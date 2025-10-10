@@ -231,32 +231,78 @@ const confirmSiteDisabled: AppEffect = (store) => async (action) => {
 	}
 };
 
-// Connect to the background script at startup
+// Connect to the background script and handle reconnection/fallbacks
 const connect: AppEffect = (store) => {
-	const browser = getBrowser();
-	const port = browser.runtime.connect();
-	port.onMessage.addListener((msg: Message) => {
-		if (msg.t === MessageType.SETTINGS_CHANGED) {
-			store.dispatch({
-				type: ActionType.BACKGROUND_SETTINGS_CHANGED,
-				settings: msg.settings,
-			});
-		}
-	});
+    const browser = getBrowser();
+    let port = undefined as undefined | import('../webextension').Port;
 
-	return (action) => {
-		// Forward any actions to the background script
-		if (action.type === ActionType.BACKGROUND_ACTION) {
-			port.postMessage({
-				t: MessageType.SETTINGS_ACTION,
-				action: action.action,
-			});
-		} else if (action.type === ActionType.UI_OPTIONS_SHOW) {
-			port.postMessage({
-				t: MessageType.OPTIONS_PAGE_OPEN,
-			});
-		}
-	};
+    const connectPort = () => {
+        try {
+            const p = browser.runtime.connect();
+            p.onMessage.addListener((msg: Message) => {
+                if (msg.t === MessageType.SETTINGS_CHANGED) {
+                    store.dispatch({
+                        type: ActionType.BACKGROUND_SETTINGS_CHANGED,
+                        settings: msg.settings,
+                    });
+                }
+            });
+            p.onDisconnect.addListener(() => {
+                // Port disconnected (e.g., service worker went idle). We'll lazily reconnect on next send.
+                port = undefined;
+            });
+            port = p;
+        } catch (e) {
+            // Could not connect right now; leave port undefined and try later
+            port = undefined;
+        }
+    };
+
+    // Establish initial connection (best-effort)
+    connectPort();
+
+    return async (action) => {
+        // Forward any actions to the background script
+        if (action.type === ActionType.BACKGROUND_ACTION) {
+            if (!port) connectPort();
+            try {
+                port && port.postMessage({
+                    t: MessageType.SETTINGS_ACTION,
+                    action: action.action,
+                });
+            } catch (_e) {
+                // Retry once on a fresh connection
+                connectPort();
+                try {
+                    port && port.postMessage({
+                        t: MessageType.SETTINGS_ACTION,
+                        action: action.action,
+                    });
+                } catch (_e2) {
+                    // Give up silently
+                }
+            }
+        } else if (action.type === ActionType.UI_OPTIONS_SHOW) {
+            // Prefer opening options directly from the content script to avoid stale ports
+            try {
+                await browser.runtime.openOptionsPage();
+                return;
+            } catch (_e) {
+                // Fallback via background messaging
+                if (!port) connectPort();
+                try {
+                    port && port.postMessage({ t: MessageType.OPTIONS_PAGE_OPEN });
+                } catch (_e2) {
+                    connectPort();
+                    try {
+                        port && port.postMessage({ t: MessageType.OPTIONS_PAGE_OPEN });
+                    } catch (_e3) {
+                        // noop
+                    }
+                }
+            }
+        }
+    };
 };
 
 export const rootEffect: AppEffect = Effect.all(

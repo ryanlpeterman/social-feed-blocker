@@ -1,7 +1,7 @@
 import instagramCss from './instagram.str.css';
 import twitterCss from './twitter.str.css';
 import linkedinCss from './linkedin.str.css';
-import githubCss from './github.str.css';
+// GitHub feed eradicator removed
 import threadsCss from './threads.str.css';
 
 export type SiteId =
@@ -12,7 +12,6 @@ export type SiteId =
 	| 'linkedin'
 	| 'youtube'
 	| 'instagram'
-	| 'github'
 	| 'threads';
 
 export const Sites: Record<SiteId, Site> = {
@@ -91,13 +90,6 @@ export const Sites: Record<SiteId, Site> = {
 		domain: ['news.ycombinator.com'],
 		paths: ['/', '/news'],
 		origins: ['https://news.ycombinator.com/*'],
-	},
-	github: {
-		label: 'Github',
-		domain: ['github.com'],
-		paths: ['/', '/dashboard'],
-		origins: ['https://github.com/*'],
-		css: githubCss,
 	},
     threads: {
         label: 'Threads',

@@ -2,6 +2,7 @@ import instagramCss from './instagram.str.css';
 import twitterCss from './twitter.str.css';
 import linkedinCss from './linkedin.str.css';
 import githubCss from './github.str.css';
+import threadsCss from './threads.str.css';
 
 export type SiteId =
 	| 'facebook'
@@ -11,7 +12,8 @@ export type SiteId =
 	| 'linkedin'
 	| 'youtube'
 	| 'instagram'
-	| 'github';
+	| 'github'
+	| 'threads';
 
 export const Sites: Record<SiteId, Site> = {
 	facebook: {
@@ -97,6 +99,20 @@ export const Sites: Record<SiteId, Site> = {
 		origins: ['https://github.com/*'],
 		css: githubCss,
 	},
+    threads: {
+        label: 'Threads',
+        domain: ['threads.com'],
+        paths: ['/', '/home', '/feed', '/explore', '/search', '/notifications'],
+        origins: [
+            'http://threads.com/*',
+            'https://threads.com/*',
+            'http://www.threads.com/*',
+            'https://www.threads.com/*',
+            'http://app.threads.com/*',
+            'https://app.threads.com/*',
+        ],
+        css: threadsCss,
+    },
 };
 
 export type Site = {

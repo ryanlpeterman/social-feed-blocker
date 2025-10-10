@@ -22,7 +22,16 @@ export function enabledStatus(state: SettingsState): EnabledStatus {
 		const siteStatus: SiteStatus = siteStatuses[siteId];
 		if (site.domain.find(domain => window.location.host.includes(domain)) != null) {
 			// Always disabled if the path doesn't match
-			if (site.paths.indexOf(window.location.pathname) === -1) {
+			// Allow exact match or prefix match for subroutes (except root '/')
+			const pathname = window.location.pathname;
+			const matchesPath = site.paths.some((p) => {
+				if (p === '/') {
+					return pathname === '/';
+				}
+				const base = p.endsWith('/') ? p : p + '/';
+				return pathname === p || pathname.startsWith(base);
+			});
+			if (!matchesPath) {
 				return { type: 'disabled' };
 			}
 

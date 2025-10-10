@@ -6,8 +6,17 @@ export function injectCSS(siteId: SiteId) {
 	if (css != null) {
 		const style = document.createElement('style');
 		style.textContent = css;
-		document.addEventListener('DOMContentLoaded', () => {
-			document.head.append(style);
-		});
+
+		const append = () => {
+			if (document.head && !style.isConnected) {
+				document.head.append(style);
+			}
+		};
+
+		if (document.readyState === 'loading') {
+			document.addEventListener('DOMContentLoaded', append, { once: true });
+		} else {
+			append();
+		}
 	}
 }

@@ -125,30 +125,42 @@ const loadSettings: BackgroundEffect = (store) => async (action) => {
 };
 
 export const registerContentScripts: BackgroundEffect =
-	(store) => async (action) => {
-		if (action.type === BackgroundActionType.CONTENT_SCRIPTS_REGISTER) {
-			const browser = getBrowser();
-			await browser.scripting.unregisterContentScripts();
+    (store) => async (action) => {
+        if (
+            action.type === BackgroundActionType.CONTENT_SCRIPTS_REGISTER ||
+            action.type === BackgroundActionType.PERMISSIONS_UPDATE
+        ) {
+            const browser = getBrowser();
+            await browser.scripting.unregisterContentScripts();
 
-			const state = store.getState();
-			if (state.ready === false) {
-				return;
-			}
+            const state = store.getState();
+            if (state.ready === false) {
+                return;
+            }
 
-			const siteIds = Object.keys(state.settings.sites) as SiteId[];
-			const siteMatches = siteIds.flatMap((siteId) => Sites[siteId].origins);
+            // Only register for granted origins to avoid API errors
+            const granted = new Set(state.settings.permissions.origins || []);
+            const siteIds = Object.keys(state.settings.sites) as SiteId[];
+            const siteMatches = siteIds
+                .flatMap((siteId) => Sites[siteId].origins)
+                .filter((origin) => granted.has(origin));
 
-			await browser.scripting.registerContentScripts([
-				{
-					id: 'intercept',
-					js: ['intercept.js'],
-					css: ['eradicate.css'],
-					matches: siteMatches,
-					runAt: 'document_start',
-				},
-			]);
-		}
-	};
+            if (siteMatches.length === 0) {
+                // No permissions granted yet; nothing to register
+                return;
+            }
+
+            await browser.scripting.registerContentScripts([
+                {
+                    id: 'intercept',
+                    js: ['intercept.js'],
+                    css: ['eradicate.css'],
+                    matches: siteMatches,
+                    runAt: 'document_start',
+                },
+            ]);
+        }
+    };
 
 export const logAction: BackgroundEffect = (store) => async (action) => {
 	console.info(action);

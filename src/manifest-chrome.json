@@ -24,7 +24,13 @@
 		"https://www.github.com/*",
 		"https://github.com/*",
 		"http://www.instagram.com/*",
-		"https://www.instagram.com/*"
+		"https://www.instagram.com/*",
+		"http://threads.com/*",
+		"https://threads.com/*",
+		"http://www.threads.com/*",
+		"https://www.threads.com/*",
+		"http://app.threads.com/*",
+		"https://app.threads.com/*"
 	],
 	"action": {
 		"default_icon": {

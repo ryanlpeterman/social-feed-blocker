@@ -2,6 +2,10 @@
 
 This is a focused fork of News Feed Eradicator that modernizes the build, simplifies the UI, and adds per‑site controls. It blocks distracting social feeds (Facebook, Twitter/X, Reddit, YouTube, Instagram, LinkedIn, TikTok, Threads, Substack, HN) and shows a clean, minimal panel you can use to open settings or temporarily allow a feed.
 
+![Twitter Before/After](assets/twitter-before-after-vertical-medium-labeled.jpg)
+
+![TikTok Before/After](assets/tiktok-before-after-vertical-medium-labeled.jpg)
+
 ## What’s different in this fork
 
 - Manifest V3 packaging for Chrome with programmatic content‑script registration via the `scripting` API.
@@ -15,13 +19,11 @@ This is a focused fork of News Feed Eradicator that modernizes the build, simpli
 
 ## Screenshots
 
-These are representative screenshots of the product. See `assets/screenshots/` for full‑size images.
+These are representative screenshots of the product. See `assets/` for full‑size images.
 
 ![Settings](assets/settings.png)
 
-![Twitter Before/After](assets/screenshots/twitter-before-after-vertical-medium-labeled.jpg)
-
-![TikTok Before/After](assets/screenshots/tiktok-before-after-vertical-medium-labeled.jpg)
+<!-- Before/after examples are showcased at the top -->
 
 ## Install (development)
 

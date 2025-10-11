@@ -47,6 +47,17 @@ html[data-nfe-enabled='false'] #nfe-container {
     filter: brightness(1.1);
 }
 
+/* Layout rows inside the injected container */
+#nfe-container .nfe-banner-row {
+    margin-bottom: 8px;
+}
+#nfe-container .nfe-buttons-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
 /* Material-style buttons in overlay */
 #nfe-container button {
     font-family: Roboto, Helvetica, Arial, sans-serif;

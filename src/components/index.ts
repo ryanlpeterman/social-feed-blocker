@@ -21,8 +21,11 @@ const NewsFeedEradicator = (store: Store) => {
     const countSuffix = count != null ? ` ${count} ${count === 1 ? 'time' : 'times'} today` : '';
     const bannerText = h('span.nfe-banner-text', 'News feed blocked' + countSuffix);
 
-	// Entire app component: order buttons with the primary action first (Close), then Settings
-	return h('div', [bannerText, closeBtn, link]);
+	// Place counter text on its own row, and buttons on their own row
+	return h('div', [
+			h('div.nfe-banner-row', [bannerText]),
+			h('div.nfe-buttons-row', [closeBtn, link]),
+	]);
 };
 
 export default NewsFeedEradicator;

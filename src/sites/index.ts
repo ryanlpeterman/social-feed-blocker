@@ -3,6 +3,7 @@ import twitterCss from './twitter.str.css';
 import linkedinCss from './linkedin.str.css';
 // GitHub feed eradicator removed
 import threadsCss from './threads.str.css';
+import tiktokCss from './tiktok.str.css';
 
 export type SiteId =
 	| 'facebook'
@@ -12,7 +13,8 @@ export type SiteId =
 	| 'linkedin'
 	| 'youtube'
 	| 'instagram'
-	| 'threads';
+	| 'threads'
+	| 'tiktok';
 
 export const Sites: Record<SiteId, Site> = {
 	facebook: {
@@ -104,6 +106,13 @@ export const Sites: Record<SiteId, Site> = {
             'https://app.threads.com/*',
         ],
         css: threadsCss,
+    },
+    tiktok: {
+        label: 'TikTok',
+        domain: ['tiktok.com'],
+        paths: ['/'],
+        origins: ['https://www.tiktok.com/*', 'https://tiktok.com/*'],
+        css: tiktokCss,
     },
 };
 

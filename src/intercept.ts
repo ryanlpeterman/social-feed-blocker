@@ -14,6 +14,7 @@ import * as HackerNews from './sites/hackernews';
 import * as LinkedIn from './sites/linkedin';
 import * as Instagram from './sites/instagram';
 import * as YouTube from './sites/youtube';
+import * as TikTok from './sites/tiktok';
 import * as Threads from './sites/threads';
 import { createStore, Store } from './store';
 
@@ -33,6 +34,8 @@ export function eradicate(store: Store) {
 		YouTube.eradicate(store);
 	} else if (Instagram.checkSite()) {
 		Instagram.eradicate(store);
+	} else if (TikTok.checkSite()) {
+		TikTok.eradicate(store);
 	} else if (Threads.checkSite()) {
 		Threads.eradicate(store);
 	} else if (FbClassic.checkSite()) {

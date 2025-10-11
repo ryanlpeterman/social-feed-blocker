@@ -28,7 +28,18 @@ const getSettings = (state: SettingsState): Settings.T => {
  * Listen for content scripts
  */
 const listen: BackgroundEffect = (store) => {
-	const browser = getBrowser();
+    const browser = getBrowser();
+    // Track last active tab id to support returning to it after close
+    let lastActiveTabId: number | null = null;
+    let currentActiveTabId: number | null = null;
+    try {
+        browser.tabs.onActivated.addListener((info: any) => {
+            lastActiveTabId = currentActiveTabId;
+            currentActiveTabId = info?.tabId ?? null;
+        });
+    } catch (e) {
+        // ignore if tabs API not available
+    }
 	let pages: Port[] = [];
 	browser.runtime.onConnect.addListener((port) => {
 		pages.push(port);
@@ -48,9 +59,42 @@ const listen: BackgroundEffect = (store) => {
 			if (msg.t === MessageType.SETTINGS_ACTION) {
 				store.dispatch(msg.action);
 			}
-			if (msg.t === MessageType.OPTIONS_PAGE_OPEN) {
-				browser.runtime.openOptionsPage().catch((e) => console.error(e));
-			}
+            if (msg.t === MessageType.OPTIONS_PAGE_OPEN) {
+                browser.runtime.openOptionsPage().catch((e) => console.error(e));
+            }
+            if (msg.t === MessageType.CLOSE_ACTIVE_TAB) {
+                (async () => {
+                    try {
+                        const tabs = await browser.tabs.query({ active: true, currentWindow: true } as any);
+                        const active = tabs && tabs[0];
+                        const activeId: number | undefined = active && (active as any).id;
+                        const target = (lastActiveTabId != null && lastActiveTabId !== activeId) ? lastActiveTabId : undefined;
+                        if (target != null) {
+                            try { await (browser.tabs as any).update(target, { active: true }); } catch (e) { console.error(e); }
+                        }
+                        if (typeof activeId === 'number') {
+                            await browser.tabs.remove(activeId);
+                        }
+                    } catch (e) {
+                        console.error(e);
+                    }
+                })();
+            }
+            if (msg.t === MessageType.CLOSE_ACTIVE_TAB) {
+                try {
+                    getBrowser().tabs
+                        .query({ active: true, currentWindow: true })
+                        .then((tabs) => {
+                            const tab = tabs && tabs[0];
+                            if (tab && typeof (tab as any).id === 'number') {
+                                return getBrowser().tabs.remove((tab as any).id as number);
+                            }
+                        })
+                        .catch((e) => console.error(e));
+                } catch (e) {
+                    console.error(e);
+                }
+            }
 		});
 	});
 

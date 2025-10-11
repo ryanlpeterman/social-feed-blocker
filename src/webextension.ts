@@ -17,9 +17,13 @@ type WebExtensionAPI = {
 		remove: (p: Permissions) => Promise<boolean>;
 		request: (p: Permissions) => Promise<boolean>;
 	};
-	tabs: {
-		onUpdated: WebExtensionEvent<TabId>;
-	};
+    tabs: {
+        onUpdated: WebExtensionEvent<TabId>;
+        onActivated: WebExtensionEvent<{ tabId: number; windowId: number }>;
+        query: (q: TabsQuery) => Promise<Tab[]>;
+        remove: (tabId: number) => Promise<void>;
+        update: (tabId: number, props: { active?: boolean }) => Promise<Tab>;
+    };
 	scripting: {
 		executeScript: (opts: ExecuteOptions) => Promise<any>;
 		insertCSS: (opts: InsertCssOptions) => Promise<any>;
@@ -35,6 +39,8 @@ type WebExtensionAPI = {
 };
 
 export type TabId = number & { __tabId: never };
+export type Tab = { id: number };
+export type TabsQuery = { active?: boolean; currentWindow?: boolean };
 
 type InjectionTarget = {
 	tabId: TabId;
@@ -100,9 +106,13 @@ type ChromeWebExtensionAPI = {
 		remove: (p: Permissions, cb: (removed: boolean) => void) => void;
 		request: (p: Permissions, cb: (granted: boolean) => void) => void;
 	};
-	tabs: {
-		onUpdated: WebExtensionEvent<TabId>;
-	};
+    tabs: {
+        onUpdated: WebExtensionEvent<TabId>;
+        onActivated: WebExtensionEvent<{ tabId: number; windowId: number }>;
+        query: (q: TabsQuery, cb: (tabs: Tab[]) => void) => void;
+        remove: (tabId: number, cb: () => void) => void;
+        update: (tabId: number, props: { active?: boolean }, cb: (tab: Tab) => void) => void;
+    };
 	scripting: {
 		executeScript: (opts: ExecuteOptions) => Promise<any>;
 		insertCSS: (opts: InsertCssOptions) => Promise<any>;
@@ -145,9 +155,13 @@ export function getBrowser(): WebExtensionAPI {
 				remove: (p) =>
 					new Promise((resolve) => chrome!.permissions?.remove(p, resolve)),
 			},
-			tabs: {
-				onUpdated: chrome!.tabs?.onUpdated,
-			},
+            tabs: {
+                onUpdated: chrome!.tabs?.onUpdated,
+                onActivated: chrome!.tabs?.onActivated,
+                query: (q) => new Promise((resolve) => chrome!.tabs?.query(q as any, resolve as any)),
+                remove: (tabId) => new Promise((resolve) => chrome!.tabs?.remove(tabId as any, resolve)),
+                update: (tabId, props) => new Promise((resolve) => chrome!.tabs?.update(tabId as any, props as any, resolve as any)),
+            },
 			scripting: chrome.scripting,
 			storage: {
 				sync: {

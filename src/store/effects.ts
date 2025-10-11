@@ -301,6 +301,16 @@ const connect: AppEffect = (store) => {
                     }
                 }
             }
+        } else if (action.type === ActionType.UI_CLOSE_TAB) {
+            if (!port) connectPort();
+            try {
+                port && port.postMessage({ t: MessageType.CLOSE_ACTIVE_TAB });
+            } catch (_e) {
+                connectPort();
+                try {
+                    port && port.postMessage({ t: MessageType.CLOSE_ACTIVE_TAB });
+                } catch (_e2) {}
+            }
         }
     };
 };

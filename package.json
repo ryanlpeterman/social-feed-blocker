@@ -5,7 +5,7 @@
     "description": "Spend less time on social media. Block distracting feeds with a focused popup.",
 	"author": "Jordan West",
 	"license": "MIT",
-	"version": "2.3.1",
+	"version": "1.0.0",
 	"scripts": {
 		"format": "prettier --write \"./src\"",
 		"check": "tsc --noEmit"

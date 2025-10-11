@@ -1,10 +1,30 @@
-/* Instagram feed, stories, recommended accounts */
-html:not([data-nfe-enabled='false']) main > :not(#nfe-container) {
+/* Instagram feed, stories, recommended accounts (includes Reels)
+   On non-reels routes, we hide direct children of main; on reels, we target videos specifically. */
+html:not([data-nfe-enabled='false']) main > :not(#nfe-container),
+html:not([data-nfe-enabled='false']) [role='main'] > :not(#nfe-container) {
 	display: none;
 }
 
-html:not([data-nfe-enabled='false']) main > #nfe-container {
-	width: 100%;
-	font-size: 24px;
-	padding: 128px;
+/* Reels-specific: block <video> while leaving other scaffolding alone, then show our popup */
+html:not([data-nfe-enabled='false'])[data-nfe-ig-reels='true'] video[playsinline][preload][disableremoteplayback] {
+	display: none !important;
+}
+/* Prefer removing the immediate container that hosts a video (chromium supports :has) */
+html:not([data-nfe-enabled='false'])[data-nfe-ig-reels='true'] main > div:has(> video),
+html:not([data-nfe-enabled='false'])[data-nfe-ig-reels='true'] [role='main'] > div:has(> video) {
+	display: none !important;
+}
+
+html:not([data-nfe-enabled='false']) main > #nfe-container,
+html:not([data-nfe-enabled='false']) [role='main'] > #nfe-container {
+    /* Center the popup card within the main content area */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0 auto;
+    padding: 24px 16px;
+    position: relative;
+    z-index: 2; /* ensure overlay sits above any remaining chrome */
 }

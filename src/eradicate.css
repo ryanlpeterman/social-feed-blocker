@@ -245,6 +245,48 @@ div[role='region'][data-visualcompletion='ignore-dynamic'] /* For stories in non
 	width: 0 !important;
 	height: 0 !important;
 }
+/* Facebook Reels/Watch feed container */
+html:not([data-nfe-enabled='false']) #watch_feed > :not(#nfe-container) {
+    position: absolute !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+html:not([data-nfe-enabled='false']) #watch_feed > #nfe-container {
+    /* Center the popup card within the Watch/Reels container */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 24px auto;
+}
+/* Facebook Reels: hide videos under role=main on /reel(s) routes */
+html:not([data-nfe-enabled='false'])[data-nfe-fb-reels='true'] div[role='main'] video {
+    display: none !important;
+}
+/* Prefer removing direct wrappers that host a video when supported */
+html:not([data-nfe-enabled='false'])[data-nfe-fb-reels='true'] div[role='main'] > div:has(> video) {
+    display: none !important;
+}
+html:not([data-nfe-enabled='false'])[data-nfe-fb-reels='true'] div[role='main'] > #nfe-container {
+    /* Center the popup in Reels layout */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 24px auto;
+}
+/* Facebook Reels: hide Next Card arrow/button */
+html:not([data-nfe-enabled='false'])[data-nfe-fb-reels='true'] [aria-label*="Next Card" i] {
+    display: none !important;
+}
+/* Facebook Reels: hide Previous Card arrow/button */
+html:not([data-nfe-enabled='false'])[data-nfe-fb-reels='true'] [aria-label*="Previous Card" i] {
+    display: none !important;
+}
 html:not([data-nfe-enabled='false']) {
 	--notification-badge: var(--base-blue);
 }

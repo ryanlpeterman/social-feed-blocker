@@ -1,28 +1,89 @@
-# Social Feed Blocker
+# Social Feed Blocker (Fork of News Feed Eradicator)
 
-A browser extension that deletes your Facebook news feed
-and replaces it with a nice quote.
+This is a focused fork of News Feed Eradicator that modernizes the build, simplifies the UI, and adds per‑site controls. It blocks distracting social feeds (Facebook, Twitter/X, Reddit, YouTube, Instagram, LinkedIn, TikTok, Threads, Substack, HN) and shows a clean, minimal panel you can use to open settings or temporarily allow a feed.
 
-[Install Chrome Extension](https://chrome.google.com/webstore/detail/news-feed-eradicator-for/fjcldmjmjhkklehbacihaiopjklihlgg?hl=en)
+## What’s different in this fork
 
-[Install Firefox Add-on](https://addons.mozilla.org/en-US/firefox/addon/news-feed-eradicator/)
+- Manifest V3 packaging for Chrome with programmatic content‑script registration via the `scripting` API.
+- Robust registration (fixes “Duplicate script ID 'intercept'”): debounced register + unregister‑first + one‑shot retry.
+- Simplified options page (React + MUI). Removed the old snabbdom options components entirely.
+- Per‑site enable/disable with on‑demand permission requests; temporary disable options (5m/1h/1d/forever).
+- More sites and fixes: Twitter/X, Instagram, YouTube Shorts, FB Reels, Reddit 2024 layout, Threads, TikTok, Substack, HN.
+- Cleaner injected UI: a compact card with an inline green leaf mark; “Blocker Settings” and “Close Tab” actions.
+- Icons reworked (trimmed padding, green brand variant); web‑accessible brand asset for content script usage.
+- More reliable settings load on options page: immediate snapshot from storage with retries + React `useSyncExternalStore`.
 
-![Screenshot](https://raw.githubusercontent.com/jordwest/news-feed-eradicator/master/assets/screenshot.jpg)
+## Screenshots
 
-## Development
+These are representative screenshots of the product. See `assets/screenshots/` for full‑size images.
 
-This plugin is built as a WebExtension - a standard for browser plugins currently supported in both Chrome and Firefox.
+![Settings](assets/screenshots/settings-1280x800.jpg)
 
-To build for either browser, clone the repository and then run:
+![Twitter Before/After](assets/screenshots/twitter-before-after-vertical-medium-labeled-1280x800.jpg)
 
-    make dev
+![TikTok Before/After](assets/screenshots/tiktok-before-after-vertical-medium-labeled-1280x800.jpg)
 
-If everything is successful, check the `build` folder for the extension contents. You can load the `build` directory into either Chrome or Firefox as an _unpacked_ or _temporary_ extension. See the instructions for [Chrome](https://developer.chrome.com/docs/extensions/get-started/tutorial/hello-world#load-unpacked) or [Firefox](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Temporary_Installation_in_Firefox).
+## Install (development)
 
-Running `make dev` will watch for changes and recompile, however each time you make changes you'll need to tell the browser to reload the temporary extension.
+This project targets WebExtensions (Chrome Manifest V3, and MV2/MV3 compatible code where possible).
 
-To build a distributable `.zip` for production, just run:
+Prereqs:
 
-    make
+- Node.js 18+ recommended
+- npm installed
 
-The extension package can be found in the `dist` folder.
+Setup and run in watch mode:
+
+```
+npm install
+make dev
+```
+
+Load the unpacked extension from the `build/` directory:
+
+- Chrome: open `chrome://extensions`, enable Developer Mode, “Load unpacked…”, select `build/`.
+- Firefox: use “about:debugging → This Firefox → Load Temporary Add‑on…”, select any file in `build/`.
+
+Build a distributable zip:
+
+```
+make build
+```
+
+The packaged zip will be in `dist/` (MV3 manifest included as `build/manifest.json`).
+
+## Contributing
+
+We welcome contributions! A few notes to get you productive quickly:
+
+- Code layout:
+  - Content entry: `src/intercept.ts`
+  - Injected UI (snabbdom): `src/components/index.ts` and `src/lib/inject-ui.ts`
+  - Site adapters (feed detection + CSS): `src/sites/*`
+  - Options page (React + MUI): `src/options/options.tsx`
+  - Background service worker (MV3): `src/background/service-worker.ts` and `src/background/store/*`
+- Adding a new site:
+  1. Create `src/sites/<site>.ts` with `checkSite()` and `eradicate(store)`.
+  2. Add paths, `origins`, and optional `css` to `src/sites/index.ts`.
+  3. If you need site‑specific CSS, add `*.str.css` and import it in `src/sites/index.ts`.
+  4. Verify permissions: the site’s origins must be listed in `src/manifest-chrome.json` under `optional_host_permissions`.
+- Build/watch:
+  - `make dev` (watch) and `make build` (release zip)
+  - Rollup bundles: `intercept.js`, `options.js`, `service-worker.js`
+- Formatting: run `npm run check` for typechecks; prettier config is included.
+
+## Permissions & Privacy
+
+- Remote code: not used. All code is bundled; no eval or remote JS execution.
+- Host permissions: requested only for the sites you enable in the options page.
+- Scripting: used to programmatically (un)register our packaged content script and stylesheet for enabled sites.
+- Storage: settings are stored in `chrome.storage.sync`.
+
+## Troubleshooting
+
+- “Duplicate script ID 'intercept'” in console: fixed here by debouncing registration and unregistering before register; if you still observe it on Canary, reloading the extension clears stale registrations.
+- Options doesn’t list sites on first load: the options page now eagerly snapshots settings from storage and re‑renders; ensure background permissions are granted for the sites you expect to see enabled.
+
+## License
+
+MIT (see `LICENSE`). Credit to the original [News Feed Eradicator](https://github.com/jordwest/news-feed-eradicator) project and community for the foundation this fork builds upon.

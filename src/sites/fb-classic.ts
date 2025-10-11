@@ -2,6 +2,7 @@ import { remove } from '../lib/remove-news-feed';
 import injectUI, { isAlreadyInjected } from '../lib/inject-ui';
 import { isEnabled } from '../lib/is-enabled';
 import { Store } from '../store';
+import { POLL_INTERVAL_MS } from '../lib/constants';
 
 // Elements here are removed from the DOM.
 // These selectors should also be added to `eradicate.css`
@@ -46,5 +47,6 @@ export function eradicate(store: Store) {
 
 	// This delay ensures that the elements have been created by Facebook's
 	// scripts before we attempt to replace them
-	setInterval(eradicateRetry, 1000);
+	setInterval(eradicateRetry, POLL_INTERVAL_MS);
+	eradicateRetry();
 }

@@ -2,6 +2,7 @@ import injectUI, { isAlreadyInjected } from '../lib/inject-ui';
 import { isEnabled } from '../lib/is-enabled';
 import { Store } from '../store';
 import {injectCSS} from "./shared";
+import { POLL_INTERVAL_MS } from '../lib/constants';
 
 export function checkSite(): boolean {
 	return window.location.host.includes('instagram.com');
@@ -32,15 +33,16 @@ export function eradicate(store: Store) {
             return;
         }
 
-		const container = feed;
+        const container = feed;
 
-		// Add News Feed Eradicator quote/info panel
+        // Add News Feed Eradicator quote/info panel
         if (feed && !isAlreadyInjected()) {
             injectUI(feed, store);
         }
     }
 
-	// This delay ensures that the elements have been created by Twitter's
-	// scripts before we attempt to replace them
-	setInterval(eradicateRetry, 1000);
+    // This delay ensures that the elements have been created by Twitter's
+    // scripts before we attempt to replace them
+    setInterval(eradicateRetry, POLL_INTERVAL_MS);
+    eradicateRetry();
 }

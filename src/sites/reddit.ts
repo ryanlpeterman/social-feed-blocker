@@ -1,6 +1,7 @@
 import injectUI, { isAlreadyInjected } from '../lib/inject-ui';
 import { isEnabled } from '../lib/is-enabled';
 import { Store } from '../store';
+import { POLL_INTERVAL_MS } from '../lib/constants';
 
 export function checkSite(): boolean {
 	return window.location.host.includes('reddit.com');
@@ -40,5 +41,6 @@ export function eradicate(store: Store) {
 
 	// This delay ensures that the elements have been created by Reddit's
 	// scripts before we attempt to replace them
-	setInterval(eradicateRetry, 1000);
+	setInterval(eradicateRetry, POLL_INTERVAL_MS);
+	eradicateRetry();
 }

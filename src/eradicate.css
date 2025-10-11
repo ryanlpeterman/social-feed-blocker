@@ -263,6 +263,7 @@ html:not([data-nfe-enabled='false']) #watch_feed > #nfe-container {
     box-sizing: border-box;
     margin: 24px auto;
 }
+
 /* Facebook Reels: hide videos under role=main on /reel(s) routes */
 html:not([data-nfe-enabled='false'])[data-nfe-fb-reels='true'] div[role='main'] video {
     display: none !important;

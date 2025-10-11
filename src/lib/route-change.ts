@@ -1,5 +1,6 @@
 import { enabledStatus } from './is-enabled';
 import { Store } from '../store';
+import { POLL_INTERVAL_MS } from './constants';
 
 // Unforunately the browser provides no native way to observe route changes initiated
 // by the page. The `popstate` event only observes browser initiated back/forward events.
@@ -7,7 +8,7 @@ import { Store } from '../store';
 // it's changed.
 // NB: I also tried monkey patching history.pushState to intercept the calls, but that
 // had no effect.
-const CHECK_INTERVAL = 1000;
+const CHECK_INTERVAL = POLL_INTERVAL_MS;
 
 let lastPath: string | undefined = undefined;
 let element = document.querySelector('html');

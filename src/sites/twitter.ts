@@ -2,6 +2,7 @@ import injectUI, { isAlreadyInjected } from '../lib/inject-ui';
 import { isEnabled } from '../lib/is-enabled';
 import { Store } from '../store';
 import { injectCSS } from './shared';
+import { POLL_INTERVAL_MS } from '../lib/constants';
 
 export function checkSite(): boolean {
 	return (
@@ -49,5 +50,6 @@ export function eradicate(store: Store) {
 
 	// This delay ensures that the elements have been created by Twitter's
 	// scripts before we attempt to replace them
-	setInterval(eradicateRetry, 1000);
+	setInterval(eradicateRetry, POLL_INTERVAL_MS);
+	eradicateRetry();
 }

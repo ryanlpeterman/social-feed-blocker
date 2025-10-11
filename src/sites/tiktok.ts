@@ -1,6 +1,7 @@
 import injectUI, { isAlreadyInjected } from '../lib/inject-ui';
 import { isEnabled } from '../lib/is-enabled';
 import { Store } from '../store';
+import { POLL_INTERVAL_MS } from '../lib/constants';
 import { injectCSS } from './shared';
 
 export function checkSite(): boolean {
@@ -46,5 +47,6 @@ export function eradicate(store: Store) {
     }
 
     // Poll to handle SPA updates
-    setInterval(eradicateRetry, 1000);
+    setInterval(eradicateRetry, POLL_INTERVAL_MS);
+    eradicateRetry();
 }

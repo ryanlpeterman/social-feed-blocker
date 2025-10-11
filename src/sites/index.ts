@@ -38,7 +38,7 @@ export const Sites: Record<SiteId, Site> = {
 	instagram: {
 		label: 'Instagram',
 		domain: ['instagram.com'],
-		paths: ['/'],
+		paths: ['/', '/explore/', '/reels/', '/reels/*/', '/reels/*'],
 		origins: ['http://www.instagram.com/*', 'https://www.instagram.com/*'],
 		css: instagramCss,
 	},
@@ -57,7 +57,7 @@ export const Sites: Record<SiteId, Site> = {
 	youtube: {
 		label: 'YouTube',
 		domain: ['youtube.com'],
-		paths: ['/', '/feed/trending'],
+		paths: ['/', '/feed/trending', '/shorts'],
 		origins: ['https://www.youtube.com/*'],
 	},
 	linkedin: {

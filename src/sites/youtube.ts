@@ -50,7 +50,7 @@ export function eradicate(store: Store) {
             }
         } catch (_) {}
 
-        // Add News Feed Eradicator quote/info panel
+        // Add Social Media Blocker panel
         if (container && !isAlreadyInjected()) {
             // Hack so that injectUI can handle dark theme
             document.body.style.background = 'var(--yt-spec-general-background-a)';

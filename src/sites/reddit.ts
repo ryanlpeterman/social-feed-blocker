@@ -30,7 +30,7 @@ export function eradicate(store: Store) {
 			return;
 		}
 
-		// Add News Feed Eradicator quote/info panel
+		// Add Social Media Blocker panel
 		if (!isAlreadyInjected()) {
 			// Hack so that injectUI can handle new-reddit theme
 			document.body.style.background = 'var(--newRedditTheme-body)';

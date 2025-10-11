@@ -1,4 +1,4 @@
-# News Feed Eradicator
+# Social Media Blocker
 
 A browser extension that deletes your Facebook news feed
 and replaces it with a nice quote.

@@ -2,7 +2,7 @@ import { Store } from '../store';
 import { h } from 'snabbdom/h';
 import { ActionType } from '../store/action-types';
 
-const NewsFeedEradicator = (store: Store) => {
+const SocialMediaBlocker = (store: Store) => {
 		const footerText = 'Blocker Settings';
 
 	const onShowInfoPanel = () => {
@@ -34,4 +34,4 @@ const NewsFeedEradicator = (store: Store) => {
     ]);
 };
 
-export default NewsFeedEradicator;
+export default SocialMediaBlocker;

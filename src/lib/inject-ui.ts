@@ -1,5 +1,5 @@
 import { Store } from '../store/index';
-import NewsFeedEradicator from '../components/index';
+import SocialMediaBlocker from '../components/index';
 import { getBrowser } from '../webextension';
 import { init } from 'snabbdom';
 import { h } from 'snabbdom/h';
@@ -15,7 +15,7 @@ export function isAlreadyInjected() {
 const rgbRe = /rgb\((\d+),\s*(\d+),\s*(\d+)\)/;
 
 /**
- * Inject the News Feed Eradicator panel into the page.
+ * Inject the Social Media Blocker panel into the page.
  */
 export default function injectUI(
     streamContainer: Node,
@@ -35,7 +35,7 @@ export default function injectUI(
 	let vnode = toVNode(nfeContainer);
 
     const render = () => {
-        const newVnode = h('div#nfe-container', [NewsFeedEradicator(store)]);
+        const newVnode = h('div#nfe-container', [SocialMediaBlocker(store)]);
 
 		patch(vnode, newVnode);
 		vnode = newVnode;

@@ -1,7 +1,7 @@
 {
-	"name": "News Feed Eradicator",
+    "name": "Social Media Blocker",
 	"version": "2.2.7",
-	"description": "Eradicate social media noise by replacing your entire news feed with an inspiring quote",
+    "description": "Block distracting social media feeds with a focused popup",
 	"manifest_version": 2,
 	"permissions": ["storage"],
 	"optional_permissions": [
@@ -35,7 +35,7 @@
 			"64": "icon64.png",
 			"128": "icon128.png"
 		},
-		"default_title": "News Feed Eradicator"
+        "default_title": "Social Media Blocker"
 	},
 	"background": {
 		"page": "background.html"

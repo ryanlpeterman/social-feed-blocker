@@ -35,7 +35,7 @@ export function eradicate(store: Store) {
 
         const container = feed;
 
-        // Add News Feed Eradicator quote/info panel
+        // Add Social Media Blocker panel
         if (feed && !isAlreadyInjected()) {
             injectUI(feed, store);
         }

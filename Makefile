@@ -8,7 +8,7 @@ build: install copy-assets
 	mkdir -p build
 	NODE_ENV=production ./node_modules/.bin/rollup -c
 	mkdir -p dist
-	(cd build && zip -r ../dist/NewsFeedEradicator_$(GITTAG).zip .)
+	(cd build && zip -r ../dist/SocialMediaBlocker_$(GITTAG).zip .)
 
 # Typecheck only
 check:
@@ -17,7 +17,7 @@ check:
 # Firefox Add-on store requires source to be submitted as a zip, so this command builds that zip
 package-source:
 	mkdir -p dist
-	git archive --output=dist/NewsFeedEradicator_source_$(GITTAG).zip HEAD
+	git archive --output=dist/SocialMediaBlocker_source_$(GITTAG).zip HEAD
 
 copy-assets:
 	mkdir -p build

@@ -52,7 +52,7 @@ export const SitesOptions = (store: Store) => {
             case SiteStatusTag.ENABLED:
                 return h(
                     'div.pad-1.flex.align-items-center.justify-right.text-right.text-muted',
-                    'Eradicating'
+                    'Blocking'
                 );
             case SiteStatusTag.NEEDS_NEW_PERMISSIONS:
                 return h(
@@ -124,11 +124,11 @@ export const SitesOptions = (store: Store) => {
 	const health = getSettingsHealth(state.settings);
 	let alerts: VNode[] = [];
 	if (health.noSitesEnabled) {
-		alerts.push(
-			WarningAlert(
-				`News Feed Eradicator isn't currently enabled for any sites. Choose at least one below to get started.`
-			)
-		);
+        alerts.push(
+                WarningAlert(
+                    `Social Media Blocker isn't currently enabled for any sites. Choose at least one below to get started.`
+                )
+            );
 	}
 	if (health.sitesNeedingPermissions > 0) {
 		alerts.push(
@@ -143,7 +143,7 @@ export const SitesOptions = (store: Store) => {
         ...alerts,
         h(
             'p',
-            "Choose sites below to enable News Feed Eradicator. When you enable a site, we'll request your permission to modify that site."
+            "Choose sites below to enable Social Media Blocker. When you enable a site, we'll request your permission to modify that site."
         ),
         h(
             'div.v-stack',

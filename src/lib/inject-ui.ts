@@ -1,7 +1,11 @@
 import { Store } from '../store/index';
-import { createRoot } from 'react-dom/client';
-import React from 'react';
-import NewsFeedEradicatorReact from '../components/index-react';
+import NewsFeedEradicator from '../components/index';
+import { init } from 'snabbdom';
+import { h } from 'snabbdom/h';
+import propsModule from 'snabbdom/modules/props';
+import attrsModule from 'snabbdom/modules/attributes';
+import eventsModule from 'snabbdom/modules/eventlisteners';
+import { toVNode } from 'snabbdom/tovnode';
 
 export function isAlreadyInjected() {
 	return document.querySelector('#nfe-container') != null;
@@ -25,9 +29,15 @@ export default function injectUI(
 		streamContainer.appendChild(nfeContainer);
 	}
 
-	const root = createRoot(nfeContainer);
+	const patch = init([propsModule, attrsModule, eventsModule]);
+
+	let vnode = toVNode(nfeContainer);
+
 	const render = () => {
-		root.render(React.createElement(NewsFeedEradicatorReact, { store }));
+		const newVnode = h('div#nfe-container', [NewsFeedEradicator(store)]);
+
+		patch(vnode, newVnode);
+		vnode = newVnode;
 
 		const col = window.getComputedStyle(document.body)['background-color'];
 		const match = rgbRe.exec(col);
@@ -35,8 +45,14 @@ export default function injectUI(
 			const r = parseInt(match[1], 10);
 			const g = parseInt(match[2], 10);
 			const b = parseInt(match[3], 10);
-			let mode: string = r < 100 && g < 100 && b < 100 ? 'dark' : 'light';
-			(document.body as any).dataset.nfeColorScheme = mode;
+			// Check the background color
+			let mode: string;
+			if (r < 100 && g < 100 && b < 100) {
+				mode = 'dark';
+			} else {
+				mode = 'light';
+			}
+			document.body.dataset.nfeColorScheme = mode;
 		}
 	};
 

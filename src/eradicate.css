@@ -1,21 +1,25 @@
 #nfe-container {
-	font-family: sans-serif;
-	font-weight: normal;
-	line-height: 1.4;
+    font-family: Roboto, Helvetica, Arial, sans-serif;
+    font-weight: normal;
+    line-height: 1.4;
 
-	/* Needed for detecting the background color with getComputedStyle */
-	background-color: inherit;
+    /* Needed for detecting the background color with getComputedStyle */
+    background-color: inherit;
 
-	/* Material UI theme tokens (approximate) */
-	--mui-primary: #2196f3; /* brighter blue */
-	--mui-primary-dark: #1976d2;
-	--mui-primary-contrast: #ffffff;
-	--mui-outline: rgba(25, 118, 210, 0.5);
-	--mui-hover: rgba(25, 118, 210, 0.04);
-	/* Success (green) for primary action */
-	--mui-success: #4caf50;
-	--mui-success-dark: #43a047;
-	--mui-success-contrast: #ffffff;
+    /* Material UI theme tokens to match options page */
+    --mui-primary: #1976d2; /* MUI default primary */
+    --mui-primary-dark: #1565c0;
+    --mui-primary-contrast: #ffffff;
+    --mui-outline: rgba(25, 118, 210, 0.5);
+    --mui-hover: rgba(25, 118, 210, 0.04);
+    --mui-divider: rgba(0, 0, 0, 0.12);
+    --mui-surface: #fff; /* Paper/card background (light) */
+    --mui-text-primary: rgba(0, 0, 0, 0.87);
+    --mui-text-secondary: rgba(0, 0, 0, 0.6);
+    /* Success colors to match Enabled status chip */
+    --mui-success: #2e7d32; /* success.main */
+    --mui-success-dark: #1b5e20; /* success.dark */
+    --mui-success-contrast: #ffffff;
 }
 
 html[data-nfe-enabled='false'] #nfe-container {
@@ -47,18 +51,29 @@ html[data-nfe-enabled='false'] #nfe-container {
     filter: brightness(1.1);
 }
 
-/* Layout rows inside the injected container */
+/* Layout rows inside the injected container to mirror options card */
+#nfe-container .nfe-card {
+    margin: 16px auto;
+    padding: 16px;
+    background: var(--mui-surface);
+    border: 1px solid var(--mui-divider);
+    border-radius: 8px;
+    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.1); /* shadow-mid */
+    max-width: 720px;
+}
 #nfe-container .nfe-banner-row {
-    margin-bottom: 8px;
+    margin-bottom: 12px;
+    text-align: center;
 }
 #nfe-container .nfe-buttons-row {
     display: flex;
     align-items: center;
-    gap: 8px;
+    justify-content: center;
+    gap: 12px;
     flex-wrap: wrap;
 }
 
-/* Material-style buttons in overlay */
+/* Buttons styled to match MUI defaults */
 #nfe-container button {
     font-family: Roboto, Helvetica, Arial, sans-serif;
     font-weight: 500;
@@ -70,41 +85,37 @@ html[data-nfe-enabled='false'] #nfe-container {
     transition: background-color 150ms ease, box-shadow 150ms ease, border-color 150ms ease;
 }
 
-/* Secondary/less prominent button (Settings) – outlined neutral */
+/* Settings: outlined success (de-emphasized but same green) */
 .nfe-settings-btn {
     -webkit-appearance: none;
     appearance: none;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid #000; /* black on light surfaces */
+    border: 1px solid var(--mui-success);
     background: transparent;
-    color: #1f2328;
+    color: var(--mui-success);
     text-decoration: none;
     font-size: 110%;
-    margin-left: 8px; /* space from primary Close button */
 }
 .nfe-settings-btn:hover {
-    background: #f6f8fa;
+    background: rgba(46, 125, 50, 0.04); /* success hover */
 }
 .nfe-settings-btn:focus {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.12);
+    box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.2);
 }
 .nfe-settings-btn:active {
     transform: translateY(0.5px);
 }
+/* Dark surfaces: keep outlined primary legible */
 body[data-nfe-color-scheme='dark'] .nfe-settings-btn,
 .__fb-dark-mode .nfe-settings-btn {
-    border-color: #fff; /* white on dark surfaces */
-    color: #e6e6e6;
-}
-body[data-nfe-color-scheme='dark'] .nfe-settings-btn:hover,
-.__fb-dark-mode .nfe-settings-btn:hover {
-    background: #262626;
+    border-color: var(--mui-success);
+    color: var(--mui-success);
 }
 
-/* Primary action (Close Tab) – contained success */
+/* Close Tab: contained success (match Enabled green) */
 .nfe-close-btn {
     -webkit-appearance: none;
     appearance: none;
@@ -120,17 +131,24 @@ body[data-nfe-color-scheme='dark'] .nfe-settings-btn:hover,
 .nfe-close-btn:hover { background: var(--mui-success-dark); }
 .nfe-close-btn:focus {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2), 0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12);
+    box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.2), 0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12);
 }
 body[data-nfe-color-scheme='dark'] .nfe-close-btn,
 .__fb-dark-mode .nfe-close-btn { background: var(--mui-success); color: var(--mui-success-contrast); }
 body[data-nfe-color-scheme='dark'] .nfe-close-btn:hover,
 .__fb-dark-mode .nfe-close-btn:hover { background: var(--mui-success-dark); }
 
-/* Banner text spacing */
-.nfe-banner-text { font-weight: 400; margin-right: 12px; font-size: 120%; color: #111; }
+/* Banner text spacing (match options text primary) */
+.nfe-banner-text { font-weight: 500; margin-right: 12px; font-size: 120%; color: var(--mui-text-primary); }
 body[data-nfe-color-scheme='dark'] .nfe-banner-text,
 .__fb-dark-mode .nfe-banner-text { color: #fff; }
+
+/* Dark surface adjustments to mirror MUI dark cards */
+body[data-nfe-color-scheme='dark'] #nfe-container .nfe-card,
+.__fb-dark-mode #nfe-container .nfe-card {
+    background: #1f1f1f;
+    border-color: rgba(255, 255, 255, 0.12);
+}
 
 /* Avoid overriding site light themes purely due to OS-level dark mode.
    Do not use prefers-color-scheme here to prevent false positives on sites like LinkedIn. */

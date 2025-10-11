@@ -5,6 +5,17 @@
 
 	/* Needed for detecting the background color with getComputedStyle */
 	background-color: inherit;
+
+	/* Material UI theme tokens (approximate) */
+	--mui-primary: #2196f3; /* brighter blue */
+	--mui-primary-dark: #1976d2;
+	--mui-primary-contrast: #ffffff;
+	--mui-outline: rgba(25, 118, 210, 0.5);
+	--mui-hover: rgba(25, 118, 210, 0.04);
+	/* Success (green) for primary action */
+	--mui-success: #4caf50;
+	--mui-success-dark: #43a047;
+	--mui-success-contrast: #ffffff;
 }
 
 html[data-nfe-enabled='false'] #nfe-container {
@@ -36,33 +47,45 @@ html[data-nfe-enabled='false'] #nfe-container {
     filter: brightness(1.1);
 }
 
-/* Minimal settings button for overlay */
+/* Material-style buttons in overlay */
+#nfe-container button {
+    font-family: Roboto, Helvetica, Arial, sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.02857em;
+    text-transform: none;
+    border-radius: 4px;
+    min-height: 36px;
+    padding: 6px 16px;
+    transition: background-color 150ms ease, box-shadow 150ms ease, border-color 150ms ease;
+}
+
+/* Secondary/less prominent button (Settings) – outlined neutral */
 .nfe-settings-btn {
-    appearance: none;
     -webkit-appearance: none;
-    display: inline-block;
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    background: #fff;
-    color: #111;
-    font-size: 16px;
-    line-height: 1.2;
-    cursor: pointer;
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #000; /* black on light surfaces */
+    background: transparent;
+    color: #1f2328;
     text-decoration: none;
+    font-size: 110%;
+    margin-left: 8px; /* space from primary Close button */
 }
 .nfe-settings-btn:hover {
-    background: #f7f7f7;
+    background: #f6f8fa;
 }
 .nfe-settings-btn:focus {
-    outline: 2px solid #99c2ff;
-    outline-offset: 2px;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.12);
 }
-/* Dark mode styling */
+.nfe-settings-btn:active {
+    transform: translateY(0.5px);
+}
 body[data-nfe-color-scheme='dark'] .nfe-settings-btn,
 .__fb-dark-mode .nfe-settings-btn {
-    border-color: #444;
-    background: #1f1f1f;
+    border-color: #fff; /* white on dark surfaces */
     color: #e6e6e6;
 }
 body[data-nfe-color-scheme='dark'] .nfe-settings-btn:hover,
@@ -70,24 +93,36 @@ body[data-nfe-color-scheme='dark'] .nfe-settings-btn:hover,
     background: #262626;
 }
 
-/* Close tab button styling */
+/* Primary action (Close Tab) – contained success */
 .nfe-close-btn {
-    appearance: none;
     -webkit-appearance: none;
-    display: inline-block;
-    margin-left: 8px;
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    background: #fff;
-    color: #111;
-    font-size: 16px;
-    line-height: 1.2;
-    cursor: pointer;
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: var(--mui-success);
+    color: var(--mui-success-contrast);
+    box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12);
+    font-size: 110%;
 }
-.nfe-close-btn:hover { background: #f7f7f7; }
-body[data-nfe-color-scheme='dark'] .nfe-close-btn { border-color: #444; background: #1f1f1f; color: #e6e6e6; }
-body[data-nfe-color-scheme='dark'] .nfe-close-btn:hover { background: #262626; }
+.nfe-close-btn:hover { background: var(--mui-success-dark); }
+.nfe-close-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2), 0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12);
+}
+body[data-nfe-color-scheme='dark'] .nfe-close-btn,
+.__fb-dark-mode .nfe-close-btn { background: var(--mui-success); color: var(--mui-success-contrast); }
+body[data-nfe-color-scheme='dark'] .nfe-close-btn:hover,
+.__fb-dark-mode .nfe-close-btn:hover { background: var(--mui-success-dark); }
+
+/* Banner text spacing */
+.nfe-banner-text { font-weight: 400; margin-right: 12px; font-size: 110%; color: #111; }
+body[data-nfe-color-scheme='dark'] .nfe-banner-text,
+.__fb-dark-mode .nfe-banner-text { color: #fff; }
+
+/* Avoid overriding site light themes purely due to OS-level dark mode.
+   Do not use prefers-color-scheme here to prevent false positives on sites like LinkedIn. */
 
 /* Old Facebook (pre-2020) */
 div[id^='explorefeed_main_stream'],

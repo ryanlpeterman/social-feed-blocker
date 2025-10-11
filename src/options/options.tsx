@@ -2,9 +2,11 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import './options.css';
 import { createStore } from '../store';
+import { ActionType } from '../store/action-types';
+import { Settings } from '../background/store';
+import { getBrowser } from '../webextension';
 import { Sites, SiteId } from '../sites';
 import { getSiteStatus, SiteStatus, SiteStatusTag } from '../background/store/sites/selectors';
-import { ActionType } from '../store/action-types';
 import { MINUTE, HOUR, DAY, readableDuration } from '../lib/time';
 
 // MUI
@@ -108,6 +110,41 @@ function SitesList() {
 function OptionsApp() {
   const prefersDark = useMediaQuery('(prefers-color-scheme: dark)');
   const theme = React.useMemo(() => createTheme({ palette: { mode: prefersDark ? 'dark' : 'light' } }), [prefersDark]);
+  // Snapshot fallback: if settings haven't arrived shortly after mount, load from storage
+  React.useEffect(() => {
+    let cancelled = false;
+    const t = setTimeout(async () => {
+      const state = store.getState();
+      if (state.settings != null) return; // already loaded
+      try {
+        const [raw, perms] = await Promise.all([
+          Settings.load(),
+          getBrowser().permissions.getAll().catch(() => ({ permissions: [], origins: [] })),
+        ]);
+        if (cancelled) return;
+        // Merge sites against known sites list
+        const siteIds = Object.keys(Sites) as (keyof typeof Sites)[];
+        const mergedSites: Settings.SitesState = {} as Settings.SitesState;
+        for (const id of siteIds) {
+          const s = (raw.sites as any)[id];
+          mergedSites[id as any] = s != null ? s : { type: Settings.SiteStateTag.CHECK_PERMISSIONS };
+        }
+        const snapshot = {
+          showQuotes: raw.showQuotes,
+          builtinQuotesEnabled: raw.builtinQuotesEnabled,
+          featureIncrement: raw.featureIncrement,
+          hiddenBuiltinQuotes: raw.hiddenBuiltinQuotes,
+          customQuotes: raw.customQuotes,
+          sites: mergedSites as any,
+          permissions: perms,
+        };
+        store.dispatch({ type: ActionType.BACKGROUND_SETTINGS_CHANGED, settings: snapshot as any });
+      } catch (_) {
+        // ignore; background connection will deliver eventually
+      }
+    }, 150);
+    return () => { cancelled = true; clearTimeout(t); };
+  }, []);
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

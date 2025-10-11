@@ -19,9 +19,9 @@ These are representative screenshots of the product. See `assets/screenshots/` f
 
 ![Settings](assets/screenshots/settings-1280x800.jpg)
 
-![Twitter Before/After](assets/screenshots/twitter-before-after-vertical-medium-labeled-1280x800.jpg)
+![Twitter Before/After](assets/screenshots/twitter-before-after-vertical-medium-labeled.jpg)
 
-![TikTok Before/After](assets/screenshots/tiktok-before-after-vertical-medium-labeled-1280x800.jpg)
+![TikTok Before/After](assets/screenshots/tiktok-before-after-vertical-medium-labeled.jpg)
 
 ## Install (development)
 

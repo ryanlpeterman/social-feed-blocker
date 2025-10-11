@@ -17,7 +17,9 @@ const NewsFeedEradicator = (store: Store) => {
 		const closeBtn = h('button.nfe-close-btn', { on: { click: onCloseTab } }, 'Close Tab');
 
 	// Informational text before the buttons
-	const bannerText = h('span.nfe-banner-text', 'News Feed Blocked');
+    const count = (window as any).__NFE_DAILY_BLOCK_COUNT as number | undefined;
+    const countSuffix = count != null ? ` ${count} ${count === 1 ? 'time' : 'times'} today` : '';
+    const bannerText = h('span.nfe-banner-text', 'News feed blocked' + countSuffix);
 
 	// Entire app component: order buttons with the primary action first (Close), then Settings
 	return h('div', [bannerText, closeBtn, link]);

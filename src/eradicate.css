@@ -295,7 +295,17 @@ html:not([data-nfe-enabled='false']) #primary > :not(#nfe-container) {
 }
 
 html:not([data-nfe-enabled='false']) #primary > #nfe-container {
-	margin: 64px;
+    margin: 64px;
+}
+/* YouTube Shorts */
+html:not([data-nfe-enabled='false'])[data-nfe-yt-shorts='true'] ytd-shorts > :not(#nfe-container) {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    height: 0 !important;
+}
+html:not([data-nfe-enabled='false'])[data-nfe-yt-shorts='true'] ytd-shorts > #nfe-container {
+    margin: 64px auto;
+    display: block;
 }
 /* Youtube related */
 #content #related {

@@ -13,8 +13,22 @@ export function eradicate(store: Store) {
 			return;
 		}
 
+		// Flag Shorts route so CSS can apply shorts-specific blocking
+		try {
+			const onShorts = /^\/shorts(\/|$)/.test(window.location.pathname);
+			if (onShorts) {
+				document.documentElement.setAttribute('data-nfe-yt-shorts', 'true');
+			} else {
+				document.documentElement.removeAttribute('data-nfe-yt-shorts');
+			}
+		} catch (_) {}
+
 		// Don't do anything if the UI hasn't loaded yet
-		const feed = document.querySelector('#primary');
+		const feed = document.querySelector(
+			(document.documentElement.getAttribute('data-nfe-yt-shorts') === 'true')
+				? 'ytd-shorts, #shorts-container, [role="main"]'
+				: '#primary'
+		);
 
 		if (feed == null) {
 			return;

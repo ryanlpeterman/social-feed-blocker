@@ -1,0 +1,25 @@
+/* Hide the entire Substack Notes feed region, leaving only our NFE container */
+html:not([data-nfe-enabled='false']) div[role='region'][aria-label='Notes feed'] > :not(#nfe-container) {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    height: 0 !important;
+}
+
+/* Ensure our injected container is visible and nicely positioned */
+html:not([data-nfe-enabled='false']) div[role='region'][aria-label='Notes feed'] > #nfe-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 24px auto;
+}
+
+/* Substack dark appearance: use dark tokens so the popup matches */
+html:not([data-nfe-enabled='false']) div[role='region'][aria-label='Notes feed'] #nfe-container {
+    /* Mirror eradicate.css dark variables locally to avoid relying on body detection */
+    --mui-surface: #121212;
+    --mui-divider: rgba(255, 255, 255, 0.12);
+    --mui-text-primary: rgba(255, 255, 255, 0.87);
+    --mui-text-secondary: rgba(255, 255, 255, 0.6);
+}

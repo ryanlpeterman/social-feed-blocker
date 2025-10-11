@@ -4,6 +4,7 @@ import linkedinCss from './linkedin.str.css';
 // GitHub feed eradicator removed
 import threadsCss from './threads.str.css';
 import tiktokCss from './tiktok.str.css';
+import substackCss from './substack.str.css';
 
 export type SiteId =
 	| 'facebook'
@@ -14,7 +15,8 @@ export type SiteId =
 	| 'youtube'
 	| 'instagram'
 	| 'threads'
-	| 'tiktok';
+	| 'tiktok'
+	| 'substack';
 
 export const Sites: Record<SiteId, Site> = {
 	facebook: {
@@ -115,6 +117,13 @@ export const Sites: Record<SiteId, Site> = {
         paths: ['/'],
         origins: ['https://www.tiktok.com/*', 'https://tiktok.com/*'],
         css: tiktokCss,
+    },
+    substack: {
+        label: 'Substack',
+        domain: ['substack.com'],
+        paths: ['/', '/home'],
+        origins: ['https://substack.com/*'],
+        css: substackCss,
     },
 };
 

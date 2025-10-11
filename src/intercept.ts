@@ -16,6 +16,7 @@ import * as Instagram from './sites/instagram';
 import * as YouTube from './sites/youtube';
 import * as TikTok from './sites/tiktok';
 import * as Threads from './sites/threads';
+import * as Substack from './sites/substack';
 import { createStore, Store } from './store';
 
 const store = createStore();
@@ -36,6 +37,8 @@ export function eradicate(store: Store) {
 		Instagram.eradicate(store);
 	} else if (TikTok.checkSite()) {
 		TikTok.eradicate(store);
+	} else if (Substack.checkSite()) {
+		Substack.eradicate(store);
 	} else if (Threads.checkSite()) {
 		Threads.eradicate(store);
 	} else if (FbClassic.checkSite()) {

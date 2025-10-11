@@ -170,17 +170,18 @@ const loadSettings: BackgroundEffect = (store) => async (action) => {
 
 export const registerContentScripts: BackgroundEffect =
     (store) => async (action) => {
-        if (
-            action.type === BackgroundActionType.CONTENT_SCRIPTS_REGISTER ||
-            action.type === BackgroundActionType.PERMISSIONS_UPDATE
-        ) {
+        // Simple debounce/lock to avoid duplicate register calls racing
+        const anySelf = registerContentScripts as any;
+        if (anySelf._lock == null) anySelf._lock = false;
+        if (anySelf._queued == null) anySelf._queued = false;
+
+        const run = async () => {
             const browser = getBrowser();
-            await browser.scripting.unregisterContentScripts();
+            // Unregister existing scripts first to avoid duplicate ID errors
+            try { await browser.scripting.unregisterContentScripts(); } catch (_) {}
 
             const state = store.getState();
-            if (state.ready === false) {
-                return;
-            }
+            if (state.ready === false) return;
 
             // Only register for granted origins to avoid API errors
             const granted = new Set(state.settings.permissions.origins || []);
@@ -189,20 +190,61 @@ export const registerContentScripts: BackgroundEffect =
                 .flatMap((siteId) => Sites[siteId].origins)
                 .filter((origin) => granted.has(origin));
 
-            if (siteMatches.length === 0) {
-                // No permissions granted yet; nothing to register
+            if (siteMatches.length === 0) return; // Nothing to register
+
+            try {
+                await browser.scripting.registerContentScripts([
+                    {
+                        id: 'intercept',
+                        js: ['intercept.js'],
+                        css: ['eradicate.css'],
+                        matches: siteMatches,
+                        runAt: 'document_start',
+                    },
+                ]);
+            } catch (e: any) {
+                // Handle duplicate ID race by force-unregistering and retrying once
+                const msg = String(e || '');
+                if (msg.includes('Duplicate script ID') || msg.includes('duplicate script id')) {
+                    try { await browser.scripting.unregisterContentScripts(); } catch (_) {}
+                    try {
+                        await browser.scripting.registerContentScripts([
+                            {
+                                id: 'intercept',
+                                js: ['intercept.js'],
+                                css: ['eradicate.css'],
+                                matches: siteMatches,
+                                runAt: 'document_start',
+                            },
+                        ]);
+                    } catch (_) {
+                        // give up silently; next update will retry
+                    }
+                } else {
+                    // Non-duplicate error: ignore to avoid crashing the SW
+                }
+            }
+        };
+
+        if (
+            action.type === BackgroundActionType.CONTENT_SCRIPTS_REGISTER ||
+            action.type === BackgroundActionType.PERMISSIONS_UPDATE
+        ) {
+            if (anySelf._lock) {
+                anySelf._queued = true;
                 return;
             }
-
-            await browser.scripting.registerContentScripts([
-                {
-                    id: 'intercept',
-                    js: ['intercept.js'],
-                    css: ['eradicate.css'],
-                    matches: siteMatches,
-                    runAt: 'document_start',
-                },
-            ]);
+            anySelf._lock = true;
+            try {
+                await run();
+            } finally {
+                anySelf._lock = false;
+                if (anySelf._queued) {
+                    anySelf._queued = false;
+                    // Schedule a follow-up registration to apply latest state
+                    store.dispatch({ type: BackgroundActionType.CONTENT_SCRIPTS_REGISTER });
+                }
+            }
         }
     };
 

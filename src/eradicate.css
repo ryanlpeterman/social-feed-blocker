@@ -60,7 +60,8 @@ html[data-nfe-enabled='false'] #nfe-container {
     border: 1px solid var(--mui-divider);
     border-radius: 8px;
     box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.1); /* shadow-mid */
-    max-width: 720px;
+    /* Widen popup while respecting container and viewport */
+    width: clamp(520px, 100%, 720px);
     color: var(--mui-text-primary);
 }
 #nfe-container .nfe-card-header {
@@ -304,8 +305,13 @@ html:not([data-nfe-enabled='false'])[data-nfe-yt-shorts='true'] ytd-shorts > :no
     height: 0 !important;
 }
 html:not([data-nfe-enabled='false'])[data-nfe-yt-shorts='true'] ytd-shorts > #nfe-container {
+    /* Center the popup horizontally within Shorts view even with a narrow host layout */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    box-sizing: border-box;
     margin: 64px auto;
-    display: block;
 }
 /* Youtube related */
 #content #related {

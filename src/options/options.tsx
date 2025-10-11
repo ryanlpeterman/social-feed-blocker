@@ -20,7 +20,6 @@ import Stack from '@mui/material/Stack';
 import Chip from '@mui/material/Chip';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
-import Switch from '@mui/material/Switch';
 import { createTheme, ThemeProvider, useMediaQuery } from '@mui/material';
 
 const store = createStore();
@@ -88,12 +87,10 @@ function SitesList() {
         const showConfirm = state.uiOptions.confirmDisableSite === siteId;
         return (
           <React.Fragment key={id}>
-            <ListItem disablePadding secondaryAction={
-              <Stack direction="row" spacing={2} alignItems="center">
-                <StatusChip status={status} />
-                <Switch edge="end" checked={enabled} onChange={onClick(siteId)} />
-              </Stack>
-            }>
+            <ListItem
+              disablePadding
+              secondaryAction={<StatusChip status={status} />}
+            >
               <ListItemButton onClick={onClick(siteId)}>
                 <ListItemText primary={Sites[siteId].label} />
               </ListItemButton>

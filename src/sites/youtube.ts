@@ -34,9 +34,22 @@ export function eradicate(store: Store) {
 			return;
 		}
 
-		const container = feed;
+        const container = feed;
 
-		// Add News Feed Eradicator quote/info panel
+        // If already injected but in the wrong container (e.g., switched tabs between Home/Shorts), move it.
+        try {
+            const existing = document.querySelector('#nfe-container');
+            if (existing && container && !container.contains(existing)) {
+                // Prefer inserting at top for Shorts; append otherwise
+                if (document.documentElement.getAttribute('data-nfe-yt-shorts') === 'true' && container.firstChild) {
+                    container.insertBefore(existing, container.firstChild);
+                } else {
+                    container.appendChild(existing);
+                }
+            }
+        } catch (_) {}
+
+        // Add News Feed Eradicator quote/info panel
         if (container && !isAlreadyInjected()) {
             // Hack so that injectUI can handle dark theme
             document.body.style.background = 'var(--yt-spec-general-background-a)';

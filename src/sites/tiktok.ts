@@ -28,6 +28,21 @@ export function eradicate(store: Store) {
         if (container && !isAlreadyInjected()) {
             injectUI(container, store);
         }
+
+        // Proactively mute and pause any video/audio elements (TikTok often autoplays sound)
+        try {
+            const scope: ParentNode = (container as ParentNode) || document;
+            const media = scope.querySelectorAll('video, audio') as NodeListOf<HTMLMediaElement>;
+            media.forEach((m) => {
+                try {
+                    m.muted = true;
+                    (m as any).setAttribute?.('muted', '');
+                    m.volume = 0;
+                    if (!m.paused) m.pause();
+                    (m as any).removeAttribute?.('autoplay');
+                } catch (_) {}
+            });
+        } catch (_) {}
     }
 
     // Poll to handle SPA updates

@@ -47,30 +47,30 @@ export const SitesOptions = (store: Store) => {
 	const state = store.getState();
 	if (state.settings == null) return null;
 
-	const stateText = (state: SiteStatus) => {
-		switch (state.type) {
-			case SiteStatusTag.ENABLED:
-				return h(
-					'div.pad-1.flex.align-items-center.justify-right.text-right.text-muted',
-					'Eradicating'
-				);
-			case SiteStatusTag.NEEDS_NEW_PERMISSIONS:
-				return h(
-					'div.pad-1.flex.align-items-center.justify-right.text-right',
-					'⚠️  Needs permissions'
-				);
-			case SiteStatusTag.DISABLED:
-				return h(
-					'div.pad-1.flex.align-items-center.justify-right.text-right.text-muted',
-					'Off'
-				);
-			case SiteStatusTag.DISABLED_TEMPORARILY:
-				return h(
-					'div.pad-1.flex.align-items-center.justify-right.text-right.text-muted',
-					'Off for ' + readableDuration(state.until - Date.now())
-				);
-		}
-	};
+    const stateText = (state: SiteStatus) => {
+        switch (state.type) {
+            case SiteStatusTag.ENABLED:
+                return h(
+                    'div.pad-1.flex.align-items-center.justify-right.text-right.text-muted',
+                    'Eradicating'
+                );
+            case SiteStatusTag.NEEDS_NEW_PERMISSIONS:
+                return h(
+                    'div.pad-1.flex.align-items-center.justify-right.text-right',
+                    '⚠️  Needs permissions'
+                );
+            case SiteStatusTag.DISABLED:
+                return h(
+                    'div.pad-1.flex.align-items-center.justify-right.text-right.text-muted',
+                    'Off'
+                );
+            case SiteStatusTag.DISABLED_TEMPORARILY:
+                return h(
+                    'div.pad-1.flex.align-items-center.justify-right.text-right.text-muted',
+                    'Off for ' + readableDuration(state.until - Date.now())
+                );
+        }
+    };
 	const stateColor = (state: SiteStatus) => {
 		switch (state.type) {
 			case SiteStatusTag.ENABLED:
@@ -82,16 +82,16 @@ export const SitesOptions = (store: Store) => {
 				return '.bg-active-light-hover';
 		}
 	};
-	const stateIcon = (state: SiteStatus) => {
-		switch (state.type) {
-			case SiteStatusTag.ENABLED:
-			case SiteStatusTag.NEEDS_NEW_PERMISSIONS:
-				return h('img', { attrs: { src: './icons/checked.svg' } });
-			case SiteStatusTag.DISABLED:
-			case SiteStatusTag.DISABLED_TEMPORARILY:
-				return h('img', { attrs: { src: './icons/unchecked.svg' } });
-		}
-	};
+    const stateIcon = (state: SiteStatus) => {
+        switch (state.type) {
+            case SiteStatusTag.ENABLED:
+            case SiteStatusTag.NEEDS_NEW_PERMISSIONS:
+                return h('img', { attrs: { src: './icons/checked.svg' } });
+            case SiteStatusTag.DISABLED:
+            case SiteStatusTag.DISABLED_TEMPORARILY:
+                return h('img', { attrs: { src: './icons/unchecked.svg' } });
+        }
+    };
 	const sites = getSiteStatus(state.settings);
 	const Site = (id: SiteId, label: string) => {
 		const siteStatus = sites[id];
@@ -105,20 +105,20 @@ export const SitesOptions = (store: Store) => {
 
 		const bgColor = stateColor(siteStatus);
 		let showDisableConfirm = state.uiOptions.confirmDisableSite === id;
-		return h('div', [
-			h(
-				'button.pad-0.site-grid.border.width-100pc.underline-off' + bgColor,
-				{ on: { click: onClick } },
-				[
-					h('div.pad-1.flex.h-stack.align-items-center', [
-						h('div', stateIcon(siteStatus)),
-						h('div', label),
-					]),
-					stateText(siteStatus),
-				]
-			),
-			showDisableConfirm ? DisableConfirmation(store, id) : null,
-		]);
+        return h('div', [
+            h(
+                'button.pad-0.site-grid.border.width-100pc.underline-off' + bgColor,
+                { on: { click: onClick } },
+                [
+                    h('div.pad-1.flex.h-stack.align-items-center', [
+                        h('div', stateIcon(siteStatus)),
+                        h('div', label),
+                    ]),
+                    stateText(siteStatus),
+                ]
+            ),
+            showDisableConfirm ? DisableConfirmation(store, id) : null,
+        ]);
 	};
 
 	const health = getSettingsHealth(state.settings);
@@ -138,16 +138,16 @@ export const SitesOptions = (store: Store) => {
 		);
 	}
 
-	return h('div.v-stack-2', [
-		h('h2', 'Sites'),
-		...alerts,
-		h(
-			'p',
-			"Choose sites below to enable News Feed Eradicator. When you enable a site, we'll request your permission to modify that site."
-		),
-		h(
-			'div.v-stack',
-			Object.keys(Sites).map((id: SiteId) => Site(id, Sites[id].label))
-		),
-	]);
+    return h('div.v-stack-2', [
+        h('h2', 'Sites'),
+        ...alerts,
+        h(
+            'p',
+            "Choose sites below to enable News Feed Eradicator. When you enable a site, we'll request your permission to modify that site."
+        ),
+        h(
+            'div.v-stack',
+            Object.keys(Sites).map((id: SiteId) => Site(id, Sites[id].label))
+        ),
+    ]);
 };

@@ -55,15 +55,17 @@ a:visited {
 }
 
 #options-container {
-	display: flex;
-	justify-content: center;
+    display: flex;
+    justify-content: center;
 }
 
 .nfe-info-panel {
-	padding: 16px;
-	width: 864px;
-	min-height: 100vh;
+    padding: 16px;
+    width: 864px;
+    min-height: 100vh;
 }
+
+/* (Reverted) removed Airbnb-like header/card/list styling */
 
 /* Make content fill available height so footer sits at bottom */
 .nfe-info-col {

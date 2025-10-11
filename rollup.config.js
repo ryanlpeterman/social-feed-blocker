@@ -1,6 +1,6 @@
 import typescript from '@rollup/plugin-typescript';
 import css from 'rollup-plugin-css-only';
-import resolve from 'rollup-plugin-node-resolve';
+import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import replace from '@rollup/plugin-replace';
 import { string } from 'rollup-plugin-string'
@@ -27,7 +27,7 @@ const intercept = {
 };
 
 const options = {
-	input: 'src/options/options.ts',
+	input: 'src/options/options.tsx',
 	output: {
 		file: 'build/options.js',
 		format: 'iife',

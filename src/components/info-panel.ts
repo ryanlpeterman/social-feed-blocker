@@ -4,7 +4,7 @@ import { UiOptionsTabShow, ActionType } from '../store/action-types';
 import { SitesOptions } from './sites-options';
 
 const Heading = () => {
-	return h('h3.text-center', 'News Feed Eradicator');
+    return h('h3.text-center', 'News Feed Eradicator');
 };
 
 // Footer removed per personalization

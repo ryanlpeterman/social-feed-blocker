@@ -1,4 +1,4 @@
-# Social Media Blocker
+# Social Feed Blocker
 
 A browser extension that deletes your Facebook news feed
 and replaces it with a nice quote.

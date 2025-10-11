@@ -2,7 +2,7 @@ import { Store } from '../store';
 import { h } from 'snabbdom/h';
 import { ActionType } from '../store/action-types';
 
-const SocialMediaBlocker = (store: Store) => {
+const SocialFeedBlocker = (store: Store) => {
 		const footerText = 'Blocker Settings';
 
 	const onShowInfoPanel = () => {
@@ -24,7 +24,7 @@ const SocialMediaBlocker = (store: Store) => {
     // Card layout to mirror the settings page: header + subtitle, then list-like rows
     return h('div.nfe-card', [
         h('div.nfe-card-header', [
-            h('h3.nfe-card-title', 'Social Media Blocker'),
+            h('h3.nfe-card-title', 'Social Feed Blocker'),
             h('div.nfe-card-subtitle', [bannerText]),
         ]),
         h('div.nfe-list', [
@@ -34,4 +34,4 @@ const SocialMediaBlocker = (store: Store) => {
     ]);
 };
 
-export default SocialMediaBlocker;
+export default SocialFeedBlocker;

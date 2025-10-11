@@ -39,7 +39,7 @@ export function eradicate(store: Store) {
 
 		remove({ toRemove: elementsToRemove, toEmpty: elementsToEmpty });
 
-		// Add Social Media Blocker panel
+		// Add Social Feed Blocker panel
 		if (!isAlreadyInjected()) {
 			injectUI(streamContainer, store);
 		}

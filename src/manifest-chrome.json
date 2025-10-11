@@ -1,5 +1,5 @@
 {
-    "name": "Social Media Blocker",
+    "name": "Social Feed Blocker",
     "version": "2.3.1",
     "description": "Block distracting social media feeds with a focused popup",
 	"manifest_version": 3,
@@ -41,7 +41,7 @@
 			"64": "icon64.png",
 			"128": "icon128.png"
 		},
-        "default_title": "Social Media Blocker"
+        "default_title": "Social Feed Blocker"
 	},
 	"background": {
 		"service_worker": "service-worker.js",

@@ -50,7 +50,7 @@ export function eradicate(store: Store) {
             }
         } catch (_) {}
 
-        // Add Social Media Blocker panel
+        // Add Social Feed Blocker panel
         if (container && !isAlreadyInjected()) {
             // Hack so that injectUI can handle dark theme
             document.body.style.background = 'var(--yt-spec-general-background-a)';

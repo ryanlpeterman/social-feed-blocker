@@ -45,7 +45,7 @@ export function eradicate(store: Store) {
 
 		const container = feed as Element;
 
-		// Add Social Media Blocker panel
+		// Add Social Feed Blocker panel
 		if (container && !isAlreadyInjected()) {
 			// Insert first so it appears at the top of the feed (like LinkedIn)
 			injectUI(container, store, { asFirstChild: true });

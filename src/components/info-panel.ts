@@ -4,7 +4,7 @@ import { UiOptionsTabShow, ActionType } from '../store/action-types';
 import { SitesOptions } from './sites-options';
 
 const Heading = () => {
-    return h('h3.text-center', 'Social Media Blocker');
+    return h('h3.text-center', 'Social Feed Blocker');
 };
 
 // Footer removed per personalization

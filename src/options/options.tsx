@@ -150,13 +150,13 @@ function OptionsApp() {
       <CssBaseline />
       <Container maxWidth="sm" sx={{ py: 4 }}>
         <Box sx={{ mb: 3 }}>
-          <Typography variant="h4" align="center">Social Media Blocker</Typography>
+          <Typography variant="h4" align="center">Social Feed Blocker</Typography>
         </Box>
         <Box sx={{ border: 1, borderColor: 'divider', borderRadius: 2, overflow: 'hidden' }}>
           <Box sx={{ p: 2 }}>
             <Typography variant="h6">Sites</Typography>
             <Typography variant="body2" color="text.secondary">
-              Choose sites below to enable Social Media Blocker. When you enable a site, we'll request your permission to modify that site.
+              Choose sites below to enable Social Feed Blocker. When you enable a site, we'll request your permission to modify that site.
             </Typography>
           </Box>
           <Divider />

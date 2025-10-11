@@ -126,7 +126,7 @@ export const SitesOptions = (store: Store) => {
 	if (health.noSitesEnabled) {
         alerts.push(
                 WarningAlert(
-                    `Social Media Blocker isn't currently enabled for any sites. Choose at least one below to get started.`
+                    `Social Feed Blocker isn't currently enabled for any sites. Choose at least one below to get started.`
                 )
             );
 	}
@@ -143,7 +143,7 @@ export const SitesOptions = (store: Store) => {
         ...alerts,
         h(
             'p',
-            "Choose sites below to enable Social Media Blocker. When you enable a site, we'll request your permission to modify that site."
+            "Choose sites below to enable Social Feed Blocker. When you enable a site, we'll request your permission to modify that site."
         ),
         h(
             'div.v-stack',

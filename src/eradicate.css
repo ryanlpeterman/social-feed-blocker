@@ -60,8 +60,9 @@ html[data-nfe-enabled='false'] #nfe-container {
     border: 1px solid var(--mui-divider);
     border-radius: 8px;
     box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.1); /* shadow-mid */
-    /* Widen popup while respecting container and viewport */
-    width: clamp(520px, 100%, 720px);
+    /* Keep card within its parent: fill available width but cap at a modest max */
+    width: 100%;
+    max-width: 560px; /* reduce from 720px to avoid overflow on narrow Threads/Twitter columns */
     color: var(--mui-text-primary);
 }
 #nfe-container .nfe-card-header {

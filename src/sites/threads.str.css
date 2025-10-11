@@ -13,6 +13,11 @@ html:not([data-nfe-enabled='false']) div[role='region'][aria-label='Column body'
 html:not([data-nfe-enabled='false']) [role='feed'] > #nfe-container,
 html:not([data-nfe-enabled='false']) main > #nfe-container,
 html:not([data-nfe-enabled='false']) [role='main'] > #nfe-container {
-  margin: 32px;
+  /* Center the popup horizontally within Threads' column */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 24px auto;
 }
-

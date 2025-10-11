@@ -24,6 +24,8 @@ export const Sites: Record<SiteId, Site> = {
 			'/',
 			'/home.php',
 			'/watch',
+			'/reel',
+			'/reels',
 			'/marketplace/',
 			'/groups/feed/',
 			'/gaming/feed/',

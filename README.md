@@ -17,7 +17,7 @@ This is a focused fork of News Feed Eradicator that modernizes the build, simpli
 
 These are representative screenshots of the product. See `assets/screenshots/` for full‑size images.
 
-![Settings](assets/screenshots/settings-1280x800.jpg)
+![Settings](assets/settings.png)
 
 ![Twitter Before/After](assets/screenshots/twitter-before-after-vertical-medium-labeled.jpg)
 

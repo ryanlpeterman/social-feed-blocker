@@ -1,10 +1,5 @@
 import { combineReducers } from 'redux';
-import {
-	UiOptionsTabShow,
-	UiOptionsQuoteTabShow,
-	ActionObject,
-	ActionType,
-} from '../action-types';
+import { ActionObject, ActionType } from '../action-types';
 import { SiteId } from '../../sites';
 
 const confirmDisableSite = (
@@ -21,41 +16,12 @@ const confirmDisableSite = (
 	return state;
 };
 
-const tab = (
-	state: UiOptionsTabShow['tab'] | undefined = 'sites',
-	action: ActionObject
-) => {
-	if (action.type === ActionType.UI_OPTIONS_TAB_SHOW) {
-		return action.tab;
-	}
-	return state;
-};
-const quotesTab = (
-	state: UiOptionsQuoteTabShow['tab'] | undefined = 'custom',
-	action: ActionObject
-) => {
-	if (action.type === ActionType.UI_OPTIONS_QUOTE_TAB_SHOW) {
-		return action.tab;
-	}
-	// Deactivate builtin quotes tab if they've been disabled
-	if (
-		action.type === ActionType.BACKGROUND_SETTINGS_CHANGED &&
-		action.settings.builtinQuotesEnabled === false &&
-		state === 'builtin'
-	) {
-		return 'custom';
-	}
-	return state;
-};
+// Removed legacy options tab state (tab, quotesTab)
 
 export type OptionsState = {
-	confirmDisableSite: SiteId | null;
-	tab: UiOptionsTabShow['tab'];
-	quotesTab: UiOptionsQuoteTabShow['tab'];
+    confirmDisableSite: SiteId | null;
 };
 
 export const optionsReducer = combineReducers({
-	confirmDisableSite,
-	tab,
-	quotesTab,
+    confirmDisableSite,
 });

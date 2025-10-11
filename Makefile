@@ -22,7 +22,8 @@ package-source:
 copy-assets:
 	mkdir -p build
 	mkdir -p build/icons
-	cp src/icons/* build/icons/
+	# Copy optional icon assets if present
+	if ls src/icons/* >/dev/null 2>&1; then cp src/icons/* build/icons/; fi
 	cp src/manifest-chrome.json build/manifest.json
 	cp src/options/options.html build/options.html
 	cp assets/icon16.png build/icon16.png
@@ -30,6 +31,8 @@ copy-assets:
 	cp assets/icon48.png build/icon48.png
 	cp assets/icon64.png build/icon64.png
 	cp assets/icon128.png build/icon128.png
+	# Brand asset for UI
+	cp assets/transparent-icon.png build/transparent-icon.png
 
 dev: install copy-assets
 	mkdir -p build

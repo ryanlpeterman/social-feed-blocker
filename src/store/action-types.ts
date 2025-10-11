@@ -15,8 +15,7 @@ export enum ActionType {
 	BACKGROUND_SETTINGS_CHANGED = 'BACKGROUND_SETTINGS_CHANGED',
 	PARSE_ERROR = 'PARSE_ERROR',
 	UI_OPTIONS_SHOW = 'ui/options/show',
-	UI_OPTIONS_TAB_SHOW = 'ui/options/tab/show',
-	UI_OPTIONS_QUOTE_TAB_SHOW = 'ui/options/quote/tab/show',
+    // Removed legacy options tab actions
 	UI_SITES_SITE_CLICK = 'sites/site/click',
 
 	/**
@@ -34,23 +33,21 @@ export enum ActionType {
 }
 
 export type ActionObject =
-	| BackgroundAction
-	| QuoteSelectNew
-	| QuoteRemoveCurrent
-	| QuoteMenuShow
-	| QuoteEdit
-	| QuoteCurrentSet
-	| QuoteSaveClicked
-	| QuoteAddBulk
-	| QuoteBulkParseError
-	| BackgroundSettingsChanged
-	| UiOptionsShow
-	| UiOptionsTabShow
-	| UiOptionsQuoteTabShow
-	| UiSitesSiteClick
-	| UiSitesSiteDisableConfirmShow
-	| UiSitesSiteDisableConfirmed
-	| UiCloseTab;
+    | BackgroundAction
+    | QuoteSelectNew
+    | QuoteRemoveCurrent
+    | QuoteMenuShow
+    | QuoteEdit
+    | QuoteCurrentSet
+    | QuoteSaveClicked
+    | QuoteAddBulk
+    | QuoteBulkParseError
+    | BackgroundSettingsChanged
+    | UiOptionsShow
+    | UiSitesSiteClick
+    | UiSitesSiteDisableConfirmShow
+    | UiSitesSiteDisableConfirmed
+    | UiCloseTab;
 
 export type BackgroundAction = {
 	type: ActionType.BACKGROUND_ACTION;
@@ -117,14 +114,7 @@ export type QuoteBulkParseError = {
 	message: string;
 };
 
-export type UiOptionsTabShow = {
-	type: ActionType.UI_OPTIONS_TAB_SHOW;
-	tab: 'sites' | 'quotes' | 'about';
-};
-export type UiOptionsQuoteTabShow = {
-	type: ActionType.UI_OPTIONS_QUOTE_TAB_SHOW;
-	tab: 'custom' | 'builtin';
-};
+// Removed UiOptionsTabShow and UiOptionsQuoteTabShow (unused)
 export type UiSitesSiteClick = {
 	type: ActionType.UI_SITES_SITE_CLICK;
 	site: SiteId;

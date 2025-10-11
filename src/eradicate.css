@@ -27,30 +27,10 @@ html[data-nfe-enabled='false'] #nfe-container {
 	display: none;
 }
 
-.margin-0 {
-	margin: 0;
-}
-.pad-0 {
-	padding: 0;
-}
-
-.pad-1 {
-	padding: 8px;
-}
+/* Removed unused utility classes (margin-0, pad-0, pad-1) */
 
 /* Link styling for overlay settings link */
-.nfe-info-link {
-    margin-left: 15px;
-    color: #1877f2;
-    font-size: 18px;
-    display: inline-block;
-    cursor: pointer;
-    text-decoration: underline;
-}
-.nfe-info-link:hover {
-    text-decoration: underline;
-    filter: brightness(1.1);
-}
+/* Removed legacy inline link styles (unused) */
 
 /* Layout rows inside the injected container to mirror options card */
 #nfe-container .nfe-card {
@@ -68,6 +48,12 @@ html[data-nfe-enabled='false'] #nfe-container {
 #nfe-container .nfe-card-header {
     padding-bottom: 8px;
 }
+#nfe-container .nfe-card-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
 #nfe-container .nfe-card-title {
     margin: 0 0 4px 0;
     font-weight: 500;
@@ -80,17 +66,22 @@ html[data-nfe-enabled='false'] #nfe-container {
     color: var(--mui-text-secondary);
     text-align: left;
 }
+
+/* Brand mark shown inline next to the title */
+#nfe-container .nfe-brand-icon {
+    width: auto;
+    height: 1.25em; /* match the h3 title font-size */
+    opacity: 0.9;
+    flex: 0 0 auto;
+}
+
+/* Reddit-specific alignment: trim bottom gap under the title row */
+/* Reddit-specific overrides no longer needed due to inline icon approach */
 #nfe-container .nfe-banner-row {
     margin-bottom: 12px;
     text-align: left;
 }
-#nfe-container .nfe-buttons-row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    flex-wrap: wrap;
-}
+/* Removed legacy button row layout (unused) */
 
 /* List-like rows to mirror options page list */
 #nfe-container .nfe-list {
@@ -139,58 +130,7 @@ html[data-nfe-enabled='false'] #nfe-container {
     transition: background-color 150ms ease, box-shadow 150ms ease, border-color 150ms ease;
 }
 
-/* Settings: outlined success (de-emphasized but same green) */
-.nfe-settings-btn {
-    -webkit-appearance: none;
-    appearance: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid var(--mui-success);
-    background: transparent;
-    color: var(--mui-success);
-    text-decoration: none;
-    font-size: 110%;
-}
-.nfe-settings-btn:hover {
-    background: rgba(46, 125, 50, 0.04); /* success hover */
-}
-.nfe-settings-btn:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.2);
-}
-.nfe-settings-btn:active {
-    transform: translateY(0.5px);
-}
-/* Dark surfaces: keep outlined primary legible */
-body[data-nfe-color-scheme='dark'] .nfe-settings-btn,
-.__fb-dark-mode .nfe-settings-btn {
-    border-color: var(--mui-success);
-    color: var(--mui-success);
-}
-
-/* Close Tab: contained success (match Enabled green) */
-.nfe-close-btn {
-    -webkit-appearance: none;
-    appearance: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    background: var(--mui-success);
-    color: var(--mui-success-contrast);
-    box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12);
-    font-size: 110%;
-}
-.nfe-close-btn:hover { background: var(--mui-success-dark); }
-.nfe-close-btn:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.2), 0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12);
-}
-body[data-nfe-color-scheme='dark'] .nfe-close-btn,
-.__fb-dark-mode .nfe-close-btn { background: var(--mui-success); color: var(--mui-success-contrast); }
-body[data-nfe-color-scheme='dark'] .nfe-close-btn:hover,
-.__fb-dark-mode .nfe-close-btn:hover { background: var(--mui-success-dark); }
+/* Removed legacy standalone button styles (unused) */
 
 /* Banner/subtitle text should match options body text */
 .nfe-banner-text { font-weight: 400; margin: 0; font-size: 1em; color: inherit; }
@@ -311,10 +251,13 @@ html:not([data-nfe-enabled='false']) {
 	--notification-badge: var(--base-blue);
 }
 
-/* Reddit 2024 update */
+/* Reddit 2024 update: fully remove articles so no space remains */
 shreddit-feed > article {
+	display: none !important;
 	opacity: 0 !important;
 	pointer-events: none !important;
+	height: 0 !important;
+	margin: 0 !important;
 }
 
 /* Reddit Home | Popular | All */
@@ -324,8 +267,11 @@ html:not([data-nfe-enabled='false'])
 	.scrollerItem,
 .SubredditVars-r-all .scrollerItem,
 .SubredditVars-r-popular .scrollerItem {
+	display: none !important;
 	opacity: 0 !important;
 	pointer-events: none !important;
+	height: 0 !important;
+	margin: 0 !important;
 }
 
 /* Reddit's Popular's Trending Part */
@@ -340,9 +286,11 @@ html:not([data-nfe-enabled='false'])
 	.listing-page.with-listing-chooser
 	.content
 	#siteTable {
+	display: none !important;
 	opacity: 0 !important;
 	pointer-events: none !important;
 	height: 0 !important;
+	margin: 0 !important;
 }
 
 /* Hacker News */

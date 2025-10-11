@@ -272,6 +272,8 @@ const connect: AppEffect = (store) => {
             // Connected: reset backoff
             nextDelayMs = 200;
             clearRetry();
+            // Nudge background to compute and send fresh settings
+            try { p.postMessage({ t: MessageType.SETTINGS_ACTION, action: { type: BackgroundActionType.PERMISSIONS_CHECK } as any }); } catch (_) {}
         } catch (e) {
             // Could not connect right now; schedule retry
             port = undefined;

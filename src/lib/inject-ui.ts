@@ -58,7 +58,8 @@ export default function injectUI(
     };
 
     render();
-    store.subscribe(render);
+    // Subscribe for updates and re-render; ignore returned unsubscribe since this lives for page lifetime
+    try { (store.subscribe as any)(render); } catch (_) { store.subscribe(render as any); }
 
     // Increment a daily counter for "times blocked" and re-render once updated.
     (async () => {

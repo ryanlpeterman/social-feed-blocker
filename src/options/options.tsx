@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSyncExternalStore } from 'react';
 import { createRoot } from 'react-dom/client';
 import './options.css';
 import { createStore } from '../store';
@@ -27,12 +28,10 @@ import { createTheme, ThemeProvider, useMediaQuery } from '@mui/material';
 const store = createStore();
 
 function useStore() {
-  const [, force] = React.useReducer((c) => c + 1, 0);
-  React.useEffect(() => {
-    // Subscribe to store updates and force re-render; unsubscribe not provided
-    store.subscribe(() => force());
-  }, []);
-  return store.getState();
+  // Stable subscribe and getState for useSyncExternalStore
+  const subscribe = React.useCallback((cb: () => void) => store.subscribe(cb), []);
+  const get = React.useCallback(() => store.getState(), []);
+  return useSyncExternalStore(subscribe, get, get);
 }
 
 function StatusChip({ status }: { status: SiteStatus }) {
@@ -110,19 +109,18 @@ function SitesList() {
 function OptionsApp() {
   const prefersDark = useMediaQuery('(prefers-color-scheme: dark)');
   const theme = React.useMemo(() => createTheme({ palette: { mode: prefersDark ? 'dark' : 'light' } }), [prefersDark]);
-  // Snapshot fallback: if settings haven't arrived shortly after mount, load from storage
+  // Snapshot fallback: eagerly load from storage if background is slow to connect
   React.useEffect(() => {
     let cancelled = false;
-    const t = setTimeout(async () => {
+    const loadSnapshot = async () => {
       const state = store.getState();
-      if (state.settings != null) return; // already loaded
+      if (cancelled || state.settings != null) return;
       try {
         const [raw, perms] = await Promise.all([
           Settings.load(),
           getBrowser().permissions.getAll().catch(() => ({ permissions: [], origins: [] })),
         ]);
         if (cancelled) return;
-        // Merge sites against known sites list
         const siteIds = Object.keys(Sites) as (keyof typeof Sites)[];
         const mergedSites: Settings.SitesState = {} as Settings.SitesState;
         for (const id of siteIds) {
@@ -142,15 +140,27 @@ function OptionsApp() {
       } catch (_) {
         // ignore; background connection will deliver eventually
       }
-    }, 150);
-    return () => { cancelled = true; clearTimeout(t); };
+    };
+    // Try immediately, then with exponential backoff a few times
+    let attempts = 0;
+    const schedule = () => {
+      if (attempts >= 3) return; // enough retries
+      attempts++;
+      setTimeout(() => { loadSnapshot(); schedule(); }, attempts * 250);
+    };
+    loadSnapshot();
+    schedule();
+    return () => { cancelled = true; };
   }, []);
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Container maxWidth="sm" sx={{ py: 4 }}>
         <Box sx={{ mb: 3 }}>
-          <Typography variant="h4" align="center">Social Feed Blocker</Typography>
+          <Typography variant="h4" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            Social Feed Blocker
+            <Box component="img" src="transparent-icon.png" alt="" sx={{ height: '0.9em', width: 'auto', opacity: 0.9 }} />
+          </Typography>
         </Box>
         <Box sx={{ border: 1, borderColor: 'divider', borderRadius: 2, overflow: 'hidden' }}>
           <Box sx={{ p: 2 }}>

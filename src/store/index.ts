@@ -7,7 +7,7 @@ import { rootEffect } from './effects';
 
 export type Store = {
 	getState(): IState;
-	subscribe(cb: () => void): void;
+	subscribe(cb: () => void): () => void; // return unsubscribe like Redux
 	dispatch(action: ActionObject): void;
 };
 

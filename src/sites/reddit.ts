@@ -8,6 +8,8 @@ export function checkSite(): boolean {
 }
 
 export function eradicate(store: Store) {
+    // Mark document for Reddit-specific CSS tweaks
+    try { document.documentElement.setAttribute('data-nfe-reddit', 'true'); } catch (_) {}
 	function eradicateRetry() {
 		const settings = store.getState().settings;
 		if (settings == null || !isEnabled(settings)) {

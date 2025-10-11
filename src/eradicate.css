@@ -2,6 +2,7 @@
     font-family: Roboto, Helvetica, Arial, sans-serif;
     font-weight: normal;
     line-height: 1.4;
+    font-size: 16px; /* Pin base size so popup is at least as large as settings */
 
     /* Needed for detecting the background color with getComputedStyle */
     background-color: inherit;
@@ -60,10 +61,26 @@ html[data-nfe-enabled='false'] #nfe-container {
     border-radius: 8px;
     box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.1); /* shadow-mid */
     max-width: 720px;
+    color: var(--mui-text-primary);
+}
+#nfe-container .nfe-card-header {
+    padding-bottom: 8px;
+}
+#nfe-container .nfe-card-title {
+    margin: 0 0 4px 0;
+    font-weight: 500;
+    font-size: 1.25em; /* scale from container base */
+    color: var(--mui-text-primary);
+    text-align: left;
+}
+#nfe-container .nfe-card-subtitle {
+    margin: 0;
+    color: var(--mui-text-secondary);
+    text-align: left;
 }
 #nfe-container .nfe-banner-row {
     margin-bottom: 12px;
-    text-align: center;
+    text-align: left;
 }
 #nfe-container .nfe-buttons-row {
     display: flex;
@@ -71,6 +88,41 @@ html[data-nfe-enabled='false'] #nfe-container {
     justify-content: center;
     gap: 12px;
     flex-wrap: wrap;
+}
+
+/* List-like rows to mirror options page list */
+#nfe-container .nfe-list {
+    display: block;
+    margin-top: 8px;
+    /* Extend list rows edge-to-edge within the card to fill the whole row */
+    margin-left: -16px;
+    margin-right: -16px;
+    margin-bottom: -16px; /* remove space under the bottom row */
+    border-top: 1px solid var(--mui-divider); /* divider between header and list like options */
+}
+#nfe-container .nfe-list-item {
+    appearance: none;
+    -webkit-appearance: none;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: none;
+    padding: 12px 16px; /* internal padding for readability; no outer padding due to negative margins */
+    font-size: 1em; /* scale from container base */
+    color: var(--mui-text-primary);
+    cursor: pointer;
+}
+#nfe-container .nfe-list-item:hover {
+    background: var(--mui-hover);
+}
+#nfe-container .nfe-list-item:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.12);
+}
+#nfe-container .nfe-list .nfe-list-item + .nfe-list-item {
+    border-top: 1px solid var(--mui-divider);
 }
 
 /* Buttons styled to match MUI defaults */
@@ -138,16 +190,25 @@ body[data-nfe-color-scheme='dark'] .nfe-close-btn,
 body[data-nfe-color-scheme='dark'] .nfe-close-btn:hover,
 .__fb-dark-mode .nfe-close-btn:hover { background: var(--mui-success-dark); }
 
-/* Banner text spacing (match options text primary) */
-.nfe-banner-text { font-weight: 500; margin-right: 12px; font-size: 120%; color: var(--mui-text-primary); }
+/* Banner/subtitle text should match options body text */
+.nfe-banner-text { font-weight: 400; margin: 0; font-size: 1em; color: inherit; }
 body[data-nfe-color-scheme='dark'] .nfe-banner-text,
-.__fb-dark-mode .nfe-banner-text { color: #fff; }
+.__fb-dark-mode .nfe-banner-text { color: var(--mui-text-secondary); }
 
 /* Dark surface adjustments to mirror MUI dark cards */
 body[data-nfe-color-scheme='dark'] #nfe-container .nfe-card,
 .__fb-dark-mode #nfe-container .nfe-card {
-    background: #1f1f1f;
-    border-color: rgba(255, 255, 255, 0.12);
+    background: var(--mui-surface);
+    border-color: var(--mui-divider);
+}
+
+/* Set dark theme tokens to match options page */
+body[data-nfe-color-scheme='dark'] #nfe-container,
+.__fb-dark-mode #nfe-container {
+    --mui-surface: #121212;
+    --mui-divider: rgba(255, 255, 255, 0.12);
+    --mui-text-primary: rgba(255, 255, 255, 0.87);
+    --mui-text-secondary: rgba(255, 255, 255, 0.6);
 }
 
 /* Avoid overriding site light themes purely due to OS-level dark mode.

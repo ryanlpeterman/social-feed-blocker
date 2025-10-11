@@ -19,12 +19,18 @@ const NewsFeedEradicator = (store: Store) => {
 	// Informational text before the buttons
     const count = (window as any).__NFE_DAILY_BLOCK_COUNT as number | undefined;
     const countSuffix = count != null ? ` ${count} ${count === 1 ? 'time' : 'times'} today` : '';
-    const bannerText = h('span.nfe-banner-text', 'Social media blocked' + countSuffix);
+    const bannerText = h('span.nfe-banner-text', 'Blocked' + countSuffix);
 
-    // Place counter text on its own row, and buttons on their own row
+    // Card layout to mirror the settings page: header + subtitle, then list-like rows
     return h('div.nfe-card', [
-            h('div.nfe-banner-row', [bannerText]),
-            h('div.nfe-buttons-row', [closeBtn, link]),
+        h('div.nfe-card-header', [
+            h('h3.nfe-card-title', 'Social Media Blocker'),
+            h('div.nfe-card-subtitle', [bannerText]),
+        ]),
+        h('div.nfe-list', [
+            h('button.nfe-list-item', { on: { click: onCloseTab } }, 'Close Tab'),
+            h('button.nfe-list-item', { on: { click: onShowInfoPanel } }, 'Blocker Settings'),
+        ]),
     ]);
 };
 

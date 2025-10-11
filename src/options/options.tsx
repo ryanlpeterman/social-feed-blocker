@@ -57,13 +57,10 @@ function DisableConfirm({ siteId }: { siteId: SiteId }) {
     });
   };
   return (
-    <Stack direction="row" spacing={1} sx={{ mt: 1, flexWrap: 'wrap' }}>
+    <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mt: 1 }}>
       <Typography variant="body2" sx={{ mr: 1 }}>Show feed for:</Typography>
       <Button size="small" variant="outlined" onClick={onConfirm(5 * MINUTE)}>5 min</Button>
-      <Button size="small" variant="outlined" onClick={onConfirm(10 * MINUTE)}>10 min</Button>
-      <Button size="small" variant="outlined" onClick={onConfirm(30 * MINUTE)}>30 min</Button>
       <Button size="small" variant="outlined" onClick={onConfirm(HOUR)}>1 hr</Button>
-      <Button size="small" variant="outlined" onClick={onConfirm(DAY)}>1 day</Button>
       <Button size="small" variant="outlined" onClick={onConfirm('forever')}>Forever</Button>
     </Stack>
   );
@@ -117,7 +114,6 @@ function OptionsApp() {
       <Container maxWidth="sm" sx={{ py: 4 }}>
         <Box sx={{ mb: 3 }}>
           <Typography variant="h4" align="center">News Feed Eradicator</Typography>
-          <Typography variant="body2" color="text.secondary" align="center">Settings</Typography>
         </Box>
         <Box sx={{ border: 1, borderColor: 'divider', borderRadius: 2, overflow: 'hidden' }}>
           <Box sx={{ p: 2 }}>

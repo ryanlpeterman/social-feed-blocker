@@ -1,17 +1,14 @@
 # Social Feed Blocker (Fork of News Feed Eradicator)
 
-This is a focused fork of News Feed Eradicator that modernizes the build, simplifies the UI, and adds per‑site controls. It blocks distracting social feeds (Facebook, Twitter/X, Reddit, YouTube, Instagram, LinkedIn, TikTok, Threads, Substack, HN) and shows a clean, minimal panel you can use to open settings or temporarily allow a feed.
+It's a modern reskin of News Feed Eradicator (does a great job at preventing doom scrolling) with some changes I wanted personally. It blocks distracting social feeds (Facebook, Twitter/X, Reddit, YouTube, Instagram, LinkedIn, TikTok, Threads, Substack, HN) and shows a clean, minimal panel you can use to open settings or temporarily allow a feed.
 
-## What’s different in this fork
+## Main changes I made
 
-- Manifest V3 packaging for Chrome with programmatic content‑script registration via the `scripting` API.
-- Robust registration (fixes “Duplicate script ID 'intercept'”): debounced register + unregister‑first + one‑shot retry.
-- Simplified options page (React + MUI). Removed the old snabbdom options components entirely.
-- Per‑site enable/disable with on‑demand permission requests; temporary disable options (5m/1h/1d/forever).
-- More sites and fixes: Twitter/X, Instagram, YouTube Shorts, FB Reels, Reddit 2024 layout, Threads, TikTok, Substack, HN.
-- Cleaner injected UI: a compact card with an inline green leaf mark; “Blocker Settings” and “Close Tab” actions.
-- Icons reworked (trimmed padding, green brand variant); web‑accessible brand asset for content script usage.
-- More reliable settings load on options page: immediate snapshot from storage with retries + React `useSyncExternalStore`.
+1. Modernized and cleaned up the front end
+2. Implemented all short form video blocking (IG/FB Reels, TikTok, YouTube Shorts)
+3. Implemented new social media websites like Threads and Substack notes
+4. Removed quotes and instead added a counter
+5. Added a button to close the tab that takes you back to the previous tab you were on, ideally restoring focus
 
 ## Screenshots
 
@@ -86,4 +83,8 @@ We welcome contributions! A few notes to get you productive quickly:
 
 ## License
 
-MIT (see `LICENSE`). Credit to the original [News Feed Eradicator](https://github.com/jordwest/news-feed-eradicator) project and community for the foundation this fork builds upon.
+MIT (see `LICENSE`).
+
+## Credit
+
+Credit to Jordan West who developed the original open source project that this reskin is based off of: https://github.com/jordwest/news-feed-eradicator

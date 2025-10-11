@@ -22,161 +22,18 @@ html[data-nfe-enabled='false'] #nfe-container {
 	padding: 8px;
 }
 
-.nfe-quote {
-	position: relative;
-	font-size: 24px;
-}
-
-.list-unstyled {
-	list-style: none;
-}
-.underline-off {
-	text-decoration: none;
-}
-
-.nfe-quote-text {
-	color: #000;
-	border-left: 4px solid #99f;
-	margin-left: 15px;
-	padding-left: 15px;
-	width: 87.5%;
-	text-align: left;
-}
-
-.__fb-dark-mode .nfe-quote-text,
-body[data-nfe-color-scheme='dark'] .nfe-quote-text {
-	color: white;
-}
-
-.nfe-quote-source {
-	color: #999;
-}
-
-.nfe-quote-action-menu {
-	display: block;
-	position: absolute;
-	right: 0px;
-	top: 0px;
-}
-
-.nfe-quote-action-menu-button {
-	position: absolute;
-	display: block;
-	width: 24px;
-	height: 24px;
-	right: 0px;
-	top: 0px;
-
-	border: 1px solid transparent;
-	background-color: rgba(255, 255, 255, 0.6);
-	font-size: 10px;
-	text-decoration: none;
-	color: #bbb;
-	line-height: 24px;
-	text-align: center;
-}
-
-.nfe-quote-action-menu-button:hover {
-	text-decoration: none;
-	color: #ccc;
-	background-color: #fff;
-	border: 1px solid #ddd;
-}
-
-.nfe-quote-action-menu-content {
-	position: absolute;
-	right: 0;
-	top: 24px;
-	width: 160px;
-	padding: 4px 0px;
-
-	background-color: #fff;
-	border: 1px solid #ddd;
-	border-radius: 2px;
-	box-shadow: 5px 5px 15px #aaa;
-	font-size: 14px;
-}
-
-.nfe-quote-action-menu-item {
-	display: block;
-	padding: 5px 5px 5px 15px;
-	color: #000;
-	border-top: 1px solid transparent;
-	border-bottom: 1px solid transparent;
-}
-
-.nfe-quote-action-menu-item:hover {
-	background-color: #77c;
-	border-top: 1px solid #003;
-	border-bottom: 1px solid #003;
-	color: #fff;
-	text-decoration: none;
-}
-
+/* Link styling for overlay settings link */
 .nfe-info-link {
-	margin-left: 15px;
-	color: #77f;
-	font-size: 18px;
-	display: block;
-	cursor: pointer;
+    margin-left: 15px;
+    color: #1877f2;
+    font-size: 18px;
+    display: inline-block;
+    cursor: pointer;
+    text-decoration: underline;
 }
-
 .nfe-info-link:hover {
-	color: #77f;
-	font-size: 18px;
-	display: block;
-	background-color: #ddd;
-}
-
-.nfe-info-link img {
-	vertical-align: middle;
-}
-
-.nfe-quote textarea.nfe-editor-quote,
-.nfe-quote input.nfe-editor-source {
-	width: 90%;
-	font-size: 24px;
-}
-
-.nfe-quote textarea.nfe-editor-quote {
-	min-height: 62px;
-}
-
-.nfe-quote textarea.nfe-editor-quote-bulk {
-	width: 90%;
-	font-size: 12px;
-	min-height: 120px;
-}
-
-.nfe-label {
-	background-color: #ddd;
-	color: #000;
-	padding: 2px;
-	border-radius: 2px;
-}
-
-.nfe-label.nfe-new-features {
-	margin-left: 1em;
-	background-color: #ffcf74;
-	font-weight: bold;
-}
-
-.nfe-label.nfe-label-add-bulk {
-	margin: 5px 10px;
-	height: 26px;
-	font-size: 22px;
-	border: 1px solid #aaa;
-	border-radius: 2px;
-	padding: 5px 9px 5px 5px;
-	cursor: pointer;
-	vertical-align: inherit;
-	font-weight: 400;
-}
-
-.nfe-error {
-	margin: 5px 10px;
-	font-size: 16px;
-	color: #ff0000;
+    text-decoration: underline;
+    filter: brightness(1.1);
 }
 
 /* Old Facebook (pre-2020) */

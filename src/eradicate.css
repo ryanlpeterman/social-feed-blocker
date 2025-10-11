@@ -18,17 +18,6 @@
 	--mui-success-contrast: #ffffff;
 }
 
-/* Center the injected overlay UI */
-#nfe-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 12px;
-    width: 100%;
-    text-align: center;
-}
-
 html[data-nfe-enabled='false'] #nfe-container {
 	display: none;
 }

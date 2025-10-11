@@ -59,10 +59,13 @@
 		"64": "icon64.png",
 		"128": "icon128.png"
 	},
-	"web_accessible_resources": [
-		{
-			"resources": ["transparent-icon.png"],
-			"matches": ["<all_urls>"]
-		}
-	]
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "transparent-icon.png",
+                "transparent-icon-green.png"
+            ],
+            "matches": ["<all_urls>"]
+        }
+    ]
 }

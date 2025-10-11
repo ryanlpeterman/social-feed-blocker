@@ -18,7 +18,7 @@ const SocialFeedBlocker = (store: Store) => {
     const bannerText = h('span.nfe-banner-text', 'Blocked' + countSuffix);
 
     // Card layout to mirror the settings page: header + subtitle, then list-like rows
-    const brandIconUrl = getBrowser().runtime.getURL('transparent-icon.png');
+    const brandIconUrl = getBrowser().runtime.getURL('transparent-icon-green.png');
 
     return h('div.nfe-card', [
         h('div.nfe-card-header', [

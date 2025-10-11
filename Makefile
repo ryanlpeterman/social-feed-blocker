@@ -32,7 +32,8 @@ copy-assets:
 	cp assets/icon64.png build/icon64.png
 	cp assets/icon128.png build/icon128.png
 	# Brand asset for UI
-	cp assets/transparent-icon.png build/transparent-icon.png
+	cp assets/transparent-icon.png build/transparent-icon.png || true
+	cp assets/transparent-icon-green.png build/transparent-icon-green.png
 
 dev: install copy-assets
 	mkdir -p build

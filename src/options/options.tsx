@@ -58,7 +58,7 @@ function DisableConfirm({ siteId }: { siteId: SiteId }) {
     });
   };
   return (
-    <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mt: 1 }}>
+    <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mt: 2, mb: 2 }}>
       <Typography variant="body2" sx={{ mr: 1 }}>Show feed for:</Typography>
       <Button size="small" variant="outlined" onClick={onConfirm(5 * MINUTE)}>5 min</Button>
       <Button size="small" variant="outlined" onClick={onConfirm(HOUR)}>1 hr</Button>
@@ -94,7 +94,7 @@ function SitesList() {
               </ListItemButton>
             </ListItem>
             {showConfirm && (
-              <Box sx={{ pl: 2, pr: 2, pb: 2 }}>
+              <Box sx={{ p: 0, mx: 2 }}>
                 <DisableConfirm siteId={siteId} />
               </Box>
             )}
@@ -156,10 +156,10 @@ function OptionsApp() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Container maxWidth="sm" sx={{ py: 4 }}>
-        <Box sx={{ mb: 3 }}>
-          <Typography variant="h4" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <Box sx={{ mb: 3, display: 'flex', justifyContent: 'center' }}>
+          <Typography variant="h4" sx={{ display: 'inline-flex', alignItems: 'center', gap: 1, textAlign: 'center' }}>
             Social Feed Blocker
-            <Box component="img" src="transparent-icon.png" alt="" sx={{ height: '0.9em', width: 'auto', opacity: 0.9 }} />
+            <Box component="img" src="transparent-icon-green.png" alt="" sx={{ height: '0.9em', width: 'auto', opacity: 0.9 }} />
           </Typography>
         </Box>
         <Box sx={{ border: 1, borderColor: 'divider', borderRadius: 2, overflow: 'hidden' }}>

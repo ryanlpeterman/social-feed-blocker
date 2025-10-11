@@ -232,19 +232,37 @@ div.ego_column,
 }
 
 /* New Facebook (2020) */
-html:not([data-nfe-enabled='false']) #ssrb_feed_start + div, /* For home and groups feeds */
-html:not([data-nfe-enabled='false']) div[data-pagelet='MainFeed'], /* For watch and marketplace feeds */
-html:not([data-nfe-enabled='false']) div[aria-label='Gaming'][role='main'],
-html:not([data-nfe-enabled='false']) div[aria-label='Stories'],
-html:not([data-nfe-enabled='false'])
-div.x1hc1fzr.x1unhpq9.x6o7n8i > :not(#nfe-container), /* For new fb layout (Q4 2022) */
-html:not([data-nfe-enabled='false'])
-div[role='region'][data-visualcompletion='ignore-dynamic'] /* For stories in non-english versions */ {
-	position: absolute !important;
-	opacity: 0 !important;
-	pointer-events: none !important;
-	width: 0 !important;
-	height: 0 !important;
+/* Hide content inside the feed containers but keep the containers in flow to preserve layout */
+html:not([data-nfe-enabled='false']) #ssrb_feed_start + div > :not(#nfe-container), /* For home and groups feeds */
+html:not([data-nfe-enabled='false']) div[data-pagelet='MainFeed'] > :not(#nfe-container), /* For watch and marketplace feeds */
+html:not([data-nfe-enabled='false']) div[aria-label='Gaming'][role='main'] > :not(#nfe-container),
+html:not([data-nfe-enabled='false']) div[aria-label='Stories'] > :not(#nfe-container),
+html:not([data-nfe-enabled='false']) div.x1hc1fzr.x1unhpq9.x6o7n8i > :not(#nfe-container), /* For new fb layout (Q4 2022) */
+html:not([data-nfe-enabled='false']) div[role='region'][data-visualcompletion='ignore-dynamic'] > :not(#nfe-container) /* For stories in non-english versions */ {
+    position: absolute !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+/* Ensure our popup centers inside known feed containers */
+html:not([data-nfe-enabled='false']) #ssrb_feed_start + div > #nfe-container,
+html:not([data-nfe-enabled='false']) div[data-pagelet='MainFeed'] > #nfe-container,
+html:not([data-nfe-enabled='false']) div[aria-label='Gaming'][role='main'] > #nfe-container,
+html:not([data-nfe-enabled='false']) div[aria-label='Stories'] > #nfe-container,
+html:not([data-nfe-enabled='false']) div.x1hc1fzr.x1unhpq9.x6o7n8i > #nfe-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    box-sizing: border-box;
+    /* Standard top spacing (avoid negative offset) */
+    margin: 8px auto;
+    /* If parent is a grid, ensure the popup centers within the grid area */
+    justify-self: center;
+    align-self: start;
+    grid-column: 1 / -1;
 }
 /* Facebook Reels/Watch feed container */
 html:not([data-nfe-enabled='false']) #watch_feed > :not(#nfe-container) {
@@ -261,7 +279,7 @@ html:not([data-nfe-enabled='false']) #watch_feed > #nfe-container {
     align-items: flex-start;
     width: 100%;
     box-sizing: border-box;
-    margin: 24px auto;
+    margin: 8px auto;
 }
 
 /* Facebook Reels: hide videos under role=main on /reel(s) routes */

@@ -128,7 +128,7 @@ body[data-nfe-color-scheme='dark'] .nfe-close-btn:hover,
 .__fb-dark-mode .nfe-close-btn:hover { background: var(--mui-success-dark); }
 
 /* Banner text spacing */
-.nfe-banner-text { font-weight: 400; margin-right: 12px; font-size: 110%; color: #111; }
+.nfe-banner-text { font-weight: 400; margin-right: 12px; font-size: 120%; color: #111; }
 body[data-nfe-color-scheme='dark'] .nfe-banner-text,
 .__fb-dark-mode .nfe-banner-text { color: #fff; }
 

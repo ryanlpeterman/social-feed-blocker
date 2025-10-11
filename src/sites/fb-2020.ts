@@ -19,12 +19,25 @@ export function eradicate(store: Store) {
 			document.title = 'Facebook';
 		}
 
-		// Don't do anything if the FB UI hasn't loaded yet
-		const feed =
-			document.querySelector('#ssrb_feed_start + div') || // For home and groups feed
-			document.querySelector('[data-pagelet=MainFeed]') || // For watch and marketplace feeds
-			document.querySelector('div[aria-label=Gaming][role=main]') || // For gaming feed
-			document.querySelector('div.x1hc1fzr.x1unhpq9.x6o7n8i'); // For new fb layout (Q4 2022)
+
+		// Detect Reels route and expose a flag for CSS-only rules
+		let onReels = false;
+		try {
+			onReels = /\/reel(s)?\//i.test(window.location.pathname);
+			if (onReels) {
+				document.documentElement.setAttribute('data-nfe-fb-reels', 'true');
+			} else {
+				document.documentElement.removeAttribute('data-nfe-fb-reels');
+			}
+		} catch (_) {}
+
+		// Choose container depending on route: prefer dedicated Reels container
+		const feed = onReels
+			? (document.querySelector('#watch_feed') || document.querySelector("div[role='main']"))
+			: (document.querySelector('#ssrb_feed_start + div') || // For home and groups feed
+				document.querySelector('[data-pagelet=MainFeed]') || // For watch and marketplace feeds
+				document.querySelector("div[aria-label=Gaming][role=main]") || // For gaming feed
+				document.querySelector('div.x1hc1fzr.x1unhpq9.x6o7n8i'));
 
 		if (feed == null) {
 			return;

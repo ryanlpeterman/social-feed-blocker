@@ -265,14 +265,14 @@ html:not([data-nfe-enabled='false']) div.x1hc1fzr.x1unhpq9.x6o7n8i > #nfe-contai
     grid-column: 1 / -1;
 }
 /* Facebook Reels/Watch feed container */
-html:not([data-nfe-enabled='false']) #watch_feed > :not(#nfe-container) {
+html:not([data-nfe-enabled='false'])[data-nfe-fb-reels='true'] #watch_feed > :not(#nfe-container) {
     position: absolute !important;
     opacity: 0 !important;
     pointer-events: none !important;
     width: 0 !important;
     height: 0 !important;
 }
-html:not([data-nfe-enabled='false']) #watch_feed > #nfe-container {
+html:not([data-nfe-enabled='false'])[data-nfe-fb-reels='true'] #watch_feed > #nfe-container {
     /* Center the popup card within the Watch/Reels container */
     display: flex;
     justify-content: center;

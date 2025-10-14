@@ -11,7 +11,6 @@ export enum BackgroundActionType {
 	QUOTE_HIDDEN_RESET = 'QUOTE_HIDDEN_RESET',
 	QUOTE_DELETE = 'QUOTE_DELETE',
 	QUOTE_ADD = 'QUOTE_ADD',
-	FEATURE_INCREMENT = 'FEATURE_INCREMENT',
 	SETTINGS_LOAD = 'SETTINGS_LOAD',
 	SETTINGS_LOADED = 'SETTINGS_LOADED',
 	PERMISSIONS_CHECK = 'permissions/check',
@@ -21,7 +20,6 @@ export enum BackgroundActionType {
 }
 
 export type BackgroundActionObject =
-	| FeatureIncrement
 	| QuotesShowToggle
 	| QuotesBuiltinToggle
 	| QuoteHide
@@ -35,8 +33,6 @@ export type BackgroundActionObject =
 	| PermissionsUpdate
 	| SitesSetState
 	| ContentScriptsRegister;
-
-export type FeatureIncrement = { type: BackgroundActionType.FEATURE_INCREMENT };
 
 export type QuotesShowToggle = {
 	type: BackgroundActionType.QUOTES_SHOW_TOGGLE;

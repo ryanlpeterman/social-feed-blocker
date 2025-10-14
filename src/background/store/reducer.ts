@@ -2,7 +2,6 @@ import {
 	BackgroundActionObject as ActionObject,
 	BackgroundActionType as ActionType,
 } from './action-types';
-import config from '../../config';
 import { CustomQuote } from '../../quote';
 import { combineReducers } from 'redux';
 import { Permissions } from '../../webextension';
@@ -21,14 +20,6 @@ function builtinQuotesEnabled(state = true, action: ActionObject) {
 	switch (action.type) {
 		case ActionType.QUOTES_BUILTIN_TOGGLE:
 			return !state;
-	}
-	return state;
-}
-
-function featureIncrement(state = 0, action: ActionObject) {
-	switch (action.type) {
-		case ActionType.FEATURE_INCREMENT:
-			return config.newFeatureIncrement;
 	}
 	return state;
 }
@@ -97,7 +88,6 @@ function sites(
 export type SettingsState = {
 	showQuotes: boolean;
 	builtinQuotesEnabled: boolean;
-	featureIncrement: number;
 	hiddenBuiltinQuotes: number[];
 	customQuotes: CustomQuote[];
 	sites: Record<SiteId, Settings.SiteState>;
@@ -114,7 +104,6 @@ export type BackgroundState =
 const settingsReducer = combineReducers({
 	showQuotes,
 	builtinQuotesEnabled,
-	featureIncrement,
 	hiddenBuiltinQuotes,
 	customQuotes,
 	sites,

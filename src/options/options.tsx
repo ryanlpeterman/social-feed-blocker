@@ -130,7 +130,6 @@ function OptionsApp() {
         const snapshot = {
           showQuotes: raw.showQuotes,
           builtinQuotesEnabled: raw.builtinQuotesEnabled,
-          featureIncrement: raw.featureIncrement,
           hiddenBuiltinQuotes: raw.hiddenBuiltinQuotes,
           customQuotes: raw.customQuotes,
           sites: mergedSites as any,

@@ -2,28 +2,26 @@ import { CustomQuote } from '../../quote';
 import { getBrowser } from '../../webextension';
 import { SiteId, Sites } from '../../sites';
 
-export namespace Settings {
-	type V1 = {
-		version: 1;
-		showQuotes: boolean;
-		builtinQuotesEnabled: boolean;
-		featureIncrement: number;
-		hiddenBuiltinQuotes: number[];
-		customQuotes: CustomQuote[];
-		sites: Partial<SitesState>;
-	};
+	export namespace Settings {
+		type V1 = {
+			version: 1;
+			showQuotes: boolean;
+			builtinQuotesEnabled: boolean;
+			hiddenBuiltinQuotes: number[];
+			customQuotes: CustomQuote[];
+			sites: Partial<SitesState>;
+		};
 
 	export type SitesState = Record<SiteId, SiteState>;
 
-	const defaults: V1 = {
-		version: 1,
-		showQuotes: true,
-		builtinQuotesEnabled: true,
-		featureIncrement: 0,
-		hiddenBuiltinQuotes: [],
-		customQuotes: [],
-		sites: {},
-	};
+		const defaults: V1 = {
+			version: 1,
+			showQuotes: true,
+			builtinQuotesEnabled: true,
+			hiddenBuiltinQuotes: [],
+			customQuotes: [],
+			sites: {},
+		};
 	export const defaultSites = (): SitesState => {
 		const sites: SitesState = {} as SitesState;
 		for (const siteId of Object.keys(Sites)) {

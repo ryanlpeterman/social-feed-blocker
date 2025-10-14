@@ -1,5 +1,4 @@
 import { IState } from './reducer';
-import config from '../config';
 
 import { BuiltinQuotes, Quote } from '../quote';
 import { CurrentQuote } from './action-types';

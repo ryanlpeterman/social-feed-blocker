@@ -57,7 +57,7 @@ const listen: BackgroundEffect = (store) => {
 				store.dispatch(msg.action);
 			}
             if (msg.t === MessageType.OPTIONS_PAGE_OPEN) {
-                browser.runtime.openOptionsPage().catch((e) => console.error(e));
+                browser.runtime.openOptionsPage().catch(() => {});
             }
             if (msg.t === MessageType.CLOSE_ACTIVE_TAB) {
                 (async () => {
@@ -67,30 +67,15 @@ const listen: BackgroundEffect = (store) => {
                         const activeId: number | undefined = active && (active as any).id;
                         const target = (lastActiveTabId != null && lastActiveTabId !== activeId) ? lastActiveTabId : undefined;
                         if (target != null) {
-                            try { await (browser.tabs as any).update(target, { active: true }); } catch (e) { console.error(e); }
+                            try { await (browser.tabs as any).update(target, { active: true }); } catch (_e) { /* ignore */ }
                         }
                         if (typeof activeId === 'number') {
-                            await browser.tabs.remove(activeId);
+                            try { await browser.tabs.remove(activeId); } catch (_e) { /* ignore */ }
                         }
-                    } catch (e) {
-                        console.error(e);
+                    } catch (_e) {
+                        // ignore: no active tab or tabs API not available
                     }
                 })();
-            }
-            if (msg.t === MessageType.CLOSE_ACTIVE_TAB) {
-                try {
-                    getBrowser().tabs
-                        .query({ active: true, currentWindow: true })
-                        .then((tabs) => {
-                            const tab = tabs && tabs[0];
-                            if (tab && typeof (tab as any).id === 'number') {
-                                return getBrowser().tabs.remove((tab as any).id as number);
-                            }
-                        })
-                        .catch((e) => console.error(e));
-                } catch (e) {
-                    console.error(e);
-                }
             }
 		});
 	});
@@ -231,8 +216,8 @@ export const registerContentScripts: BackgroundEffect =
         }
     };
 
-export const logAction: BackgroundEffect = (store) => async (action) => {
-	console.info(action);
+export const logAction: BackgroundEffect = (_store) => async (_action) => {
+    // Intentionally no-op in production to reduce console noise
 };
 
 export const rootEffect = Effect.all(

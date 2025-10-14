@@ -7,7 +7,7 @@ import { ActionType } from '../store/action-types';
 import { Settings } from '../background/store';
 import { getBrowser } from '../webextension';
 import { Sites, SiteId } from '../sites';
-import { getSiteStatus, SiteStatus, SiteStatusTag } from '../background/store/sites/selectors';
+import { getSiteStatus, SiteStatus, SiteStatusTag, getSettingsHealth } from '../background/store/sites/selectors';
 import { MINUTE, HOUR, DAY, readableDuration } from '../lib/time';
 
 // MUI
@@ -24,6 +24,8 @@ import Chip from '@mui/material/Chip';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import { createTheme, ThemeProvider, useMediaQuery } from '@mui/material';
+import { BackgroundActionType } from '../background/store/action-types';
+import { setSiteState } from '../store/actions';
 
 const store = createStore();
 
@@ -107,8 +109,13 @@ function SitesList() {
 }
 
 function OptionsApp() {
+  const uiState = useStore();
   const prefersDark = useMediaQuery('(prefers-color-scheme: dark)');
   const theme = React.useMemo(() => createTheme({ palette: { mode: prefersDark ? 'dark' : 'light' } }), [prefersDark]);
+  const showEnableAll = React.useMemo(() => {
+    if (!uiState.settings) return false;
+    return getSettingsHealth(uiState.settings).noSitesEnabled;
+  }, [uiState.settings]);
   // Snapshot fallback: eagerly load from storage if background is slow to connect
   React.useEffect(() => {
     let cancelled = false;
@@ -151,6 +158,31 @@ function OptionsApp() {
     schedule();
     return () => { cancelled = true; };
   }, []);
+  const onEnableAll = React.useCallback(async () => {
+    try {
+      const allOrigins = Array.from(
+        new Set(
+          Object.values(Sites).flatMap((s) => s.origins)
+        )
+      );
+      const granted = await getBrowser().permissions.request({ permissions: [], origins: allOrigins });
+      if (granted) {
+        const ids = Object.keys(Sites) as SiteId[];
+        for (const id of ids) {
+          store.dispatch(
+            setSiteState(id, { type: Settings.SiteStateTag.ENABLED })
+          );
+        }
+        store.dispatch({
+          type: ActionType.BACKGROUND_ACTION,
+          action: { type: BackgroundActionType.PERMISSIONS_CHECK },
+        });
+      }
+    } catch (_) {
+      // ignore
+    }
+  }, []);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -167,6 +199,11 @@ function OptionsApp() {
             <Typography variant="body2" color="text.secondary">
               Choose sites below to enable Social Feed Blocker. When you enable a site, we'll request your permission to modify that site.
             </Typography>
+            {showEnableAll && (
+              <Box sx={{ mt: 1.5 }}>
+                <Button size="small" variant="contained" onClick={onEnableAll}>Enable All</Button>
+              </Box>
+            )}
           </Box>
           <Divider />
           <SitesList />

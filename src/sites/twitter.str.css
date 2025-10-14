@@ -7,6 +7,11 @@ html:not([data-nfe-enabled='false'])
 	padding: 16px;
 }
 
+/* Make the popup card a bit narrower on Twitter (20% smaller) */
+html:not([data-nfe-enabled='false']) #nfe-container .nfe-card {
+    max-width: 448px; /* 560px * 0.8 to better match column width */
+}
+
 html:not([data-nfe-enabled='false']) div[aria-label*='Timeline'],
 html:not([data-nfe-enabled='false']) div[data-testid="primaryColumn"] > div:last-child > div:last-child
 {

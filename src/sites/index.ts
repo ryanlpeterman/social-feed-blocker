@@ -65,6 +65,7 @@ export const Sites: Record<SiteId, Site> = {
 		label: 'LinkedIn',
 		domain: ['linkedin.com'],
 		paths: ['/feed'],
+		excludePaths: ['/feed/update'],
 		origins: ['https://linkedin.com/*', 'https://*.linkedin.com/*'],
 		css: linkedinCss,
 	},
@@ -124,6 +125,9 @@ export type Site = {
 
 	// Will only be enabled for these paths
 	paths: string[];
+
+	// Optional: path prefixes to explicitly disable even if they match `paths`
+	excludePaths?: string[];
 
 	css?: string;
 };

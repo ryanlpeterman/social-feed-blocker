@@ -33,17 +33,15 @@ export const Sites: Record<SiteId, Site> = {
 			'/gaming/feed/',
 		],
 		origins: [
-			'http://www.facebook.com/*',
-			'https://www.facebook.com/*',
-			'http://web.facebook.com/*',
-			'https://web.facebook.com/*',
+			'https://facebook.com/*',
+			'https://*.facebook.com/*',
 		],
 	},
 	instagram: {
 		label: 'Instagram',
 		domain: ['instagram.com'],
 		paths: ['/', '/explore/', '/reels/', '/reels/*/', '/reels/*'],
-		origins: ['http://www.instagram.com/*', 'https://www.instagram.com/*'],
+		origins: ['https://instagram.com/*', 'https://*.instagram.com/*'],
 		css: instagramCss,
 	},
 	twitter: {
@@ -51,9 +49,8 @@ export const Sites: Record<SiteId, Site> = {
 		domain: ['twitter.com', 'x.com'],
 		paths: ['/home', '/compose/tweet'],
 		origins: [
-			'http://twitter.com/*',
 			'https://twitter.com/*',
-			'http://x.com/*',
+			'https://*.twitter.com/*',
 			'https://x.com/*',
 		],
 		css: twitterCss,
@@ -62,13 +59,13 @@ export const Sites: Record<SiteId, Site> = {
 		label: 'YouTube',
 		domain: ['youtube.com'],
 		paths: ['/', '/feed/trending', '/shorts'],
-		origins: ['https://www.youtube.com/*'],
+		origins: ['https://youtube.com/*', 'https://*.youtube.com/*'],
 	},
 	linkedin: {
 		label: 'LinkedIn',
 		domain: ['linkedin.com'],
 		paths: ['/feed'],
-		origins: ['https://www.linkedin.com/*'],
+		origins: ['https://linkedin.com/*', 'https://*.linkedin.com/*'],
 		css: linkedinCss,
 	},
 	reddit: {
@@ -84,12 +81,7 @@ export const Sites: Record<SiteId, Site> = {
 				i + 'rising/',
 			])
 			.reduce((i, j) => i.concat(j)),
-		origins: [
-			'https://www.reddit.com/*',
-			'http://www.reddit.com/*',
-			'https://old.reddit.com/*',
-			'http://old.reddit.com/*',
-		],
+		origins: ['https://reddit.com/*', 'https://*.reddit.com/*'],
 	},
 	hackernews: {
 		label: 'Y Combinator News (HN)',
@@ -101,21 +93,14 @@ export const Sites: Record<SiteId, Site> = {
         label: 'Threads',
         domain: ['threads.com'],
         paths: ['/', '/home', '/feed', '/explore', '/search', '/notifications'],
-        origins: [
-            'http://threads.com/*',
-            'https://threads.com/*',
-            'http://www.threads.com/*',
-            'https://www.threads.com/*',
-            'http://app.threads.com/*',
-            'https://app.threads.com/*',
-        ],
+        origins: ['https://threads.com/*', 'https://*.threads.com/*'],
         css: threadsCss,
     },
     tiktok: {
         label: 'TikTok',
         domain: ['tiktok.com'],
         paths: ['/'],
-        origins: ['https://www.tiktok.com/*', 'https://tiktok.com/*'],
+        origins: ['https://tiktok.com/*', 'https://*.tiktok.com/*'],
         css: tiktokCss,
     },
     substack: {

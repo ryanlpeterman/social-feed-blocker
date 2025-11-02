@@ -3,13 +3,14 @@
  * https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API
  */
 type WebExtensionAPI = {
-	runtime: {
-		openOptionsPage: () => Promise<void>;
-		sendMessage: (message: any) => Promise<void>;
-		connect: () => Port;
-		onConnect: WebExtensionEvent<Port>;
-		getURL: (path: string) => string;
-	};
+    runtime: {
+        openOptionsPage: () => Promise<void>;
+        sendMessage: (message: any) => Promise<void>;
+        connect: () => Port;
+        onConnect: WebExtensionEvent<Port>;
+        onInstalled?: WebExtensionEvent<{ reason?: string }>;
+        getURL: (path: string) => string;
+    };
 	action: {
 		onClicked: WebExtensionEvent<void>;
 	};
@@ -88,18 +89,19 @@ export type Port = {
  * https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Chrome_incompatibilities
  */
 type ChromeWebExtensionAPI = {
-	runtime: {
-		openOptionsPage: (cb: () => void) => void;
-		sendMessage: (
-			extId: string | undefined,
-			message: any,
-			options: undefined,
-			responseCallback: (res: any) => void
-		) => void;
-		connect: () => Port;
-		onConnect: WebExtensionEvent<Port>;
-		getURL: (path: string) => string;
-	};
+    runtime: {
+        openOptionsPage: (cb: () => void) => void;
+        sendMessage: (
+            extId: string | undefined,
+            message: any,
+            options: undefined,
+            responseCallback: (res: any) => void
+        ) => void;
+        connect: () => Port;
+        onConnect: WebExtensionEvent<Port>;
+        onInstalled?: WebExtensionEvent<{ reason?: string }>;
+        getURL: (path: string) => string;
+    };
 	action: {
 		onClicked: WebExtensionEvent<void>;
 	};
@@ -135,20 +137,21 @@ declare var chrome: ChromeWebExtensionAPI | undefined;
 export function getBrowser(): WebExtensionAPI {
 	if (typeof browser !== 'undefined') {
 		return browser;
-	} else if (typeof chrome !== 'undefined') {
-		// Chrome uses callbacks instead of promises, so we promisify everything
-		return {
-			runtime: {
-				openOptionsPage: () =>
-					new Promise((resolve) => chrome!.runtime.openOptionsPage(resolve)),
-				sendMessage: (m) =>
-					new Promise((resolve) =>
-						chrome!.runtime.sendMessage(undefined, m, undefined, resolve)
-					),
-				connect: chrome.runtime.connect.bind(chrome.runtime),
-				onConnect: chrome.runtime.onConnect,
-				getURL: chrome.runtime.getURL.bind(chrome.runtime),
-			},
+    } else if (typeof chrome !== 'undefined') {
+        // Chrome uses callbacks instead of promises, so we promisify everything
+        return {
+            runtime: {
+                openOptionsPage: () =>
+                    new Promise((resolve) => chrome!.runtime.openOptionsPage(resolve)),
+                sendMessage: (m) =>
+                    new Promise((resolve) =>
+                        chrome!.runtime.sendMessage(undefined, m, undefined, resolve)
+                    ),
+                connect: chrome.runtime.connect.bind(chrome.runtime),
+                onConnect: chrome.runtime.onConnect,
+                onInstalled: (chrome.runtime as any).onInstalled,
+                getURL: chrome.runtime.getURL.bind(chrome.runtime),
+            },
 			action: chrome.action,
 			permissions: {
 				getAll: () =>

@@ -1,6 +1,6 @@
 {
     "name": "Social Feed Blocker",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Block distracting social media feeds and reclaim your focus",
 	"manifest_version": 3,
 	"permissions": ["storage", "scripting"],

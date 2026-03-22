@@ -25,3 +25,9 @@ html:not([data-nfe-enabled='false']) div[data-testid="primaryColumn"] > div:last
 	pointer-events: none !important;
 	height: 0 !important;
 }
+
+/* Twitter/X: hide notifications nav link */
+html:not([data-nfe-enabled='false']) a[href="/notifications"],
+html:not([data-nfe-enabled='false']) a[data-testid="AppTabBar_Notifications_Link"] {
+    display: none !important;
+}

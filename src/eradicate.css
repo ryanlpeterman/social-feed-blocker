@@ -61,12 +61,6 @@ html[data-nfe-enabled='false'] #nfe-container {
     color: var(--mui-text-primary);
     text-align: left;
 }
-#nfe-container .nfe-card-subtitle {
-    margin: 0;
-    color: var(--mui-text-secondary);
-    text-align: left;
-}
-
 /* Brand mark shown inline next to the title */
 #nfe-container .nfe-brand-icon {
     width: auto;
@@ -131,11 +125,6 @@ html[data-nfe-enabled='false'] #nfe-container {
 }
 
 /* Removed legacy standalone button styles (unused) */
-
-/* Banner/subtitle text should match options body text */
-.nfe-banner-text { font-weight: 400; margin: 0; font-size: 1em; color: inherit; }
-body[data-nfe-color-scheme='dark'] .nfe-banner-text,
-.__fb-dark-mode .nfe-banner-text { color: var(--mui-text-secondary); }
 
 /* Dark surface adjustments to mirror MUI dark cards */
 body[data-nfe-color-scheme='dark'] #nfe-container .nfe-card,
@@ -251,6 +240,11 @@ html:not([data-nfe-enabled='false']) {
 	--notification-badge: var(--base-blue);
 }
 
+/* Facebook: hide notifications bell */
+html:not([data-nfe-enabled='false']) a[href="/notifications"][role="link"] {
+    display: none !important;
+}
+
 /* Reddit 2024 update: fully remove articles so no space remains */
 shreddit-feed > article {
 	display: none !important;
@@ -323,6 +317,11 @@ html:not([data-nfe-enabled='false'])[data-nfe-yt-shorts='true'] ytd-shorts > #nf
     box-sizing: border-box;
     margin: 64px auto;
 }
+/* YouTube: hide notifications bell */
+html:not([data-nfe-enabled='false']) ytd-notification-topbar-button-renderer {
+    display: none !important;
+}
+
 /* Youtube related */
 #content #related {
 	opacity: 0 !important;

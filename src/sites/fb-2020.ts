@@ -3,10 +3,6 @@ import { isEnabled } from '../lib/is-enabled';
 import { Store } from '../store';
 import { POLL_INTERVAL_MS } from '../lib/constants';
 
-//export function checkSite(): boolean {
-//	return !!document.querySelector('#stream_pagelet');
-//}
-
 export function eradicate(store: Store) {
 	function eradicateRetry() {
 		const settings = store.getState().settings;

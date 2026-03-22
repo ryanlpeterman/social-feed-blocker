@@ -1,6 +1,5 @@
 import { Store } from '../store/index';
 import SocialFeedBlocker from '../components/index';
-import { getBrowser } from '../webextension';
 import { init } from 'snabbdom';
 import { h } from 'snabbdom/h';
 import propsModule from 'snabbdom/modules/props';
@@ -60,31 +59,4 @@ export default function injectUI(
     render();
     // Subscribe for updates and re-render; ignore returned unsubscribe since this lives for page lifetime
     try { (store.subscribe as any)(render); } catch (_) { store.subscribe(render as any); }
-
-    // Increment a daily counter for "times blocked" and re-render once updated.
-    (async () => {
-        try {
-            const browser = getBrowser();
-            const key = 'nfeDailyBlockCount';
-            const today = new Date();
-            const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(
-                today.getDate()
-            ).padStart(2, '0')}`;
-
-            const data = await browser.storage.sync.get(key);
-            let rec = (data && data[key]) || { date: todayStr, count: 0 };
-            if (rec.date !== todayStr) {
-                rec = { date: todayStr, count: 0 };
-            }
-            rec.count += 1;
-            await browser.storage.sync.set({ [key]: rec });
-
-            // Expose count for rendering (simple shared state for snabbdom component)
-            (window as any).__NFE_DAILY_BLOCK_COUNT = rec.count;
-            (window as any).__NFE_DAILY_BLOCK_DATE = rec.date;
-            render();
-        } catch (e) {
-            // Non-fatal: if storage fails, just skip the counter
-        }
-    })();
 }

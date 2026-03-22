@@ -64,9 +64,6 @@ export type UiOptionsShow = {
 export type QuoteSelectNew = {
 	type: ActionType.SELECT_NEW_QUOTE;
 };
-export type QuoteResetHidden = {
-	type: ActionType.RESET_HIDDEN_QUOTES;
-};
 
 export type QuoteRemoveCurrent = {
 	type: ActionType.QUOTE_REMOVE_CURRENT;

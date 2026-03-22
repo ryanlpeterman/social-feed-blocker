@@ -27,8 +27,6 @@ type WebExtensionAPI = {
         update: (tabId: number, props: { active?: boolean }) => Promise<Tab>;
     };
 	scripting: {
-		executeScript: (opts: ExecuteOptions) => Promise<any>;
-		insertCSS: (opts: InsertCssOptions) => Promise<any>;
 		registerContentScripts: (opts: RegisteredContentScript[]) => Promise<void>;
 		unregisterContentScripts: () => Promise<void>;
 	};
@@ -43,21 +41,6 @@ type WebExtensionAPI = {
 export type TabId = number & { __tabId: never };
 export type Tab = { id: number };
 export type TabsQuery = { active?: boolean; currentWindow?: boolean };
-
-type InjectionTarget = {
-	tabId: TabId;
-};
-type InsertCssOptions = {
-	target: InjectionTarget;
-	files?: string[];
-	css?: string;
-};
-type ExecuteOptions = {
-	target: { tabId: TabId };
-	injectImmediately?: boolean;
-	files?: string[];
-	func?: () => void;
-};
 
 type RegisteredContentScript = {
 	id: string;
@@ -118,8 +101,6 @@ type ChromeWebExtensionAPI = {
         update: (tabId: number, props: { active?: boolean }, cb: (tab: Tab) => void) => void;
     };
 	scripting: {
-		executeScript: (opts: ExecuteOptions) => Promise<any>;
-		insertCSS: (opts: InsertCssOptions) => Promise<any>;
 		registerContentScripts: (opts: RegisteredContentScript[]) => Promise<void>;
 		unregisterContentScripts: () => Promise<void>;
 	};

@@ -13,3 +13,8 @@ aside.scaffold-layout__aside > div:nth-child(2) {
 	pointer-events: none !important;
 	height: 0 !important;
 }
+
+/* LinkedIn: hide notifications nav link */
+html:not([data-nfe-enabled='false']) a[href*="/notifications"] {
+    display: none !important;
+}

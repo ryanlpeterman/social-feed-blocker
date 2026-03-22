@@ -82,12 +82,18 @@ const listen: BackgroundEffect = (store) => {
 
 	// Then, after every store action we save the settings and
 	// let all the clients know the new settings
+	let saveTimer: ReturnType<typeof setTimeout> | null = null;
 	return () => {
 		const state = store.getState();
 		// Send the new client the latest settings
 		if (state.ready === true) {
 			const settings: SettingsState = state.settings;
-			Settings.save(getSettings(state.settings));
+			// Debounce storage writes to avoid exceeding MAX_WRITE_OPERATIONS_PER_MINUTE quota
+			if (saveTimer) clearTimeout(saveTimer);
+			saveTimer = setTimeout(() => {
+				Settings.save(getSettings(state.settings));
+			}, 1000);
+			// Broadcast to content scripts immediately (in-memory, no quota)
 			pages.forEach((port) =>
 				port.postMessage({ t: MessageType.SETTINGS_CHANGED, settings })
 			);

@@ -21,3 +21,8 @@ html:not([data-nfe-enabled='false']) [role='main'] > #nfe-container {
   box-sizing: border-box;
   margin: 24px auto;
 }
+
+/* Threads: hide notifications icon (SVG with aria-label, not an <a> link) */
+html:not([data-nfe-enabled='false']) :has(> svg[aria-label="Notifications"]) {
+    display: none !important;
+}

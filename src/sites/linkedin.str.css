@@ -1,14 +1,16 @@
-/* LinkedIn */
+/* LinkedIn: use `display: none` because post wrappers have
+   `data-display-contents="true"` (display: contents) — opacity/height
+   rules don't affect elements that generate no box of their own */
 html:not([data-nfe-enabled='false'])
-	.scaffold-finite-scroll
+	[data-testid='mainFeed']
 	> div:not(#nfe-container) {
-	opacity: 0 !important;
-	pointer-events: none !important;
-	height: 0 !important;
+	display: none !important;
 }
 
-/* LinkedIn trending news section */
-aside.scaffold-layout__aside > div:nth-child(2) {
+/* LinkedIn trending news section (content-anchored; LinkedIn dropped
+   stable class names so target the wrapper containing news-story links) */
+html:not([data-nfe-enabled='false'])
+	div:has(> div > a[href*='linkedin.com/news/story/']) {
 	opacity: 0 !important;
 	pointer-events: none !important;
 	height: 0 !important;

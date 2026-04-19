@@ -18,7 +18,7 @@ export function eradicate(store: Store) {
 		}
 
 		// Don't do anything if the UI hasn't loaded yet
-		const feed = document.querySelector('.scaffold-finite-scroll');
+		const feed = document.querySelector('[data-testid="mainFeed"]');
 		if (feed == null) {
 			return;
 		}

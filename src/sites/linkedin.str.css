@@ -1,9 +1,12 @@
-/* LinkedIn: use `display: none` because post wrappers have
-   `data-display-contents="true"` (display: contents) — opacity/height
-   rules don't affect elements that generate no box of their own */
+/* LinkedIn: hide only feed post wrappers, not the rest of the feed
+   chrome. Posts are wrapped in <div data-display-contents="true">
+   (display: contents); the "Start a post" share box and the sort/
+   filter dropdown are not, so they stay visible and users can compose
+   without disabling the extension. `display: none` is required to
+   collapse a `display: contents` wrapper and its subtree. */
 html:not([data-nfe-enabled='false'])
 	[data-testid='mainFeed']
-	> div:not(#nfe-container) {
+	> div[data-display-contents='true'] {
 	display: none !important;
 }
 

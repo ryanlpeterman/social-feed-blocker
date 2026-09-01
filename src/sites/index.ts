@@ -58,7 +58,9 @@ export const Sites: Record<SiteId, Site> = {
 	youtube: {
 		label: 'YouTube',
 		domain: ['youtube.com'],
-		paths: ['/', '/feed/trending', '/shorts'],
+		// NB: /shorts is deliberately NOT a blocked path: a short navigated to
+		// directly may play; youtube.ts blocks advancing to the next one.
+		paths: ['/', '/feed/trending'],
 		origins: ['https://youtube.com/*', 'https://*.youtube.com/*'],
 	},
 	linkedin: {

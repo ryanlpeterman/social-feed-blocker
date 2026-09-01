@@ -1,5 +1,5 @@
 /* Twitter */
-html:not([data-nfe-enabled='false'])
+html[data-nfe-enabled='true']
 	div[data-testid='primaryColumn']
 	> div:last-child
 	> div:nth-child(4)
@@ -8,26 +8,27 @@ html:not([data-nfe-enabled='false'])
 }
 
 /* Make the popup card a bit narrower on Twitter (20% smaller) */
-html:not([data-nfe-enabled='false']) #nfe-container .nfe-card {
+html[data-nfe-enabled='true'] #nfe-container .nfe-card {
     max-width: 448px; /* 560px * 0.8 to better match column width */
 }
 
-html:not([data-nfe-enabled='false']) div[aria-label*='Timeline'],
-html:not([data-nfe-enabled='false']) div[data-testid="primaryColumn"] > div:last-child > div:last-child
+html[data-nfe-enabled='true'] div[aria-label*='Timeline'],
+html[data-nfe-enabled='true'] div[data-testid="primaryColumn"] > div:last-child > div:last-child
 {
 	opacity: 0 !important;
 	pointer-events: none !important;
 }
 
 /* "What's Happening" section on Twitter */
-[data-testid='sidebarColumn'] [role='region'] {
+html[data-nfe-enabled='true'] [data-testid='sidebarColumn'] [role='region'] {
 	opacity: 0 !important;
 	pointer-events: none !important;
 	height: 0 !important;
 }
 
-/* Twitter/X: hide notifications nav link */
-html:not([data-nfe-enabled='false']) a[href="/notifications"],
-html:not([data-nfe-enabled='false']) a[data-testid="AppTabBar_Notifications_Link"] {
+/* Twitter/X: hide notifications nav link. Site-wide gate: the nav rail is
+   present on every route (/i/chat, profiles, ...), not just the feed paths. */
+html[data-nfe-site-enabled='true'] a[href="/notifications"],
+html[data-nfe-site-enabled='true'] a[data-testid="AppTabBar_Notifications_Link"] {
     display: none !important;
 }

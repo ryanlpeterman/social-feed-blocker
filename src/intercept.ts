@@ -4,7 +4,10 @@
  */
 
 import './eradicate.css';
-import { setupRouteChange } from './lib/route-change';
+import {
+	applyProvisionalEnabledStatus,
+	setupRouteChange,
+} from './lib/route-change';
 
 import * as FbClassic from './sites/fb-classic';
 import * as Fb2020 from './sites/fb-2020';
@@ -18,6 +21,12 @@ import * as TikTok from './sites/tiktok';
 import * as Threads from './sites/threads';
 import * as Substack from './sites/substack';
 import { createStore, Store } from './store';
+
+// Decide up front whether this page is blockable at all. Without this the CSS
+// would be in its indeterminate state until the background script answers, which
+// blanked pages we never block (any subreddit, any YouTube video) - and blanked
+// them permanently whenever the service worker never replied.
+applyProvisionalEnabledStatus();
 
 const store = createStore();
 

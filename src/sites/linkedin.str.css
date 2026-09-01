@@ -1,25 +1,32 @@
 /* LinkedIn: hide only feed post wrappers, not the rest of the feed
-   chrome. Posts are wrapped in <div data-display-contents="true">
+   chrome. Posts carry a <div data-display-contents="true"> marker
    (display: contents); the "Start a post" share box and the sort/
-   filter dropdown are not, so they stay visible and users can compose
-   without disabling the extension. `display: none` is required to
-   collapse a `display: contents` wrapper and its subtree. */
-html:not([data-nfe-enabled='false'])
+   filter dropdown use role="listitem" wrappers instead, so they stay
+   visible and users can compose without disabling the extension.
+   The marker has appeared at two depths: as a direct child of the
+   feed, and (since the lazy-mount migration) one level down inside
+   <div data-lazy-mount-id> wrappers — match both. `display: none` is
+   required to collapse a `display: contents` wrapper and its subtree. */
+html[data-nfe-enabled='true']
 	[data-testid='mainFeed']
+	> div[data-display-contents='true'],
+html[data-nfe-enabled='true']
+	[data-testid='mainFeed']
+	> div
 	> div[data-display-contents='true'] {
 	display: none !important;
 }
 
 /* LinkedIn trending news section (content-anchored; LinkedIn dropped
    stable class names so target the wrapper containing news-story links) */
-html:not([data-nfe-enabled='false'])
+html[data-nfe-enabled='true']
 	div:has(> div > a[href*='linkedin.com/news/story/']) {
 	opacity: 0 !important;
 	pointer-events: none !important;
 	height: 0 !important;
 }
 
-/* LinkedIn: hide notifications nav link */
-html:not([data-nfe-enabled='false']) a[href*="/notifications"] {
+/* LinkedIn: hide notifications nav link on every route, not just /feed */
+html[data-nfe-site-enabled='true'] a[href*="/notifications"] {
     display: none !important;
 }

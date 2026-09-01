@@ -23,7 +23,7 @@
     --mui-success-contrast: #ffffff;
 }
 
-html[data-nfe-enabled='false'] #nfe-container {
+html:not([data-nfe-enabled='true']) #nfe-container {
 	display: none;
 }
 
@@ -123,28 +123,28 @@ body[data-nfe-color-scheme='dark'] #nfe-container,
    Do not use prefers-color-scheme here to prevent false positives on sites like LinkedIn. */
 
 /* Old Facebook (pre-2020) */
-div[id^='explorefeed_main_stream'],
-div[id^='topnews_main_stream'],
-div.ticker_stream,
-div.ego_column,
-#pagelet_home_stream,
-#pagelet_trending_tags_and_topics,
-#stories_pagelet_rhc,
-#fb_stories_card_root,
-#pagelet_gaming_destination_rhc,
-#pagelet_canvas_nav_content {
+html[data-nfe-enabled='true'] div[id^='explorefeed_main_stream'],
+html[data-nfe-enabled='true'] div[id^='topnews_main_stream'],
+html[data-nfe-enabled='true'] div.ticker_stream,
+html[data-nfe-enabled='true'] div.ego_column,
+html[data-nfe-enabled='true'] #pagelet_home_stream,
+html[data-nfe-enabled='true'] #pagelet_trending_tags_and_topics,
+html[data-nfe-enabled='true'] #stories_pagelet_rhc,
+html[data-nfe-enabled='true'] #fb_stories_card_root,
+html[data-nfe-enabled='true'] #pagelet_gaming_destination_rhc,
+html[data-nfe-enabled='true'] #pagelet_canvas_nav_content {
 	opacity: 0 !important;
 	pointer-events: none !important;
 }
 
 /* New Facebook (2020) */
 /* Hide content inside the feed containers but keep the containers in flow to preserve layout */
-html:not([data-nfe-enabled='false']) #ssrb_feed_start + div > :not(#nfe-container), /* For home and groups feeds */
-html:not([data-nfe-enabled='false']) div[data-pagelet='MainFeed'] > :not(#nfe-container), /* For watch and marketplace feeds */
-html:not([data-nfe-enabled='false']) div[aria-label='Gaming'][role='main'] > :not(#nfe-container),
-html:not([data-nfe-enabled='false']) div[aria-label='Stories'] > :not(#nfe-container),
-html:not([data-nfe-enabled='false']) div.x1hc1fzr.x1unhpq9.x6o7n8i > :not(#nfe-container), /* For new fb layout (Q4 2022) */
-html:not([data-nfe-enabled='false']) div[role='region'][data-visualcompletion='ignore-dynamic'] > :not(#nfe-container) /* For stories in non-english versions */ {
+html[data-nfe-enabled='true'] #ssrb_feed_start + div > :not(#nfe-container), /* For home and groups feeds */
+html[data-nfe-enabled='true'] div[data-pagelet='MainFeed'] > :not(#nfe-container), /* For watch and marketplace feeds */
+html[data-nfe-enabled='true'] div[aria-label='Gaming'][role='main'] > :not(#nfe-container),
+html[data-nfe-enabled='true'] div[aria-label='Stories'] > :not(#nfe-container),
+html[data-nfe-enabled='true'] div.x1hc1fzr.x1unhpq9.x6o7n8i > :not(#nfe-container), /* For new fb layout (Q4 2022) */
+html[data-nfe-enabled='true'] div[role='region'][data-visualcompletion='ignore-dynamic'] > :not(#nfe-container) /* For stories in non-english versions */ {
     position: absolute !important;
     opacity: 0 !important;
     pointer-events: none !important;
@@ -153,11 +153,11 @@ html:not([data-nfe-enabled='false']) div[role='region'][data-visualcompletion='i
 }
 
 /* Ensure our popup centers inside known feed containers */
-html:not([data-nfe-enabled='false']) #ssrb_feed_start + div > #nfe-container,
-html:not([data-nfe-enabled='false']) div[data-pagelet='MainFeed'] > #nfe-container,
-html:not([data-nfe-enabled='false']) div[aria-label='Gaming'][role='main'] > #nfe-container,
-html:not([data-nfe-enabled='false']) div[aria-label='Stories'] > #nfe-container,
-html:not([data-nfe-enabled='false']) div.x1hc1fzr.x1unhpq9.x6o7n8i > #nfe-container {
+html[data-nfe-enabled='true'] #ssrb_feed_start + div > #nfe-container,
+html[data-nfe-enabled='true'] div[data-pagelet='MainFeed'] > #nfe-container,
+html[data-nfe-enabled='true'] div[aria-label='Gaming'][role='main'] > #nfe-container,
+html[data-nfe-enabled='true'] div[aria-label='Stories'] > #nfe-container,
+html[data-nfe-enabled='true'] div.x1hc1fzr.x1unhpq9.x6o7n8i > #nfe-container {
     display: flex;
     justify-content: center;
     align-items: flex-start;
@@ -171,14 +171,14 @@ html:not([data-nfe-enabled='false']) div.x1hc1fzr.x1unhpq9.x6o7n8i > #nfe-contai
     grid-column: 1 / -1;
 }
 /* Facebook Reels/Watch feed container */
-html:not([data-nfe-enabled='false'])[data-nfe-fb-reels='true'] #watch_feed > :not(#nfe-container) {
+html[data-nfe-enabled='true'][data-nfe-fb-reels='true'] #watch_feed > :not(#nfe-container) {
     position: absolute !important;
     opacity: 0 !important;
     pointer-events: none !important;
     width: 0 !important;
     height: 0 !important;
 }
-html:not([data-nfe-enabled='false'])[data-nfe-fb-reels='true'] #watch_feed > #nfe-container {
+html[data-nfe-enabled='true'][data-nfe-fb-reels='true'] #watch_feed > #nfe-container {
     /* Center the popup card within the Watch/Reels container */
     display: flex;
     justify-content: center;
@@ -189,14 +189,14 @@ html:not([data-nfe-enabled='false'])[data-nfe-fb-reels='true'] #watch_feed > #nf
 }
 
 /* Facebook Reels: hide videos under role=main on /reel(s) routes */
-html:not([data-nfe-enabled='false'])[data-nfe-fb-reels='true'] div[role='main'] video {
+html[data-nfe-enabled='true'][data-nfe-fb-reels='true'] div[role='main'] video {
     display: none !important;
 }
 /* Prefer removing direct wrappers that host a video when supported */
-html:not([data-nfe-enabled='false'])[data-nfe-fb-reels='true'] div[role='main'] > div:has(> video) {
+html[data-nfe-enabled='true'][data-nfe-fb-reels='true'] div[role='main'] > div:has(> video) {
     display: none !important;
 }
-html:not([data-nfe-enabled='false'])[data-nfe-fb-reels='true'] div[role='main'] > #nfe-container {
+html[data-nfe-enabled='true'][data-nfe-fb-reels='true'] div[role='main'] > #nfe-container {
     /* Center the popup in Reels layout */
     display: flex;
     justify-content: center;
@@ -206,24 +206,27 @@ html:not([data-nfe-enabled='false'])[data-nfe-fb-reels='true'] div[role='main'] 
     margin: 24px auto;
 }
 /* Facebook Reels: hide Next Card arrow/button */
-html:not([data-nfe-enabled='false'])[data-nfe-fb-reels='true'] [aria-label*="Next Card" i] {
+html[data-nfe-enabled='true'][data-nfe-fb-reels='true'] [aria-label*="Next Card" i] {
     display: none !important;
 }
 /* Facebook Reels: hide Previous Card arrow/button */
-html:not([data-nfe-enabled='false'])[data-nfe-fb-reels='true'] [aria-label*="Previous Card" i] {
+html[data-nfe-enabled='true'][data-nfe-fb-reels='true'] [aria-label*="Previous Card" i] {
     display: none !important;
 }
-html:not([data-nfe-enabled='false']) {
+html[data-nfe-enabled='true'] {
 	--notification-badge: var(--base-blue);
 }
 
-/* Facebook: hide notifications bell */
-html:not([data-nfe-enabled='false']) a[href="/notifications"][role="link"] {
+/* Facebook: hide notifications bell (site-wide, on every route).
+   The bell is a div[role=button] in the current DOM; the anchor
+   selector covers older layouts. */
+html[data-nfe-site-enabled='true'] a[href="/notifications"][role="link"],
+html[data-nfe-site-enabled='true'] div[role="button"][aria-label^="Notifications" i] {
     display: none !important;
 }
 
 /* Reddit 2024 update: fully remove articles so no space remains */
-shreddit-feed > article {
+html[data-nfe-enabled='true'] shreddit-feed > article {
 	display: none !important;
 	opacity: 0 !important;
 	pointer-events: none !important;
@@ -232,12 +235,12 @@ shreddit-feed > article {
 }
 
 /* Reddit Home | Popular | All */
-html:not([data-nfe-enabled='false'])
+html[data-nfe-enabled='true']
 	#SHORTCUT_FOCUSABLE_DIV
 	> :not([class^='SubredditVars-r-'])
 	.scrollerItem,
-.SubredditVars-r-all .scrollerItem,
-.SubredditVars-r-popular .scrollerItem {
+html[data-nfe-enabled='true'] .SubredditVars-r-all .scrollerItem,
+html[data-nfe-enabled='true'] .SubredditVars-r-popular .scrollerItem {
 	display: none !important;
 	opacity: 0 !important;
 	pointer-events: none !important;
@@ -246,14 +249,14 @@ html:not([data-nfe-enabled='false'])
 }
 
 /* Reddit's Popular's Trending Part */
-#TrendingPostsContainer {
+html[data-nfe-enabled='true'] #TrendingPostsContainer {
 	opacity: 0 !important;
 	pointer-events: none !important;
 	height: 0 !important;
 }
 
 /* Reddit old */
-html:not([data-nfe-enabled='false'])
+html[data-nfe-enabled='true']
 	.listing-page.with-listing-chooser
 	.content
 	#siteTable {
@@ -265,27 +268,34 @@ html:not([data-nfe-enabled='false'])
 }
 
 /* Hacker News */
-html:not([data-nfe-enabled='false']) table#hnmain tr:nth-of-type(3) td > table {
+html[data-nfe-enabled='true'] table#hnmain tr:nth-of-type(3) td > table {
 	display: none;
 }
 
 /* Youtube */
-html:not([data-nfe-enabled='false']) #primary > :not(#nfe-container) {
+html[data-nfe-enabled='true'] #primary > :not(#nfe-container) {
 	opacity: 0 !important;
 	pointer-events: none !important;
 	height: 0 !important;
 }
 
-html:not([data-nfe-enabled='false']) #primary > #nfe-container {
+html[data-nfe-enabled='true'] #primary > #nfe-container {
     margin: 64px;
 }
-/* YouTube Shorts */
-html:not([data-nfe-enabled='false'])[data-nfe-yt-shorts='true'] ytd-shorts > :not(#nfe-container) {
+/* YouTube Shorts: a short navigated to directly is allowed to play; only
+   advancing to the next short is blocked. Hide the next/prev arrows whenever
+   the site blocker is on and we're on a Shorts page. */
+html[data-nfe-site-enabled='true'][data-nfe-yt-shorts='true'] ytd-shorts .navigation-container {
+    display: none !important;
+}
+/* Blank the player only when advancement slipped through anyway (the short id
+   no longer matches the one the user navigated to — see youtube.ts watchdog) */
+html[data-nfe-site-enabled='true'][data-nfe-yt-shorts-blocked='true'] ytd-shorts > :not(#nfe-container) {
     opacity: 0 !important;
     pointer-events: none !important;
     height: 0 !important;
 }
-html:not([data-nfe-enabled='false'])[data-nfe-yt-shorts='true'] ytd-shorts > #nfe-container {
+html[data-nfe-site-enabled='true'][data-nfe-yt-shorts-blocked='true'] ytd-shorts > #nfe-container {
     /* Center the popup horizontally within Shorts view even with a narrow host layout */
     display: flex;
     justify-content: center;
@@ -294,13 +304,13 @@ html:not([data-nfe-enabled='false'])[data-nfe-yt-shorts='true'] ytd-shorts > #nf
     box-sizing: border-box;
     margin: 64px auto;
 }
-/* YouTube: hide notifications bell */
-html:not([data-nfe-enabled='false']) ytd-notification-topbar-button-renderer {
+/* YouTube: hide notifications bell (site-wide, on every route) */
+html[data-nfe-site-enabled='true'] ytd-notification-topbar-button-renderer {
     display: none !important;
 }
 
 /* Youtube related */
-#content #related {
+html[data-nfe-enabled='true'] #content #related {
 	opacity: 0 !important;
 	pointer-events: none !important;
 }

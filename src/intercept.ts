@@ -8,6 +8,7 @@ import {
 	applyProvisionalEnabledStatus,
 	setupRouteChange,
 } from './lib/route-change';
+import { setupTitleScrub } from './lib/title-scrub';
 
 import * as FbClassic from './sites/fb-classic';
 import * as Fb2020 from './sites/fb-2020';
@@ -58,4 +59,5 @@ export function eradicate(store: Store) {
 }
 
 setupRouteChange(store);
+setupTitleScrub();
 eradicate(store);

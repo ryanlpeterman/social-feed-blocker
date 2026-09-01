@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Strip unread counters from the tab title on every enabled site: "(1) Home"
+  becomes "Home", "(3) Home / X" becomes "Home / X", and so on. The counter is
+  visible in the tab strip even when the tab is in the background, which is the
+  same "come back and check" pull the notification-button hiding removes.
 - New site-wide flag `data-nfe-site-enabled` (set from settings alone, ignoring
   the path) gates rules that should apply on every page of an enabled site.
   Notification buttons (Twitter/X, LinkedIn, Threads, Facebook, YouTube bell) now

@@ -5,11 +5,9 @@
 type WebExtensionAPI = {
     runtime: {
         openOptionsPage: () => Promise<void>;
-        sendMessage: (message: any) => Promise<void>;
         connect: () => Port;
         onConnect: WebExtensionEvent<Port>;
         onInstalled?: WebExtensionEvent<{ reason?: string }>;
-        getURL: (path: string) => string;
     };
 	action: {
 		onClicked: WebExtensionEvent<void>;
@@ -20,7 +18,6 @@ type WebExtensionAPI = {
 		request: (p: Permissions) => Promise<boolean>;
 	};
     tabs: {
-        onUpdated: WebExtensionEvent<TabId>;
         onActivated: WebExtensionEvent<{ tabId: number; windowId: number }>;
         query: (q: TabsQuery) => Promise<Tab[]>;
         remove: (tabId: number) => Promise<void>;
@@ -38,7 +35,6 @@ type WebExtensionAPI = {
 	};
 };
 
-export type TabId = number & { __tabId: never };
 export type Tab = { id: number };
 export type TabsQuery = { active?: boolean; currentWindow?: boolean };
 
@@ -74,16 +70,9 @@ export type Port = {
 type ChromeWebExtensionAPI = {
     runtime: {
         openOptionsPage: (cb: () => void) => void;
-        sendMessage: (
-            extId: string | undefined,
-            message: any,
-            options: undefined,
-            responseCallback: (res: any) => void
-        ) => void;
         connect: () => Port;
         onConnect: WebExtensionEvent<Port>;
         onInstalled?: WebExtensionEvent<{ reason?: string }>;
-        getURL: (path: string) => string;
     };
 	action: {
 		onClicked: WebExtensionEvent<void>;
@@ -94,7 +83,6 @@ type ChromeWebExtensionAPI = {
 		request: (p: Permissions, cb: (granted: boolean) => void) => void;
 	};
     tabs: {
-        onUpdated: WebExtensionEvent<TabId>;
         onActivated: WebExtensionEvent<{ tabId: number; windowId: number }>;
         query: (q: TabsQuery, cb: (tabs: Tab[]) => void) => void;
         remove: (tabId: number, cb: () => void) => void;
@@ -124,14 +112,9 @@ export function getBrowser(): WebExtensionAPI {
             runtime: {
                 openOptionsPage: () =>
                     new Promise((resolve) => chrome!.runtime.openOptionsPage(resolve)),
-                sendMessage: (m) =>
-                    new Promise((resolve) =>
-                        chrome!.runtime.sendMessage(undefined, m, undefined, resolve)
-                    ),
                 connect: chrome.runtime.connect.bind(chrome.runtime),
                 onConnect: chrome.runtime.onConnect,
                 onInstalled: (chrome.runtime as any).onInstalled,
-                getURL: chrome.runtime.getURL.bind(chrome.runtime),
             },
 			action: chrome.action,
 			permissions: {
@@ -143,7 +126,6 @@ export function getBrowser(): WebExtensionAPI {
 					new Promise((resolve) => chrome!.permissions?.remove(p, resolve)),
 			},
             tabs: {
-                onUpdated: chrome!.tabs?.onUpdated,
                 onActivated: chrome!.tabs?.onActivated,
                 query: (q) => new Promise((resolve) => chrome!.tabs?.query(q as any, resolve as any)),
                 remove: (tabId) => new Promise((resolve) => chrome!.tabs?.remove(tabId as any, resolve)),

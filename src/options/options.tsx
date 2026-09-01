@@ -8,7 +8,7 @@ import { Settings } from '../background/store';
 import { getBrowser } from '../webextension';
 import { Sites, SiteId } from '../sites';
 import { getSiteStatus, SiteStatus, SiteStatusTag, getSettingsHealth } from '../background/store/sites/selectors';
-import { MINUTE, HOUR, DAY, readableDuration } from '../lib/time';
+import { MINUTE, HOUR, readableDuration } from '../lib/time';
 
 // MUI
 import CssBaseline from '@mui/material/CssBaseline';
@@ -135,10 +135,6 @@ function OptionsApp() {
           mergedSites[id as any] = s != null ? s : { type: Settings.SiteStateTag.CHECK_PERMISSIONS };
         }
         const snapshot = {
-          showQuotes: raw.showQuotes,
-          builtinQuotesEnabled: raw.builtinQuotesEnabled,
-          hiddenBuiltinQuotes: raw.hiddenBuiltinQuotes,
-          customQuotes: raw.customQuotes,
           sites: mergedSites as any,
           permissions: perms,
         };

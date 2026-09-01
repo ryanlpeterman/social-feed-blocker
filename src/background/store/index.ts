@@ -1,14 +1,9 @@
-import { CustomQuote } from '../../quote';
 import { getBrowser } from '../../webextension';
 import { SiteId, Sites } from '../../sites';
 
 	export namespace Settings {
 		type V1 = {
 			version: 1;
-			showQuotes: boolean;
-			builtinQuotesEnabled: boolean;
-			hiddenBuiltinQuotes: number[];
-			customQuotes: CustomQuote[];
 			sites: Partial<SitesState>;
 		};
 
@@ -16,10 +11,6 @@ import { SiteId, Sites } from '../../sites';
 
 		const defaults: V1 = {
 			version: 1,
-			showQuotes: true,
-			builtinQuotesEnabled: true,
-			hiddenBuiltinQuotes: [],
-			customQuotes: [],
 			sites: {},
 		};
 	export const defaultSites = (): SitesState => {

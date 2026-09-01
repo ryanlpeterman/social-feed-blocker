@@ -16,7 +16,6 @@
 		"@rollup/plugin-typescript": "^4.0.0",
 		"prettier": "^2.0.5",
 		"redux": "^4.0.5",
-		"redux-thunk": "^2.3.0",
 		"rollup": "^2.2.0",
 		"rollup-plugin-css-only": "^2.0.0",
         "@rollup/plugin-node-resolve": "^15.2.3",

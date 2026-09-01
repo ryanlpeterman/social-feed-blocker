@@ -1,4 +1,4 @@
-export const removeNode = (node: Element) =>
+const removeNode = (node: Element) =>
 	node.parentNode && node.parentNode.removeChild(node);
 
 const removeChildren = (node: Element) => {

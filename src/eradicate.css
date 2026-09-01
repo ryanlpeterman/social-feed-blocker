@@ -27,11 +27,6 @@ html[data-nfe-enabled='false'] #nfe-container {
 	display: none;
 }
 
-/* Removed unused utility classes (margin-0, pad-0, pad-1) */
-
-/* Link styling for overlay settings link */
-/* Removed legacy inline link styles (unused) */
-
 /* Layout rows inside the injected container to mirror options card */
 #nfe-container .nfe-card {
     margin: 16px auto;
@@ -61,22 +56,6 @@ html[data-nfe-enabled='false'] #nfe-container {
     color: var(--mui-text-primary);
     text-align: left;
 }
-/* Brand mark shown inline next to the title */
-#nfe-container .nfe-brand-icon {
-    width: auto;
-    height: 1.25em; /* match the h3 title font-size */
-    opacity: 0.9;
-    flex: 0 0 auto;
-}
-
-/* Reddit-specific alignment: trim bottom gap under the title row */
-/* Reddit-specific overrides no longer needed due to inline icon approach */
-#nfe-container .nfe-banner-row {
-    margin-bottom: 12px;
-    text-align: left;
-}
-/* Removed legacy button row layout (unused) */
-
 /* List-like rows to mirror options page list */
 #nfe-container .nfe-list {
     display: block;
@@ -123,8 +102,6 @@ html[data-nfe-enabled='false'] #nfe-container {
     padding: 6px 16px;
     transition: background-color 150ms ease, box-shadow 150ms ease, border-color 150ms ease;
 }
-
-/* Removed legacy standalone button styles (unused) */
 
 /* Dark surface adjustments to mirror MUI dark cards */
 body[data-nfe-color-scheme='dark'] #nfe-container .nfe-card,

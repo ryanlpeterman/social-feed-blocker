@@ -4,13 +4,6 @@ import { SiteId } from '../../sites';
 import { Settings } from '.';
 
 export enum BackgroundActionType {
-	QUOTES_SHOW_TOGGLE = 'QUOTES_SHOW_TOGGLE',
-	QUOTES_BUILTIN_TOGGLE = 'QUOTES_BUILTIN_TOGGLE',
-	QUOTE_HIDE = 'QUOTE_HIDE',
-	QUOTE_SHOW = 'QUOTE_SHOW',
-	QUOTE_HIDDEN_RESET = 'QUOTE_HIDDEN_RESET',
-	QUOTE_DELETE = 'QUOTE_DELETE',
-	QUOTE_ADD = 'QUOTE_ADD',
 	SETTINGS_LOAD = 'SETTINGS_LOAD',
 	SETTINGS_LOADED = 'SETTINGS_LOADED',
 	PERMISSIONS_CHECK = 'permissions/check',
@@ -20,51 +13,12 @@ export enum BackgroundActionType {
 }
 
 export type BackgroundActionObject =
-	| QuotesShowToggle
-	| QuotesBuiltinToggle
-	| QuoteHide
-	| QuoteShow
-	| QuoteDelete
-	| QuoteAdd
-	| QuoteHiddenReset
 	| SettingsLoad
 	| SettingsLoaded
 	| PermissionsCheck
 	| PermissionsUpdate
 	| SitesSetState
 	| ContentScriptsRegister;
-
-export type QuotesShowToggle = {
-	type: BackgroundActionType.QUOTES_SHOW_TOGGLE;
-};
-
-export type QuotesBuiltinToggle = {
-	type: BackgroundActionType.QUOTES_BUILTIN_TOGGLE;
-};
-
-export type QuoteHide = {
-	type: BackgroundActionType.QUOTE_HIDE;
-	id: number;
-};
-export type QuoteShow = {
-	type: BackgroundActionType.QUOTE_SHOW;
-	id: number;
-};
-export type QuoteDelete = {
-	type: BackgroundActionType.QUOTE_DELETE;
-	id: string;
-};
-
-export type QuoteAdd = {
-	type: BackgroundActionType.QUOTE_ADD;
-	id: string;
-	text: string;
-	source: string;
-};
-
-export type QuoteHiddenReset = {
-	type: BackgroundActionType.QUOTE_HIDDEN_RESET;
-};
 
 export type SettingsLoad = { type: BackgroundActionType.SETTINGS_LOAD };
 export type SettingsLoaded = {

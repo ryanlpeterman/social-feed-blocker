@@ -4,7 +4,6 @@ import { Settings } from '..';
 
 type SettingsHealth = {
 	noSitesEnabled: boolean;
-	sitesNeedingPermissions: number;
 };
 
 export enum SiteStatusTag {
@@ -22,7 +21,6 @@ export type SiteStatus =
 
 export function getSettingsHealth(state: SettingsState): SettingsHealth {
 	let atLeastOneSiteEnabled = false;
-	let sitesNeedingPermissions = 0;
 	const siteStatus = getSiteStatus(state);
 
 	Object.keys(siteStatus).forEach((id) => {
@@ -34,14 +32,10 @@ export function getSettingsHealth(state: SettingsState): SettingsHealth {
 		) {
 			atLeastOneSiteEnabled = true;
 		}
-		if (s.type === SiteStatusTag.NEEDS_NEW_PERMISSIONS) {
-			sitesNeedingPermissions += 1;
-		}
 	});
 
 	return {
 		noSitesEnabled: !atLeastOneSiteEnabled,
-		sitesNeedingPermissions,
 	};
 }
 

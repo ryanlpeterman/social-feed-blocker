@@ -13,10 +13,6 @@ export type BackgroundEffect = Effect<BackgroundState, BackgroundActionObject>;
 const getSettings = (state: SettingsState): Settings.T => {
 	return {
 		version: 1,
-		showQuotes: state.showQuotes,
-		builtinQuotesEnabled: state.builtinQuotesEnabled,
-		hiddenBuiltinQuotes: state.hiddenBuiltinQuotes,
-		customQuotes: state.customQuotes,
 		sites: state.sites,
 	};
 };
@@ -56,9 +52,6 @@ const listen: BackgroundEffect = (store) => {
 			if (msg.t === MessageType.SETTINGS_ACTION) {
 				store.dispatch(msg.action);
 			}
-            if (msg.t === MessageType.OPTIONS_PAGE_OPEN) {
-                browser.runtime.openOptionsPage().catch(() => {});
-            }
             if (msg.t === MessageType.CLOSE_ACTIVE_TAB) {
                 (async () => {
                     try {
@@ -101,8 +94,6 @@ const listen: BackgroundEffect = (store) => {
 	};
 };
 
-// Removed new-feature helper: no feature-bump prompts anymore
-
 const loadSettings: BackgroundEffect = (store) => async (action) => {
 	if (action.type === BackgroundActionType.SETTINGS_LOAD) {
 		const [settings, permissions] = await Promise.all([
@@ -125,10 +116,6 @@ const loadSettings: BackgroundEffect = (store) => async (action) => {
 		}
 
 		const state: SettingsState = {
-			showQuotes: settings.showQuotes,
-			builtinQuotesEnabled: settings.builtinQuotesEnabled,
-			hiddenBuiltinQuotes: settings.hiddenBuiltinQuotes,
-			customQuotes: settings.customQuotes,
 			sites,
 			permissions,
 		};
@@ -142,7 +129,7 @@ const loadSettings: BackgroundEffect = (store) => async (action) => {
 	}
 };
 
-export const registerContentScripts: BackgroundEffect =
+const registerContentScripts: BackgroundEffect =
     (store) => async (action) => {
         // Simple debounce/lock to avoid duplicate register calls racing
         const anySelf = registerContentScripts as any;
@@ -222,14 +209,9 @@ export const registerContentScripts: BackgroundEffect =
         }
     };
 
-export const logAction: BackgroundEffect = (_store) => async (_action) => {
-    // Intentionally no-op in production to reduce console noise
-};
-
 export const rootEffect = Effect.all(
 	listen,
 	loadSettings,
 	sitesEffect,
-	registerContentScripts,
-	logAction
+	registerContentScripts
 );

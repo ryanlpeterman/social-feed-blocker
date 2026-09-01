@@ -16,8 +16,6 @@ const confirmDisableSite = (
 	return state;
 };
 
-// Removed legacy options tab state (tab, quotesTab)
-
 export type OptionsState = {
     confirmDisableSite: SiteId | null;
 };

@@ -1,6 +1,5 @@
 import { createBackgroundStore } from './store/store';
-import { getBrowser, TabId } from '../webextension';
-import { Sites } from '../sites';
+import { getBrowser } from '../webextension';
 
 createBackgroundStore();
 

@@ -21,5 +21,4 @@ html[data-nfe-enabled='true'] div[role='region'][aria-label='Notes feed'] #nfe-c
     --mui-surface: #121212;
     --mui-divider: rgba(255, 255, 255, 0.12);
     --mui-text-primary: rgba(255, 255, 255, 0.87);
-    --mui-text-secondary: rgba(255, 255, 255, 0.6);
 }

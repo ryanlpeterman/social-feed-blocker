@@ -8,19 +8,10 @@
     background-color: inherit;
 
     /* Material UI theme tokens to match options page */
-    --mui-primary: #1976d2; /* MUI default primary */
-    --mui-primary-dark: #1565c0;
-    --mui-primary-contrast: #ffffff;
-    --mui-outline: rgba(25, 118, 210, 0.5);
     --mui-hover: rgba(25, 118, 210, 0.04);
     --mui-divider: rgba(0, 0, 0, 0.12);
     --mui-surface: #fff; /* Paper/card background (light) */
     --mui-text-primary: rgba(0, 0, 0, 0.87);
-    --mui-text-secondary: rgba(0, 0, 0, 0.6);
-    /* Success colors to match Enabled status chip */
-    --mui-success: #2e7d32; /* success.main */
-    --mui-success-dark: #1b5e20; /* success.dark */
-    --mui-success-contrast: #ffffff;
 }
 
 html:not([data-nfe-enabled='true']) #nfe-container {
@@ -116,7 +107,6 @@ body[data-nfe-color-scheme='dark'] #nfe-container,
     --mui-surface: #121212;
     --mui-divider: rgba(255, 255, 255, 0.12);
     --mui-text-primary: rgba(255, 255, 255, 0.87);
-    --mui-text-secondary: rgba(255, 255, 255, 0.6);
 }
 
 /* Avoid overriding site light themes purely due to OS-level dark mode.

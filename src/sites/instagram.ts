@@ -33,8 +33,6 @@ export function eradicate(store: Store) {
             return;
         }
 
-        const container = feed;
-
         // Add Social Feed Blocker panel
         if (feed && !isAlreadyInjected()) {
             injectUI(feed, store);

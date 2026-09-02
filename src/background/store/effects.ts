@@ -6,7 +6,6 @@ import { Message, MessageType } from '../../messaging/types';
 import { Settings } from './index';
 import { getPermissions, sitesEffect } from './sites/effects';
 import { SiteId, Sites } from '../../sites';
-import SiteStateTag = Settings.SiteStateTag;
 
 export type BackgroundEffect = Effect<BackgroundState, BackgroundActionObject>;
 

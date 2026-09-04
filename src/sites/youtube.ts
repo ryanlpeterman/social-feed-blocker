@@ -137,8 +137,7 @@ export function eradicate(store: Store) {
 
 			if (!isAlreadyInjected()) {
 				// Hack so that injectUI can handle dark theme
-				document.body.style.background =
-					'var(--yt-spec-general-background-a)';
+				document.body.style.background = 'var(--yt-spec-general-background-a)';
 				injectUI(feed, store);
 			}
 

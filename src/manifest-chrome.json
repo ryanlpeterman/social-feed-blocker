@@ -1,7 +1,7 @@
 {
-    "name": "Social Feed Blocker",
-    "version": "1.0.3",
-    "description": "Block distracting social media feeds and reclaim your focus",
+	"name": "Social Feed Blocker",
+	"version": "1.0.3",
+	"description": "Block distracting social media feeds and reclaim your focus",
 	"manifest_version": 3,
 	"permissions": ["storage", "scripting"],
 	"optional_host_permissions": [
@@ -33,7 +33,7 @@
 			"64": "icon64.png",
 			"128": "icon128.png"
 		},
-        "default_title": "Social Feed Blocker"
+		"default_title": "Social Feed Blocker"
 	},
 	"background": {
 		"service_worker": "service-worker.js",
@@ -51,13 +51,10 @@
 		"64": "icon64.png",
 		"128": "icon128.png"
 	},
-    "web_accessible_resources": [
-        {
-            "resources": [
-                "transparent-icon.png",
-                "transparent-icon-green.png"
-            ],
-            "matches": ["<all_urls>"]
-        }
-    ]
+	"web_accessible_resources": [
+		{
+			"resources": ["transparent-icon.png", "transparent-icon-green.png"],
+			"matches": ["<all_urls>"]
+		}
+	]
 }

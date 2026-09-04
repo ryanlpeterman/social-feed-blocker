@@ -1,7 +1,7 @@
 import injectUI, { isAlreadyInjected } from '../lib/inject-ui';
 import { isEnabled } from '../lib/is-enabled';
 import { Store } from '../store';
-import {injectCSS} from "./shared";
+import { injectCSS } from './shared';
 import { POLL_INTERVAL_MS } from '../lib/constants';
 
 export function checkSite(): boolean {
@@ -9,38 +9,38 @@ export function checkSite(): boolean {
 }
 
 export function eradicate(store: Store) {
-    injectCSS('instagram');
+	injectCSS('instagram');
 
-    function eradicateRetry() {
-        const settings = store.getState().settings;
-        if (settings == null || !isEnabled(settings)) {
-            return;
-        }
+	function eradicateRetry() {
+		const settings = store.getState().settings;
+		if (settings == null || !isEnabled(settings)) {
+			return;
+		}
 
-        // Flag reels route so CSS can apply reels-specific blocking without affecting other pages
-        try {
-            const onReels = /\/reels\/?/i.test(window.location.pathname);
-            if (onReels) {
-                document.documentElement.setAttribute('data-nfe-ig-reels', 'true');
-            } else {
-                document.documentElement.removeAttribute('data-nfe-ig-reels');
-            }
-        } catch (_) {}
+		// Flag reels route so CSS can apply reels-specific blocking without affecting other pages
+		try {
+			const onReels = /\/reels\/?/i.test(window.location.pathname);
+			if (onReels) {
+				document.documentElement.setAttribute('data-nfe-ig-reels', 'true');
+			} else {
+				document.documentElement.removeAttribute('data-nfe-ig-reels');
+			}
+		} catch (_) {}
 
-        // Don't do anything if the UI hasn't loaded yet
-        const feed = document.querySelector('main, [role="main"]');
-        if (feed == null) {
-            return;
-        }
+		// Don't do anything if the UI hasn't loaded yet
+		const feed = document.querySelector('main, [role="main"]');
+		if (feed == null) {
+			return;
+		}
 
-        // Add Social Feed Blocker panel
-        if (feed && !isAlreadyInjected()) {
-            injectUI(feed, store);
-        }
-    }
+		// Add Social Feed Blocker panel
+		if (feed && !isAlreadyInjected()) {
+			injectUI(feed, store);
+		}
+	}
 
-    // This delay ensures that the elements have been created by Twitter's
-    // scripts before we attempt to replace them
-    setInterval(eradicateRetry, POLL_INTERVAL_MS);
-    eradicateRetry();
+	// This delay ensures that the elements have been created by Twitter's
+	// scripts before we attempt to replace them
+	setInterval(eradicateRetry, POLL_INTERVAL_MS);
+	eradicateRetry();
 }

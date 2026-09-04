@@ -27,6 +27,6 @@ html[data-nfe-enabled='true']
 }
 
 /* LinkedIn: hide notifications nav link on every route, not just /feed */
-html[data-nfe-site-enabled='true'] a[href*="/notifications"] {
-    display: none !important;
+html[data-nfe-site-enabled='true'] a[href*='/notifications'] {
+	display: none !important;
 }

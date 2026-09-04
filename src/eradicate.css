@@ -1,17 +1,17 @@
 #nfe-container {
-    font-family: Roboto, Helvetica, Arial, sans-serif;
-    font-weight: normal;
-    line-height: 1.4;
-    font-size: 16px; /* Pin base size so popup is at least as large as settings */
+	font-family: Roboto, Helvetica, Arial, sans-serif;
+	font-weight: normal;
+	line-height: 1.4;
+	font-size: 16px; /* Pin base size so popup is at least as large as settings */
 
-    /* Needed for detecting the background color with getComputedStyle */
-    background-color: inherit;
+	/* Needed for detecting the background color with getComputedStyle */
+	background-color: inherit;
 
-    /* Material UI theme tokens to match options page */
-    --mui-hover: rgba(25, 118, 210, 0.04);
-    --mui-divider: rgba(0, 0, 0, 0.12);
-    --mui-surface: #fff; /* Paper/card background (light) */
-    --mui-text-primary: rgba(0, 0, 0, 0.87);
+	/* Material UI theme tokens to match options page */
+	--mui-hover: rgba(25, 118, 210, 0.04);
+	--mui-divider: rgba(0, 0, 0, 0.12);
+	--mui-surface: #fff; /* Paper/card background (light) */
+	--mui-text-primary: rgba(0, 0, 0, 0.87);
 }
 
 html:not([data-nfe-enabled='true']) #nfe-container {
@@ -20,93 +20,94 @@ html:not([data-nfe-enabled='true']) #nfe-container {
 
 /* Layout rows inside the injected container to mirror options card */
 #nfe-container .nfe-card {
-    margin: 16px auto;
-    padding: 16px;
-    background: var(--mui-surface);
-    border: 1px solid var(--mui-divider);
-    border-radius: 8px;
-    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.1); /* shadow-mid */
-    /* Keep card within its parent: fill available width but cap at a modest max */
-    width: 100%;
-    max-width: 560px; /* reduce from 720px to avoid overflow on narrow Threads/Twitter columns */
-    color: var(--mui-text-primary);
+	margin: 16px auto;
+	padding: 16px;
+	background: var(--mui-surface);
+	border: 1px solid var(--mui-divider);
+	border-radius: 8px;
+	box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.1); /* shadow-mid */
+	/* Keep card within its parent: fill available width but cap at a modest max */
+	width: 100%;
+	max-width: 560px; /* reduce from 720px to avoid overflow on narrow Threads/Twitter columns */
+	color: var(--mui-text-primary);
 }
 #nfe-container .nfe-card-header {
-    padding-bottom: 8px;
+	padding-bottom: 8px;
 }
 #nfe-container .nfe-card-title-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+	display: flex;
+	align-items: center;
+	gap: 8px;
 }
 
 #nfe-container .nfe-card-title {
-    margin: 0 0 4px 0;
-    font-weight: 500;
-    font-size: 1.25em; /* scale from container base */
-    color: var(--mui-text-primary);
-    text-align: left;
+	margin: 0 0 4px 0;
+	font-weight: 500;
+	font-size: 1.25em; /* scale from container base */
+	color: var(--mui-text-primary);
+	text-align: left;
 }
 /* List-like rows to mirror options page list */
 #nfe-container .nfe-list {
-    display: block;
-    margin-top: 8px;
-    /* Extend list rows edge-to-edge within the card to fill the whole row */
-    margin-left: -16px;
-    margin-right: -16px;
-    margin-bottom: -16px; /* remove space under the bottom row */
-    border-top: 1px solid var(--mui-divider); /* divider between header and list like options */
+	display: block;
+	margin-top: 8px;
+	/* Extend list rows edge-to-edge within the card to fill the whole row */
+	margin-left: -16px;
+	margin-right: -16px;
+	margin-bottom: -16px; /* remove space under the bottom row */
+	border-top: 1px solid var(--mui-divider); /* divider between header and list like options */
 }
 #nfe-container .nfe-list-item {
-    appearance: none;
-    -webkit-appearance: none;
-    display: flex;
-    align-items: center;
-    width: 100%;
-    text-align: left;
-    background: transparent;
-    border: none;
-    padding: 12px 16px; /* internal padding for readability; no outer padding due to negative margins */
-    font-size: 1em; /* scale from container base */
-    color: var(--mui-text-primary);
-    cursor: pointer;
+	appearance: none;
+	-webkit-appearance: none;
+	display: flex;
+	align-items: center;
+	width: 100%;
+	text-align: left;
+	background: transparent;
+	border: none;
+	padding: 12px 16px; /* internal padding for readability; no outer padding due to negative margins */
+	font-size: 1em; /* scale from container base */
+	color: var(--mui-text-primary);
+	cursor: pointer;
 }
 #nfe-container .nfe-list-item:hover {
-    background: var(--mui-hover);
+	background: var(--mui-hover);
 }
 #nfe-container .nfe-list-item:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.12);
+	outline: none;
+	box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.12);
 }
 #nfe-container .nfe-list .nfe-list-item + .nfe-list-item {
-    border-top: 1px solid var(--mui-divider);
+	border-top: 1px solid var(--mui-divider);
 }
 
 /* Buttons styled to match MUI defaults */
 #nfe-container button {
-    font-family: Roboto, Helvetica, Arial, sans-serif;
-    font-weight: 500;
-    letter-spacing: 0.02857em;
-    text-transform: none;
-    border-radius: 4px;
-    min-height: 36px;
-    padding: 6px 16px;
-    transition: background-color 150ms ease, box-shadow 150ms ease, border-color 150ms ease;
+	font-family: Roboto, Helvetica, Arial, sans-serif;
+	font-weight: 500;
+	letter-spacing: 0.02857em;
+	text-transform: none;
+	border-radius: 4px;
+	min-height: 36px;
+	padding: 6px 16px;
+	transition: background-color 150ms ease, box-shadow 150ms ease,
+		border-color 150ms ease;
 }
 
 /* Dark surface adjustments to mirror MUI dark cards */
 body[data-nfe-color-scheme='dark'] #nfe-container .nfe-card,
 .__fb-dark-mode #nfe-container .nfe-card {
-    background: var(--mui-surface);
-    border-color: var(--mui-divider);
+	background: var(--mui-surface);
+	border-color: var(--mui-divider);
 }
 
 /* Set dark theme tokens to match options page */
 body[data-nfe-color-scheme='dark'] #nfe-container,
 .__fb-dark-mode #nfe-container {
-    --mui-surface: #121212;
-    --mui-divider: rgba(255, 255, 255, 0.12);
-    --mui-text-primary: rgba(255, 255, 255, 0.87);
+	--mui-surface: #121212;
+	--mui-divider: rgba(255, 255, 255, 0.12);
+	--mui-text-primary: rgba(255, 255, 255, 0.87);
 }
 
 /* Avoid overriding site light themes purely due to OS-level dark mode.
@@ -135,73 +136,85 @@ html[data-nfe-enabled='true'] div[aria-label='Gaming'][role='main'] > :not(#nfe-
 html[data-nfe-enabled='true'] div[aria-label='Stories'] > :not(#nfe-container),
 html[data-nfe-enabled='true'] div.x1hc1fzr.x1unhpq9.x6o7n8i > :not(#nfe-container), /* For new fb layout (Q4 2022) */
 html[data-nfe-enabled='true'] div[role='region'][data-visualcompletion='ignore-dynamic'] > :not(#nfe-container) /* For stories in non-english versions */ {
-    position: absolute !important;
-    opacity: 0 !important;
-    pointer-events: none !important;
-    width: 0 !important;
-    height: 0 !important;
+	position: absolute !important;
+	opacity: 0 !important;
+	pointer-events: none !important;
+	width: 0 !important;
+	height: 0 !important;
 }
 
 /* Ensure our popup centers inside known feed containers */
 html[data-nfe-enabled='true'] #ssrb_feed_start + div > #nfe-container,
 html[data-nfe-enabled='true'] div[data-pagelet='MainFeed'] > #nfe-container,
-html[data-nfe-enabled='true'] div[aria-label='Gaming'][role='main'] > #nfe-container,
+html[data-nfe-enabled='true']
+	div[aria-label='Gaming'][role='main']
+	> #nfe-container,
 html[data-nfe-enabled='true'] div[aria-label='Stories'] > #nfe-container,
 html[data-nfe-enabled='true'] div.x1hc1fzr.x1unhpq9.x6o7n8i > #nfe-container {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    width: 100%;
-    box-sizing: border-box;
-    /* Standard top spacing (avoid negative offset) */
-    margin: 8px auto;
-    /* If parent is a grid, ensure the popup centers within the grid area */
-    justify-self: center;
-    align-self: start;
-    grid-column: 1 / -1;
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	width: 100%;
+	box-sizing: border-box;
+	/* Standard top spacing (avoid negative offset) */
+	margin: 8px auto;
+	/* If parent is a grid, ensure the popup centers within the grid area */
+	justify-self: center;
+	align-self: start;
+	grid-column: 1 / -1;
 }
 /* Facebook Reels/Watch feed container */
-html[data-nfe-enabled='true'][data-nfe-fb-reels='true'] #watch_feed > :not(#nfe-container) {
-    position: absolute !important;
-    opacity: 0 !important;
-    pointer-events: none !important;
-    width: 0 !important;
-    height: 0 !important;
+html[data-nfe-enabled='true'][data-nfe-fb-reels='true']
+	#watch_feed
+	> :not(#nfe-container) {
+	position: absolute !important;
+	opacity: 0 !important;
+	pointer-events: none !important;
+	width: 0 !important;
+	height: 0 !important;
 }
-html[data-nfe-enabled='true'][data-nfe-fb-reels='true'] #watch_feed > #nfe-container {
-    /* Center the popup card within the Watch/Reels container */
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    width: 100%;
-    box-sizing: border-box;
-    margin: 8px auto;
+html[data-nfe-enabled='true'][data-nfe-fb-reels='true']
+	#watch_feed
+	> #nfe-container {
+	/* Center the popup card within the Watch/Reels container */
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	width: 100%;
+	box-sizing: border-box;
+	margin: 8px auto;
 }
 
 /* Facebook Reels: hide videos under role=main on /reel(s) routes */
 html[data-nfe-enabled='true'][data-nfe-fb-reels='true'] div[role='main'] video {
-    display: none !important;
+	display: none !important;
 }
 /* Prefer removing direct wrappers that host a video when supported */
-html[data-nfe-enabled='true'][data-nfe-fb-reels='true'] div[role='main'] > div:has(> video) {
-    display: none !important;
+html[data-nfe-enabled='true'][data-nfe-fb-reels='true']
+	div[role='main']
+	> div:has(> video) {
+	display: none !important;
 }
-html[data-nfe-enabled='true'][data-nfe-fb-reels='true'] div[role='main'] > #nfe-container {
-    /* Center the popup in Reels layout */
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    width: 100%;
-    box-sizing: border-box;
-    margin: 24px auto;
+html[data-nfe-enabled='true'][data-nfe-fb-reels='true']
+	div[role='main']
+	> #nfe-container {
+	/* Center the popup in Reels layout */
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	width: 100%;
+	box-sizing: border-box;
+	margin: 24px auto;
 }
 /* Facebook Reels: hide Next Card arrow/button */
-html[data-nfe-enabled='true'][data-nfe-fb-reels='true'] [aria-label*="Next Card" i] {
-    display: none !important;
+html[data-nfe-enabled='true'][data-nfe-fb-reels='true']
+	[aria-label*='Next Card' i] {
+	display: none !important;
 }
 /* Facebook Reels: hide Previous Card arrow/button */
-html[data-nfe-enabled='true'][data-nfe-fb-reels='true'] [aria-label*="Previous Card" i] {
-    display: none !important;
+html[data-nfe-enabled='true'][data-nfe-fb-reels='true']
+	[aria-label*='Previous Card' i] {
+	display: none !important;
 }
 html[data-nfe-enabled='true'] {
 	--notification-badge: var(--base-blue);
@@ -210,9 +223,10 @@ html[data-nfe-enabled='true'] {
 /* Facebook: hide notifications bell (site-wide, on every route).
    The bell is a div[role=button] in the current DOM; the anchor
    selector covers older layouts. */
-html[data-nfe-site-enabled='true'] a[href="/notifications"][role="link"],
-html[data-nfe-site-enabled='true'] div[role="button"][aria-label^="Notifications" i] {
-    display: none !important;
+html[data-nfe-site-enabled='true'] a[href='/notifications'][role='link'],
+html[data-nfe-site-enabled='true']
+	div[role='button'][aria-label^='Notifications' i] {
+	display: none !important;
 }
 
 /* Reddit 2024 update: fully remove articles so no space remains */
@@ -270,33 +284,39 @@ html[data-nfe-enabled='true'] #primary > :not(#nfe-container) {
 }
 
 html[data-nfe-enabled='true'] #primary > #nfe-container {
-    margin: 64px;
+	margin: 64px;
 }
 /* YouTube Shorts: a short navigated to directly is allowed to play; only
    advancing to the next short is blocked. Hide the next/prev arrows whenever
    the site blocker is on and we're on a Shorts page. */
-html[data-nfe-site-enabled='true'][data-nfe-yt-shorts='true'] ytd-shorts .navigation-container {
-    display: none !important;
+html[data-nfe-site-enabled='true'][data-nfe-yt-shorts='true']
+	ytd-shorts
+	.navigation-container {
+	display: none !important;
 }
 /* Blank the player only when advancement slipped through anyway (the short id
    no longer matches the one the user navigated to — see youtube.ts watchdog) */
-html[data-nfe-site-enabled='true'][data-nfe-yt-shorts-blocked='true'] ytd-shorts > :not(#nfe-container) {
-    opacity: 0 !important;
-    pointer-events: none !important;
-    height: 0 !important;
+html[data-nfe-site-enabled='true'][data-nfe-yt-shorts-blocked='true']
+	ytd-shorts
+	> :not(#nfe-container) {
+	opacity: 0 !important;
+	pointer-events: none !important;
+	height: 0 !important;
 }
-html[data-nfe-site-enabled='true'][data-nfe-yt-shorts-blocked='true'] ytd-shorts > #nfe-container {
-    /* Center the popup horizontally within Shorts view even with a narrow host layout */
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    width: 100%;
-    box-sizing: border-box;
-    margin: 64px auto;
+html[data-nfe-site-enabled='true'][data-nfe-yt-shorts-blocked='true']
+	ytd-shorts
+	> #nfe-container {
+	/* Center the popup horizontally within Shorts view even with a narrow host layout */
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	width: 100%;
+	box-sizing: border-box;
+	margin: 64px auto;
 }
 /* YouTube: hide notifications bell (site-wide, on every route) */
 html[data-nfe-site-enabled='true'] ytd-notification-topbar-button-renderer {
-    display: none !important;
+	display: none !important;
 }
 
 /* Youtube related */

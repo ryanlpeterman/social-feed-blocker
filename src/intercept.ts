@@ -39,8 +39,8 @@ export function eradicate(store: Store) {
 		Twitter.eradicate(store);
 	} else if (HackerNews.checkSite()) {
 		HackerNews.eradicate(store);
-    } else if (LinkedIn.checkSite()) {
-        LinkedIn.eradicate(store);
+	} else if (LinkedIn.checkSite()) {
+		LinkedIn.eradicate(store);
 	} else if (YouTube.checkSite()) {
 		YouTube.eradicate(store);
 	} else if (Instagram.checkSite()) {

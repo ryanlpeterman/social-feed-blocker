@@ -1,4 +1,4 @@
-import {SiteId, Sites} from "./index";
+import { SiteId, Sites } from './index';
 
 export function injectCSS(siteId: SiteId) {
 	const css = Sites[siteId].css;

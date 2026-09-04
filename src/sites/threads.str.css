@@ -1,32 +1,36 @@
 /* Threads.com simple feed hiding rules (mirrors Facebook-style approach) */
-html[data-nfe-enabled='true'] div[role='region'][aria-label='Column body'] > :not(#nfe-container),
+html[data-nfe-enabled='true']
+	div[role='region'][aria-label='Column body']
+	> :not(#nfe-container),
 html[data-nfe-enabled='true'] [role='feed'] > :not(#nfe-container),
 html[data-nfe-enabled='true'] main > :not(#nfe-container),
 html[data-nfe-enabled='true'] [role='main'] > :not(#nfe-container) {
-  opacity: 0 !important;
-  pointer-events: none !important;
-  height: 0 !important;
+	opacity: 0 !important;
+	pointer-events: none !important;
+	height: 0 !important;
 }
 
 /* Give our container some breathing room */
-html[data-nfe-enabled='true'] div[role='region'][aria-label='Column body'] > #nfe-container,
+html[data-nfe-enabled='true']
+	div[role='region'][aria-label='Column body']
+	> #nfe-container,
 html[data-nfe-enabled='true'] [role='feed'] > #nfe-container,
 html[data-nfe-enabled='true'] main > #nfe-container,
 html[data-nfe-enabled='true'] [role='main'] > #nfe-container {
-  /* Center the popup horizontally within Threads' column */
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  width: 100%;
-  box-sizing: border-box;
-  margin: 24px auto;
+	/* Center the popup horizontally within Threads' column */
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	width: 100%;
+	box-sizing: border-box;
+	margin: 24px auto;
 }
 
 /* Threads: hide the notifications nav item. Target the /activity link
    itself: hiding only the icon's wrapper leaves the link's hit area
    clickable. Keep the SVG-wrapper rule for icons outside that link.
    Site-wide gate so it stays hidden on every route. */
-html[data-nfe-site-enabled='true'] a[href="/activity"],
-html[data-nfe-site-enabled='true'] :has(> svg[aria-label="Notifications"]) {
-    display: none !important;
+html[data-nfe-site-enabled='true'] a[href='/activity'],
+html[data-nfe-site-enabled='true'] :has(> svg[aria-label='Notifications']) {
+	display: none !important;
 }

@@ -9,12 +9,14 @@ html[data-nfe-enabled='true']
 
 /* Make the popup card a bit narrower on Twitter (20% smaller) */
 html[data-nfe-enabled='true'] #nfe-container .nfe-card {
-    max-width: 448px; /* 560px * 0.8 to better match column width */
+	max-width: 448px; /* 560px * 0.8 to better match column width */
 }
 
 html[data-nfe-enabled='true'] div[aria-label*='Timeline'],
-html[data-nfe-enabled='true'] div[data-testid="primaryColumn"] > div:last-child > div:last-child
-{
+html[data-nfe-enabled='true']
+	div[data-testid='primaryColumn']
+	> div:last-child
+	> div:last-child {
 	opacity: 0 !important;
 	pointer-events: none !important;
 }
@@ -28,7 +30,8 @@ html[data-nfe-enabled='true'] [data-testid='sidebarColumn'] [role='region'] {
 
 /* Twitter/X: hide notifications nav link. Site-wide gate: the nav rail is
    present on every route (/i/chat, profiles, ...), not just the feed paths. */
-html[data-nfe-site-enabled='true'] a[href="/notifications"],
-html[data-nfe-site-enabled='true'] a[data-testid="AppTabBar_Notifications_Link"] {
-    display: none !important;
+html[data-nfe-site-enabled='true'] a[href='/notifications'],
+html[data-nfe-site-enabled='true']
+	a[data-testid='AppTabBar_Notifications_Link'] {
+	display: none !important;
 }

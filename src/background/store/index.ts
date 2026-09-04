@@ -1,18 +1,18 @@
 import { getBrowser } from '../../webextension';
 import { SiteId, Sites } from '../../sites';
 
-	export namespace Settings {
-		type V1 = {
-			version: 1;
-			sites: Partial<SitesState>;
-		};
+export namespace Settings {
+	type V1 = {
+		version: 1;
+		sites: Partial<SitesState>;
+	};
 
 	export type SitesState = Record<SiteId, SiteState>;
 
-		const defaults: V1 = {
-			version: 1,
-			sites: {},
-		};
+	const defaults: V1 = {
+		version: 1,
+		sites: {},
+	};
 	export const defaultSites = (): SitesState => {
 		const sites: SitesState = {} as SitesState;
 		for (const siteId of Object.keys(Sites)) {

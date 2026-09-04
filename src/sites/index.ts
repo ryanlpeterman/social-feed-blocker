@@ -32,10 +32,7 @@ export const Sites: Record<SiteId, Site> = {
 			'/groups/feed/',
 			'/gaming/feed/',
 		],
-		origins: [
-			'https://facebook.com/*',
-			'https://*.facebook.com/*',
-		],
+		origins: ['https://facebook.com/*', 'https://*.facebook.com/*'],
 	},
 	instagram: {
 		label: 'Instagram',
@@ -92,27 +89,27 @@ export const Sites: Record<SiteId, Site> = {
 		paths: ['/', '/news'],
 		origins: ['https://news.ycombinator.com/*'],
 	},
-    threads: {
-        label: 'Threads',
-        domain: ['threads.com'],
-        paths: ['/', '/home', '/feed', '/explore', '/search', '/notifications'],
-        origins: ['https://threads.com/*', 'https://*.threads.com/*'],
-        css: threadsCss,
-    },
-    tiktok: {
-        label: 'TikTok',
-        domain: ['tiktok.com'],
-        paths: ['/'],
-        origins: ['https://tiktok.com/*', 'https://*.tiktok.com/*'],
-        css: tiktokCss,
-    },
-    substack: {
-        label: 'Substack',
-        domain: ['substack.com'],
-        paths: ['/', '/home'],
-        origins: ['https://substack.com/*'],
-        css: substackCss,
-    },
+	threads: {
+		label: 'Threads',
+		domain: ['threads.com'],
+		paths: ['/', '/home', '/feed', '/explore', '/search', '/notifications'],
+		origins: ['https://threads.com/*', 'https://*.threads.com/*'],
+		css: threadsCss,
+	},
+	tiktok: {
+		label: 'TikTok',
+		domain: ['tiktok.com'],
+		paths: ['/'],
+		origins: ['https://tiktok.com/*', 'https://*.tiktok.com/*'],
+		css: tiktokCss,
+	},
+	substack: {
+		label: 'Substack',
+		domain: ['substack.com'],
+		paths: ['/', '/home'],
+		origins: ['https://substack.com/*'],
+		css: substackCss,
+	},
 };
 
 export type Site = {

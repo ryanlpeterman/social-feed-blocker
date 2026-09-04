@@ -17,9 +17,9 @@ const confirmDisableSite = (
 };
 
 export type OptionsState = {
-    confirmDisableSite: SiteId | null;
+	confirmDisableSite: SiteId | null;
 };
 
 export const optionsReducer = combineReducers({
-    confirmDisableSite,
+	confirmDisableSite,
 });

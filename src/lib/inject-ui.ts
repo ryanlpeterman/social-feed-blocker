@@ -17,9 +17,9 @@ const rgbRe = /rgb\((\d+),\s*(\d+),\s*(\d+)\)/;
  * Inject the Social Feed Blocker panel into the page.
  */
 export default function injectUI(
-    streamContainer: Node,
-    store: Store,
-    opts: { asFirstChild?: boolean } = {}
+	streamContainer: Node,
+	store: Store,
+	opts: { asFirstChild?: boolean } = {}
 ) {
 	const nfeContainer = document.createElement('div');
 	nfeContainer.id = 'nfe-container';
@@ -33,8 +33,8 @@ export default function injectUI(
 
 	let vnode = toVNode(nfeContainer);
 
-    const render = () => {
-        const newVnode = h('div#nfe-container', [SocialFeedBlocker(store)]);
+	const render = () => {
+		const newVnode = h('div#nfe-container', [SocialFeedBlocker(store)]);
 
 		patch(vnode, newVnode);
 		vnode = newVnode;
@@ -53,10 +53,14 @@ export default function injectUI(
 				mode = 'light';
 			}
 			document.body.dataset.nfeColorScheme = mode;
-        }
-    };
+		}
+	};
 
-    render();
-    // Subscribe for updates and re-render; ignore returned unsubscribe since this lives for page lifetime
-    try { (store.subscribe as any)(render); } catch (_) { store.subscribe(render as any); }
+	render();
+	// Subscribe for updates and re-render; ignore returned unsubscribe since this lives for page lifetime
+	try {
+		(store.subscribe as any)(render);
+	} catch (_) {
+		store.subscribe(render as any);
+	}
 }

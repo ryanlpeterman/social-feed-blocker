@@ -118,91 +118,106 @@ const confirmSiteDisabled: AppEffect = (store) => async (action) => {
 
 // Connect to the background script and handle reconnection/fallbacks
 const connect: AppEffect = (store) => {
-    const browser = getBrowser();
-    let port = undefined as undefined | import('../webextension').Port;
-    let retryTimer: any = undefined;
-    let nextDelayMs = 200;
+	const browser = getBrowser();
+	let port = undefined as undefined | import('../webextension').Port;
+	let retryTimer: any = undefined;
+	let nextDelayMs = 200;
 
-    const clearRetry = () => {
-        if (retryTimer) {
-            clearTimeout(retryTimer);
-            retryTimer = undefined;
-        }
-    };
-    const scheduleRetry = () => {
-        if (retryTimer) return;
-        retryTimer = setTimeout(() => {
-            retryTimer = undefined;
-            connectPort();
-        }, nextDelayMs);
-        nextDelayMs = Math.min(nextDelayMs * 2, 1000);
-    };
-    const connectPort = () => {
-        try {
-            const p = browser.runtime.connect();
-            p.onMessage.addListener((msg: Message) => {
-                if (msg.t === MessageType.SETTINGS_CHANGED) {
-                    store.dispatch({
-                        type: ActionType.BACKGROUND_SETTINGS_CHANGED,
-                        settings: msg.settings,
-                    });
-                }
-            });
-            p.onDisconnect.addListener(() => {
-                // Port disconnected (e.g., service worker went idle). Schedule retry.
-                port = undefined;
-                scheduleRetry();
-            });
-            port = p;
-            // Connected: reset backoff
-            nextDelayMs = 200;
-            clearRetry();
-            // Nudge background to compute and send fresh settings
-            try { p.postMessage({ t: MessageType.SETTINGS_ACTION, action: { type: BackgroundActionType.PERMISSIONS_CHECK } as any }); } catch (_) {}
-        } catch (e) {
-            // Could not connect right now; schedule retry
-            port = undefined;
-            scheduleRetry();
-        }
-    };
+	const clearRetry = () => {
+		if (retryTimer) {
+			clearTimeout(retryTimer);
+			retryTimer = undefined;
+		}
+	};
+	const scheduleRetry = () => {
+		if (retryTimer) return;
+		retryTimer = setTimeout(() => {
+			retryTimer = undefined;
+			connectPort();
+		}, nextDelayMs);
+		nextDelayMs = Math.min(nextDelayMs * 2, 1000);
+	};
+	const connectPort = () => {
+		try {
+			const p = browser.runtime.connect();
+			p.onMessage.addListener((msg: Message) => {
+				if (msg.t === MessageType.SETTINGS_CHANGED) {
+					store.dispatch({
+						type: ActionType.BACKGROUND_SETTINGS_CHANGED,
+						settings: msg.settings,
+					});
+				}
+			});
+			p.onDisconnect.addListener(() => {
+				// Port disconnected (e.g., service worker went idle). Schedule retry.
+				port = undefined;
+				scheduleRetry();
+			});
+			port = p;
+			// Connected: reset backoff
+			nextDelayMs = 200;
+			clearRetry();
+			// Nudge background to compute and send fresh settings
+			try {
+				p.postMessage({
+					t: MessageType.SETTINGS_ACTION,
+					action: { type: BackgroundActionType.PERMISSIONS_CHECK } as any,
+				});
+			} catch (_) {}
+		} catch (e) {
+			// Could not connect right now; schedule retry
+			port = undefined;
+			scheduleRetry();
+		}
+	};
 
-    // Establish initial connection (best-effort) and schedule retries if needed
-    connectPort();
-    if (!port) scheduleRetry();
+	// Establish initial connection (best-effort) and schedule retries if needed
+	connectPort();
+	if (!port) scheduleRetry();
 
-    return async (action) => {
-        // Forward any actions to the background script
-        if (action.type === ActionType.BACKGROUND_ACTION) {
-            if (!port) { connectPort(); if (!port) scheduleRetry(); }
-            try {
-                port && port.postMessage({
-                    t: MessageType.SETTINGS_ACTION,
-                    action: action.action,
-                });
-            } catch (_e) {
-                // Retry once on a fresh connection
-                connectPort(); if (!port) scheduleRetry();
-                try {
-                    port && port.postMessage({
-                        t: MessageType.SETTINGS_ACTION,
-                        action: action.action,
-                    });
-                } catch (_e2) {
-                    // Give up silently
-                }
-            }
-        } else if (action.type === ActionType.UI_CLOSE_TAB) {
-            if (!port) { connectPort(); if (!port) scheduleRetry(); }
-            try {
-                port && port.postMessage({ t: MessageType.CLOSE_ACTIVE_TAB });
-            } catch (_e) {
-                connectPort(); if (!port) scheduleRetry();
-                try {
-                    port && port.postMessage({ t: MessageType.CLOSE_ACTIVE_TAB });
-                } catch (_e2) {}
-            }
-        }
-    };
+	return async (action) => {
+		// Forward any actions to the background script
+		if (action.type === ActionType.BACKGROUND_ACTION) {
+			if (!port) {
+				connectPort();
+				if (!port) scheduleRetry();
+			}
+			try {
+				port &&
+					port.postMessage({
+						t: MessageType.SETTINGS_ACTION,
+						action: action.action,
+					});
+			} catch (_e) {
+				// Retry once on a fresh connection
+				connectPort();
+				if (!port) scheduleRetry();
+				try {
+					port &&
+						port.postMessage({
+							t: MessageType.SETTINGS_ACTION,
+							action: action.action,
+						});
+				} catch (_e2) {
+					// Give up silently
+				}
+			}
+		} else if (action.type === ActionType.UI_CLOSE_TAB) {
+			if (!port) {
+				connectPort();
+				if (!port) scheduleRetry();
+			}
+			try {
+				port && port.postMessage({ t: MessageType.CLOSE_ACTIVE_TAB });
+			} catch (_e) {
+				connectPort();
+				if (!port) scheduleRetry();
+				try {
+					port && port.postMessage({ t: MessageType.CLOSE_ACTIVE_TAB });
+				} catch (_e2) {}
+			}
+		}
+	};
 };
 
 export const rootEffect: AppEffect = Effect.all(

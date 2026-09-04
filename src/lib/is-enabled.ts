@@ -43,7 +43,10 @@ const pathMatchesFor = (site: Site): boolean => {
 export function matchesBlockablePath(): boolean {
 	for (const siteId of Object.keys(Sites)) {
 		const site: Site = Sites[siteId];
-		if (site.domain.find((domain) => window.location.host.includes(domain)) != null) {
+		if (
+			site.domain.find((domain) => window.location.host.includes(domain)) !=
+			null
+		) {
 			return pathMatchesFor(site);
 		}
 	}
@@ -62,7 +65,10 @@ export function matchesBlockablePath(): boolean {
 export function matchesConfiguredSite(): boolean {
 	for (const siteId of Object.keys(Sites)) {
 		const site: Site = Sites[siteId];
-		if (site.domain.find((domain) => window.location.host.includes(domain)) != null) {
+		if (
+			site.domain.find((domain) => window.location.host.includes(domain)) !=
+			null
+		) {
 			return true;
 		}
 	}
@@ -79,7 +85,10 @@ export function siteEnabledStatus(state: SettingsState): EnabledStatus {
 	const siteStatuses = getSiteStatus(state);
 	for (const siteId of Object.keys(Sites)) {
 		const site: Site = Sites[siteId];
-		if (site.domain.find((domain) => window.location.host.includes(domain)) != null) {
+		if (
+			site.domain.find((domain) => window.location.host.includes(domain)) !=
+			null
+		) {
 			const siteStatus: SiteStatus = siteStatuses[siteId];
 			if (siteStatus.type === SiteStatusTag.ENABLED) {
 				return { type: 'enabled' };
@@ -95,21 +104,24 @@ export function siteEnabledStatus(state: SettingsState): EnabledStatus {
 }
 
 export function enabledStatus(state: SettingsState): EnabledStatus {
-    const siteStatuses = getSiteStatus(state);
-    for (let siteId of Object.keys(Sites)) {
-        let site: Site = Sites[siteId];
-        const siteStatus: SiteStatus = siteStatuses[siteId];
-        if (site.domain.find(domain => window.location.host.includes(domain)) != null) {
-            // Always disabled if the path doesn't match, or is explicitly excluded
-            if (!pathMatchesFor(site)) {
-                return { type: 'disabled' };
-            }
+	const siteStatuses = getSiteStatus(state);
+	for (let siteId of Object.keys(Sites)) {
+		let site: Site = Sites[siteId];
+		const siteStatus: SiteStatus = siteStatuses[siteId];
+		if (
+			site.domain.find((domain) => window.location.host.includes(domain)) !=
+			null
+		) {
+			// Always disabled if the path doesn't match, or is explicitly excluded
+			if (!pathMatchesFor(site)) {
+				return { type: 'disabled' };
+			}
 
-            if (siteStatus.type === SiteStatusTag.DISABLED) {
-                return { type: 'disabled' };
-            } else if (siteStatus.type === SiteStatusTag.DISABLED_TEMPORARILY) {
-                return { type: 'disabled-temporarily', until: siteStatus.until };
-            }
+			if (siteStatus.type === SiteStatusTag.DISABLED) {
+				return { type: 'disabled' };
+			} else if (siteStatus.type === SiteStatusTag.DISABLED_TEMPORARILY) {
+				return { type: 'disabled-temporarily', until: siteStatus.until };
+			}
 
 			return { type: 'enabled' };
 		}

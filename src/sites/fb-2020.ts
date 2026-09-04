@@ -15,7 +15,6 @@ export function eradicate(store: Store) {
 			document.title = 'Facebook';
 		}
 
-
 		// Detect Reels route and expose a flag for CSS-only rules
 		let onReels = false;
 		try {
@@ -29,11 +28,12 @@ export function eradicate(store: Store) {
 
 		// Choose container depending on route: prefer dedicated Reels container
 		const feed = onReels
-			? (document.querySelector('#watch_feed') || document.querySelector("div[role='main']"))
-			: (document.querySelector('#ssrb_feed_start + div') || // For home and groups feed
-				document.querySelector('[data-pagelet=MainFeed]') || // For watch and marketplace feeds
-				document.querySelector("div[aria-label=Gaming][role=main]") || // For gaming feed
-				document.querySelector('div.x1hc1fzr.x1unhpq9.x6o7n8i'));
+			? document.querySelector('#watch_feed') ||
+			  document.querySelector("div[role='main']")
+			: document.querySelector('#ssrb_feed_start + div') || // For home and groups feed
+			  document.querySelector('[data-pagelet=MainFeed]') || // For watch and marketplace feeds
+			  document.querySelector('div[aria-label=Gaming][role=main]') || // For gaming feed
+			  document.querySelector('div.x1hc1fzr.x1unhpq9.x6o7n8i');
 
 		if (feed == null) {
 			return;

@@ -20,18 +20,18 @@ const getSettings = (state: SettingsState): Settings.T => {
  * Listen for content scripts
  */
 const listen: BackgroundEffect = (store) => {
-    const browser = getBrowser();
-    // Track last active tab id to support returning to it after close
-    let lastActiveTabId: number | null = null;
-    let currentActiveTabId: number | null = null;
-    try {
-        browser.tabs.onActivated.addListener((info: any) => {
-            lastActiveTabId = currentActiveTabId;
-            currentActiveTabId = info?.tabId ?? null;
-        });
-    } catch (e) {
-        // ignore if tabs API not available
-    }
+	const browser = getBrowser();
+	// Track last active tab id to support returning to it after close
+	let lastActiveTabId: number | null = null;
+	let currentActiveTabId: number | null = null;
+	try {
+		browser.tabs.onActivated.addListener((info: any) => {
+			lastActiveTabId = currentActiveTabId;
+			currentActiveTabId = info?.tabId ?? null;
+		});
+	} catch (e) {
+		// ignore if tabs API not available
+	}
 	let pages: Port[] = [];
 	browser.runtime.onConnect.addListener((port) => {
 		pages.push(port);
@@ -51,24 +51,38 @@ const listen: BackgroundEffect = (store) => {
 			if (msg.t === MessageType.SETTINGS_ACTION) {
 				store.dispatch(msg.action);
 			}
-            if (msg.t === MessageType.CLOSE_ACTIVE_TAB) {
-                (async () => {
-                    try {
-                        const tabs = await browser.tabs.query({ active: true, currentWindow: true } as any);
-                        const active = tabs && tabs[0];
-                        const activeId: number | undefined = active && (active as any).id;
-                        const target = (lastActiveTabId != null && lastActiveTabId !== activeId) ? lastActiveTabId : undefined;
-                        if (target != null) {
-                            try { await (browser.tabs as any).update(target, { active: true }); } catch (_e) { /* ignore */ }
-                        }
-                        if (typeof activeId === 'number') {
-                            try { await browser.tabs.remove(activeId); } catch (_e) { /* ignore */ }
-                        }
-                    } catch (_e) {
-                        // ignore: no active tab or tabs API not available
-                    }
-                })();
-            }
+			if (msg.t === MessageType.CLOSE_ACTIVE_TAB) {
+				(async () => {
+					try {
+						const tabs = await browser.tabs.query({
+							active: true,
+							currentWindow: true,
+						} as any);
+						const active = tabs && tabs[0];
+						const activeId: number | undefined = active && (active as any).id;
+						const target =
+							lastActiveTabId != null && lastActiveTabId !== activeId
+								? lastActiveTabId
+								: undefined;
+						if (target != null) {
+							try {
+								await (browser.tabs as any).update(target, { active: true });
+							} catch (_e) {
+								/* ignore */
+							}
+						}
+						if (typeof activeId === 'number') {
+							try {
+								await browser.tabs.remove(activeId);
+							} catch (_e) {
+								/* ignore */
+							}
+						}
+					} catch (_e) {
+						// ignore: no active tab or tabs API not available
+					}
+				})();
+			}
 		});
 	});
 
@@ -128,85 +142,91 @@ const loadSettings: BackgroundEffect = (store) => async (action) => {
 	}
 };
 
-const registerContentScripts: BackgroundEffect =
-    (store) => async (action) => {
-        // Simple debounce/lock to avoid duplicate register calls racing
-        const anySelf = registerContentScripts as any;
-        if (anySelf._lock == null) anySelf._lock = false;
-        if (anySelf._queued == null) anySelf._queued = false;
+const registerContentScripts: BackgroundEffect = (store) => async (action) => {
+	// Simple debounce/lock to avoid duplicate register calls racing
+	const anySelf = registerContentScripts as any;
+	if (anySelf._lock == null) anySelf._lock = false;
+	if (anySelf._queued == null) anySelf._queued = false;
 
-        const run = async () => {
-            const browser = getBrowser();
-            // Unregister existing scripts first to avoid duplicate ID errors
-            try { await browser.scripting.unregisterContentScripts(); } catch (_) {}
+	const run = async () => {
+		const browser = getBrowser();
+		// Unregister existing scripts first to avoid duplicate ID errors
+		try {
+			await browser.scripting.unregisterContentScripts();
+		} catch (_) {}
 
-            const state = store.getState();
-            if (state.ready === false) return;
+		const state = store.getState();
+		if (state.ready === false) return;
 
-            // Only register for granted origins to avoid API errors
-            const granted = new Set(state.settings.permissions.origins || []);
-            const siteIds = Object.keys(state.settings.sites) as SiteId[];
-            const siteMatches = siteIds
-                .flatMap((siteId) => Sites[siteId].origins)
-                .filter((origin) => granted.has(origin));
+		// Only register for granted origins to avoid API errors
+		const granted = new Set(state.settings.permissions.origins || []);
+		const siteIds = Object.keys(state.settings.sites) as SiteId[];
+		const siteMatches = siteIds
+			.flatMap((siteId) => Sites[siteId].origins)
+			.filter((origin) => granted.has(origin));
 
-            if (siteMatches.length === 0) return; // Nothing to register
+		if (siteMatches.length === 0) return; // Nothing to register
 
-            try {
-                await browser.scripting.registerContentScripts([
-                    {
-                        id: 'intercept',
-                        js: ['intercept.js'],
-                        css: ['eradicate.css'],
-                        matches: siteMatches,
-                        runAt: 'document_start',
-                    },
-                ]);
-            } catch (e: any) {
-                // Handle duplicate ID race by force-unregistering and retrying once
-                const msg = String(e || '');
-                if (msg.includes('Duplicate script ID') || msg.includes('duplicate script id')) {
-                    try { await browser.scripting.unregisterContentScripts(); } catch (_) {}
-                    try {
-                        await browser.scripting.registerContentScripts([
-                            {
-                                id: 'intercept',
-                                js: ['intercept.js'],
-                                css: ['eradicate.css'],
-                                matches: siteMatches,
-                                runAt: 'document_start',
-                            },
-                        ]);
-                    } catch (_) {
-                        // give up silently; next update will retry
-                    }
-                } else {
-                    // Non-duplicate error: ignore to avoid crashing the SW
-                }
-            }
-        };
+		try {
+			await browser.scripting.registerContentScripts([
+				{
+					id: 'intercept',
+					js: ['intercept.js'],
+					css: ['eradicate.css'],
+					matches: siteMatches,
+					runAt: 'document_start',
+				},
+			]);
+		} catch (e: any) {
+			// Handle duplicate ID race by force-unregistering and retrying once
+			const msg = String(e || '');
+			if (
+				msg.includes('Duplicate script ID') ||
+				msg.includes('duplicate script id')
+			) {
+				try {
+					await browser.scripting.unregisterContentScripts();
+				} catch (_) {}
+				try {
+					await browser.scripting.registerContentScripts([
+						{
+							id: 'intercept',
+							js: ['intercept.js'],
+							css: ['eradicate.css'],
+							matches: siteMatches,
+							runAt: 'document_start',
+						},
+					]);
+				} catch (_) {
+					// give up silently; next update will retry
+				}
+			} else {
+				// Non-duplicate error: ignore to avoid crashing the SW
+			}
+		}
+	};
 
-        if (
-            action.type === BackgroundActionType.CONTENT_SCRIPTS_REGISTER ||
-            action.type === BackgroundActionType.PERMISSIONS_UPDATE
-        ) {
-            if (anySelf._lock) {
-                anySelf._queued = true;
-                return;
-            }
-            anySelf._lock = true;
-            try {
-                await run();
-            } finally {
-                anySelf._lock = false;
-                if (anySelf._queued) {
-                    anySelf._queued = false;
-                    // Schedule a follow-up registration to apply latest state
-                    store.dispatch({ type: BackgroundActionType.CONTENT_SCRIPTS_REGISTER });
-                }
-            }
-        }
-    };
+	if (
+		action.type === BackgroundActionType.CONTENT_SCRIPTS_REGISTER ||
+		action.type === BackgroundActionType.PERMISSIONS_UPDATE
+	) {
+		if (anySelf._lock) {
+			anySelf._queued = true;
+			return;
+		}
+		anySelf._lock = true;
+		try {
+			await run();
+		} finally {
+			anySelf._lock = false;
+			if (anySelf._queued) {
+				anySelf._queued = false;
+				// Schedule a follow-up registration to apply latest state
+				store.dispatch({ type: BackgroundActionType.CONTENT_SCRIPTS_REGISTER });
+			}
+		}
+	}
+};
 
 export const rootEffect = Effect.all(
 	listen,

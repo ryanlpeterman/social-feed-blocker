@@ -216,9 +216,6 @@ html[data-nfe-enabled='true'][data-nfe-fb-reels='true']
 	[aria-label*='Previous Card' i] {
 	display: none !important;
 }
-html[data-nfe-enabled='true'] {
-	--notification-badge: var(--base-blue);
-}
 
 /* Facebook: hide notifications bell (site-wide, on every route).
    The bell is a div[role=button] in the current DOM; the anchor

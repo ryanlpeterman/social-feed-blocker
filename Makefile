@@ -1,8 +1,7 @@
-.PHONY: all clean install dev copy-assets package-source
+.PHONY: build check clean install dev copy-assets package-source
 
 # The current git tag is used as the version number
 GITTAG=$(shell git describe --always --tag)
-BIN=$(shell npm bin)
 
 build: install copy-assets
 	mkdir -p build
@@ -21,9 +20,6 @@ package-source:
 
 copy-assets:
 	mkdir -p build
-	mkdir -p build/icons
-	# Copy optional icon assets if present
-	if ls src/icons/* >/dev/null 2>&1; then cp src/icons/* build/icons/; fi
 	cp src/manifest-chrome.json build/manifest.json
 	cp src/options/options.html build/options.html
 	cp assets/icon16.png build/icon16.png
@@ -32,7 +28,6 @@ copy-assets:
 	cp assets/icon64.png build/icon64.png
 	cp assets/icon128.png build/icon128.png
 	# Brand asset for UI
-	cp assets/transparent-icon.png build/transparent-icon.png || true
 	cp assets/transparent-icon-green.png build/transparent-icon-green.png
 
 dev: install copy-assets

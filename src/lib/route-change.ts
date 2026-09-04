@@ -85,16 +85,8 @@ export function setupRouteChange(store: Store) {
 				}
 				return;
 			case 'disabled':
-				// Delay showing the feed when switching pages, sometimes it can appear
-				// before the page has switched
-				//
-				// Removed for now as this was causing issues when loading twitter. When
-				// it's disabled then enabled immediately after, the timeout still hangs around
-				// for a second and eventually disables it.
-				// setTimeout(() => {
-				// 	element!.dataset.nfeEnabled = 'false';
-				// }, 1000);
-
+				// No delay before revealing the feed: a deferred timeout kept re-disabling
+				// the page on Twitter when it was disabled then enabled immediately after.
 				setEnabled(false);
 				return;
 			case 'disabled-temporarily':

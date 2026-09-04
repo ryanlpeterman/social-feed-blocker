@@ -53,7 +53,7 @@
 	},
 	"web_accessible_resources": [
 		{
-			"resources": ["transparent-icon.png", "transparent-icon-green.png"],
+			"resources": ["transparent-icon-green.png"],
 			"matches": ["<all_urls>"]
 		}
 	]

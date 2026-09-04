@@ -1,7 +1,6 @@
 import instagramCss from './instagram.str.css';
 import twitterCss from './twitter.str.css';
 import linkedinCss from './linkedin.str.css';
-// GitHub feed eradicator removed
 import threadsCss from './threads.str.css';
 import tiktokCss from './tiktok.str.css';
 import substackCss from './substack.str.css';
@@ -116,7 +115,7 @@ export type Site = {
 	// Label displayed in the options UI
 	label: string;
 
-	// Note: these must also be added to optional_permissions in manifest.json
+	// Note: these must also be added to optional_host_permissions in manifest-chrome.json
 	origins: string[];
 
 	// Will be enabled for any hostnames containing this value

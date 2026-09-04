@@ -12,7 +12,7 @@ It's a modern reskin of News Feed Eradicator (does a great job at preventing doo
 
 ## Screenshots
 
-These are representative screenshots of the product. See `assets/screenshots/` for full‑size images.
+These are representative screenshots of the product. The 1280×800 store screenshots are in `assets/screenshots/`.
 
 ![Settings](assets/settings.png)
 
@@ -22,7 +22,7 @@ These are representative screenshots of the product. See `assets/screenshots/` f
 
 ## Install (development)
 
-This project targets WebExtensions (Chrome Manifest V3, and MV2/MV3 compatible code where possible).
+This project targets WebExtensions (Chrome Manifest V3).
 
 Prereqs:
 
@@ -39,7 +39,6 @@ make dev
 Load the unpacked extension from the `build/` directory:
 
 - Chrome: open `chrome://extensions`, enable Developer Mode, “Load unpacked…”, select `build/`.
-- Firefox: use “about:debugging → This Firefox → Load Temporary Add‑on…”, select any file in `build/`.
 
 Build a distributable zip:
 
@@ -67,7 +66,8 @@ We welcome contributions! A few notes to get you productive quickly:
 - Build/watch:
   - `make dev` (watch) and `make build` (release zip)
   - Rollup bundles: `intercept.js`, `options.js`, `service-worker.js`
-- Formatting: run `npm run check` for typechecks; prettier config is included.
+- Typecheck: `npm run check`
+- Format: `npm run format`
 
 ## Permissions & Privacy
 

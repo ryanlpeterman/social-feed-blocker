@@ -18,7 +18,8 @@
 	},
 	"scripts": {
 		"format": "prettier --write \"./src\"",
-		"check": "tsc --noEmit"
+		"check": "tsc --noEmit",
+		"test": "node --test test/*.test.cjs"
 	},
 	"devDependencies": {
 		"@rollup/plugin-commonjs": "^25.0.7",

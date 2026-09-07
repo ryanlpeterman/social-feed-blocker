@@ -8,10 +8,13 @@ export const readableDuration = (milliseconds: number) => {
 		return 'less than a minute';
 	}
 	if (milliseconds < HOUR) {
-		return Math.round(milliseconds / MINUTE) + ' minutes';
+		const count = Math.round(milliseconds / MINUTE);
+		return count + (count === 1 ? ' minute' : ' minutes');
 	}
 	if (milliseconds < DAY) {
-		return Math.round(milliseconds / HOUR) + ' hours';
+		const count = Math.round(milliseconds / HOUR);
+		return count + (count === 1 ? ' hour' : ' hours');
 	}
-	return Math.round(milliseconds / DAY) + ' days';
+	const count = Math.round(milliseconds / DAY);
+	return count + (count === 1 ? ' day' : ' days');
 };

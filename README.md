@@ -66,6 +66,7 @@ We welcome contributions! A few notes to get you productive quickly:
 - Build/watch:
   - `make dev` (watch) and `make build` (release zip)
   - Rollup bundles: `intercept.js`, `options.js`, `service-worker.js`
+- Tests: `npm test` (offline settings, path matching and duration tests)
 - Typecheck: `npm run check`
 - Format: `npm run format`
 

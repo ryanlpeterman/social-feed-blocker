@@ -144,6 +144,59 @@ function SitesList() {
 	);
 }
 
+function RegistrationHealth() {
+	const [message, setMessage] = React.useState('Checking blocking setup…');
+	const check = React.useCallback(async () => {
+		try {
+			const browser = getBrowser();
+			const [permissions, scripts] = await Promise.all([
+				browser.permissions.getAll(),
+				browser.scripting.getRegisteredContentScripts(),
+			]);
+			const wanted = new Set(
+				Object.values(Sites)
+					.flatMap((s) => s.origins)
+					.filter((origin) => permissions.origins.includes(origin))
+			);
+			const actual = new Set(
+				scripts.find((s) => s.id === 'intercept')?.matches || []
+			);
+			const healthy =
+				wanted.size === actual.size &&
+				[...wanted].every((origin) => actual.has(origin));
+			setMessage(
+				!wanted.size
+					? 'Enable a site to grant access.'
+					: healthy
+					? 'Blocking setup is ready.'
+					: 'Blocking setup needs repair.'
+			);
+		} catch (error) {
+			setMessage('Could not check blocking setup: ' + String(error));
+		}
+	}, []);
+	React.useEffect(() => {
+		check();
+	}, [check]);
+	return (
+		<Box sx={{ my: 2 }}>
+			<Typography role="status">{message}</Typography>
+			<Button onClick={check}>Check setup</Button>
+			<Button
+				onClick={() => {
+					store.dispatch({
+						type: ActionType.BACKGROUND_ACTION,
+						action: { type: BackgroundActionType.PERMISSIONS_CHECK },
+					});
+					setMessage('Repair requested. Use Check setup to verify.');
+				}}
+			>
+				Repair blocking
+			</Button>
+		</Box>
+	);
+}
+
 function OptionsApp() {
 	const uiState = useStore();
 	const prefersDark = useMediaQuery('(prefers-color-scheme: dark)');
@@ -263,6 +316,7 @@ function OptionsApp() {
 				>
 					<Box sx={{ p: 2 }}>
 						<Typography variant="h6">Sites</Typography>
+						<RegistrationHealth />
 						<Typography variant="body2" color="text.secondary">
 							Choose sites below to enable Social Feed Blocker. When you enable
 							a site, we'll request your permission to modify that site.

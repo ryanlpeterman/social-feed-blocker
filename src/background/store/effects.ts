@@ -21,17 +21,13 @@ const getSettings = (state: SettingsState): Settings.T => {
  */
 const listen: BackgroundEffect = (store) => {
 	const browser = getBrowser();
-	// Track last active tab id to support returning to it after close
-	let lastActiveTabId: number | null = null;
-	let currentActiveTabId: number | null = null;
-	try {
-		browser.tabs.onActivated.addListener((info: any) => {
-			lastActiveTabId = currentActiveTabId;
-			currentActiveTabId = info?.tabId ?? null;
-		});
-	} catch (e) {
-		// ignore if tabs API not available
-	}
+	// Track activation within each window; asynchronous actions retain sender identity.
+	const activeTabs = new Map<number, { current: number; previous?: number }>();
+	browser.tabs.onActivated.addListener(({ tabId, windowId }) => {
+		const old = activeTabs.get(windowId);
+		if (old?.current !== tabId)
+			activeTabs.set(windowId, { current: tabId, previous: old?.current });
+	});
 	let pages: Port[] = [];
 	browser.runtime.onConnect.addListener((port) => {
 		pages.push(port);
@@ -52,36 +48,26 @@ const listen: BackgroundEffect = (store) => {
 				store.dispatch(msg.action);
 			}
 			if (msg.t === MessageType.CLOSE_ACTIVE_TAB) {
+				const tab = port.sender?.tab;
+				if (tab == null) return;
+				const previous = activeTabs.get(tab.windowId)?.previous;
 				(async () => {
-					try {
-						const tabs = await browser.tabs.query({
-							active: true,
-							currentWindow: true,
-						} as any);
-						const active = tabs && tabs[0];
-						const activeId: number | undefined = active && (active as any).id;
-						const target =
-							lastActiveTabId != null && lastActiveTabId !== activeId
-								? lastActiveTabId
-								: undefined;
-						if (target != null) {
-							try {
-								await (browser.tabs as any).update(target, { active: true });
-							} catch (_e) {
-								/* ignore */
-							}
-						}
-						if (typeof activeId === 'number') {
-							try {
-								await browser.tabs.remove(activeId);
-							} catch (_e) {
-								/* ignore */
-							}
-						}
-					} catch (_e) {
-						// ignore: no active tab or tabs API not available
+					// Only restore focus if the requesting tab is still active in its window.
+					const active = await browser.tabs.query({
+						active: true,
+						windowId: tab.windowId,
+					});
+					if (
+						active.some((t) => t.id === tab.id) &&
+						previous != null &&
+						previous !== tab.id
+					) {
+						await browser.tabs
+							.update(previous, { active: true })
+							.catch(() => {});
 					}
-				})();
+					await browser.tabs.remove(tab.id);
+				})().catch(() => {});
 			}
 		});
 	});

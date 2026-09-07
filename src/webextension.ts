@@ -26,6 +26,7 @@ type WebExtensionAPI = {
 	scripting: {
 		registerContentScripts: (opts: RegisteredContentScript[]) => Promise<void>;
 		unregisterContentScripts: () => Promise<void>;
+		getRegisteredContentScripts: () => Promise<RegisteredContentScript[]>;
 	};
 	storage: {
 		sync: {
@@ -35,8 +36,12 @@ type WebExtensionAPI = {
 	};
 };
 
-export type Tab = { id: number };
-export type TabsQuery = { active?: boolean; currentWindow?: boolean };
+export type Tab = { id: number; windowId: number };
+export type TabsQuery = {
+	active?: boolean;
+	currentWindow?: boolean;
+	windowId?: number;
+};
 
 type RegisteredContentScript = {
 	id: string;
@@ -56,6 +61,7 @@ export type Permissions = {
 };
 
 export type Port = {
+	sender?: { tab?: Tab };
 	postMessage(msg: any): void;
 	onDisconnect: WebExtensionEvent<Port>;
 	onMessage: WebExtensionEvent<any>;
@@ -95,6 +101,7 @@ type ChromeWebExtensionAPI = {
 	scripting: {
 		registerContentScripts: (opts: RegisteredContentScript[]) => Promise<void>;
 		unregisterContentScripts: () => Promise<void>;
+		getRegisteredContentScripts: () => Promise<RegisteredContentScript[]>;
 	};
 	storage: {
 		sync: {

@@ -89,3 +89,18 @@ MIT (see `LICENSE`).
 ## Credit
 
 Credit to Jordan West who developed the original open source project that this reskin is based off of: https://github.com/jordwest/news-feed-eradicator
+
+## Regression checks and setup repair
+
+Options now includes Check setup and Repair blocking. These compare granted
+origins with registered content scripts; repair rechecks permissions and triggers
+registration. A site must still be granted access before it can be blocked.
+Snooze keeps one expiry callback as settings change. The close action closes the
+requesting tab and restores prior focus only within that tab's window.
+
+Run `npm ci`, `npm run check`, and `npm test`. For offline browser regressions:
+`make copy-assets`, `NODE_ENV=production ./node_modules/.bin/rollup -c`,
+`npx playwright-core install chromium`, then `npm run test:browser`.
+The harness loads the production extension in a disposable profile with granted
+fixture origins. It tests registration, YouTube muting and Shorts input, editable
+input exceptions, and X SPA routes. Live site markup can still change independently.

@@ -17,3 +17,7 @@ jobs:
       - run: npm run check
       - run: npm test
       - run: npx prettier --check ./src
+      - run: make copy-assets
+      - run: NODE_ENV=production ./node_modules/.bin/rollup -c
+      - run: npx playwright-core install --with-deps chromium
+      - run: node test/browser.cjs

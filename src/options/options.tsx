@@ -120,9 +120,6 @@ function SitesList() {
 			{Object.keys(Sites).map((id) => {
 				const siteId = id as SiteId;
 				const status = statuses[siteId];
-				const enabled =
-					status.type === SiteStatusTag.ENABLED ||
-					status.type === SiteStatusTag.NEEDS_NEW_PERMISSIONS;
 				const showConfirm = state.uiOptions.confirmDisableSite === siteId;
 				return (
 					<React.Fragment key={id}>

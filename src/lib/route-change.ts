@@ -51,13 +51,20 @@ export function applyProvisionalEnabledStatus() {
 }
 
 export function setupRouteChange(store: Store) {
+	let expiryTimer: ReturnType<typeof setTimeout> | undefined;
+	const scheduleStatus = (delay: number) => {
+		if (expiryTimer != null) clearTimeout(expiryTimer);
+		expiryTimer = setTimeout(updateEnabledStatus, Math.max(0, delay));
+	};
 	const updateEnabledStatus = (): any => {
+		if (expiryTimer != null) clearTimeout(expiryTimer);
+		expiryTimer = undefined;
 		const settings = store.getState().settings;
 		if (settings == null) {
 			// Settings not loaded yet. Fall back to the path-only guess so a route
 			// change is reflected even while the background script is unreachable.
 			applyProvisionalEnabledStatus();
-			setTimeout(updateEnabledStatus, 100);
+			scheduleStatus(100);
 			return;
 		}
 
@@ -69,7 +76,7 @@ export function setupRouteChange(store: Store) {
 		setSiteEnabled(siteStatus.type === 'enabled');
 		if (siteStatus.type === 'disabled-temporarily') {
 			const remaining = siteStatus.until - Date.now();
-			setTimeout(updateEnabledStatus, remaining > 60000 ? 60000 : remaining);
+			scheduleStatus(remaining > 60000 ? 60000 : remaining);
 		}
 
 		const wasEnabled = element!.dataset.nfeEnabled === 'true';
@@ -91,9 +98,7 @@ export function setupRouteChange(store: Store) {
 				return;
 			case 'disabled-temporarily':
 				setEnabled(false);
-				const remainingTime = status.until - Date.now();
-				const checkAgainDelay = remainingTime > 60000 ? 60000 : remainingTime;
-				setTimeout(updateEnabledStatus, checkAgainDelay);
+
 		}
 	};
 

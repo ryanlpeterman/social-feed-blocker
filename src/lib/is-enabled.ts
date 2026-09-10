@@ -104,28 +104,5 @@ export function siteEnabledStatus(state: SettingsState): EnabledStatus {
 }
 
 export function enabledStatus(state: SettingsState): EnabledStatus {
-	const siteStatuses = getSiteStatus(state);
-	for (let siteId of Object.keys(Sites)) {
-		let site: Site = Sites[siteId];
-		const siteStatus: SiteStatus = siteStatuses[siteId];
-		if (
-			site.domain.find((domain) => window.location.host.includes(domain)) !=
-			null
-		) {
-			// Always disabled if the path doesn't match, or is explicitly excluded
-			if (!pathMatchesFor(site)) {
-				return { type: 'disabled' };
-			}
-
-			if (siteStatus.type === SiteStatusTag.DISABLED) {
-				return { type: 'disabled' };
-			} else if (siteStatus.type === SiteStatusTag.DISABLED_TEMPORARILY) {
-				return { type: 'disabled-temporarily', until: siteStatus.until };
-			}
-
-			return { type: 'enabled' };
-		}
-	}
-
-	return { type: 'disabled' };
+	return matchesBlockablePath() ? siteEnabledStatus(state) : { type: 'disabled' };
 }

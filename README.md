@@ -89,3 +89,37 @@ MIT (see `LICENSE`).
 ## Credit
 
 Credit to Jordan West who developed the original open source project that this reskin is based off of: https://github.com/jordwest/news-feed-eradicator
+
+## Reliability verification
+
+Use `npm ci`, `npm run check`, `npm test`,
+`python3 -m unittest discover -s test -p 'test_*.py' -v`,
+`npx prettier --check ./src`, and `make build`. CI includes package validation.
+Verified with Node 26.9.0, npm 11.19.1 and Python 3.9: 14 JavaScript tests and two
+packaging tests pass. The build uses fresh staging, validates every member and
+referenced asset, and atomically replaces the ZIP; stale build/archive entries
+cannot survive a repeat build. The archive entry names and extension identity
+are unchanged.
+
+Close requests use the originating port's tab ID, preserving a later active tab.
+One disconnected port cannot stop other clients receiving settings. Callback
+storage errors become rejected promises; failed loads do not overwrite storage,
+and failed saves retain the newest in-memory settings through up to three
+retries. Only serialized setting changes cause writes. If storage remains
+unavailable, pending changes remain in that worker's memory until it stops;
+console errors identify the failure. Saved variants, site IDs and snooze dates
+are validated before use; the valid version-1 format is unchanged.
+
+Content-script registration is serialized per store and queries/unregisters only
+`intercept`, using the documented [script ID filter](https://developer.chrome.com/docs/extensions/reference/api/scripting#type-ContentScriptFilter).
+The requesting identity comes from [Port.sender](https://developer.chrome.com/docs/extensions/reference/api/runtime#property-Port-sender).
+
+The locked build dependencies received compatible patch/minor security fixes
+(rollup 2.x, picomatch 2.x/4.x, minimatch 5.x, brace-expansion 2.x, yaml 1.x);
+no existing dependency major version changed. `npm audit` reports zero findings
+for this lockfile at verification. Explicit TS/TSX globs preserve the old plugin's
+matching with patched picomatch. Only expected MUI/Emotion `use client`
+directives are filtered; other warnings remain visible, including the existing
+unnamed-IIFE export warning. Two pre-existing formatting failures were repaired
+without changing behavior. No extension reload, tab closure or live browser
+change was performed during verification.

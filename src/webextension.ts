@@ -25,12 +25,15 @@ type WebExtensionAPI = {
 	};
 	scripting: {
 		registerContentScripts: (opts: RegisteredContentScript[]) => Promise<void>;
-		unregisterContentScripts: () => Promise<void>;
+		getRegisteredContentScripts: (filter: {
+			ids: string[];
+		}) => Promise<RegisteredContentScript[]>;
+		unregisterContentScripts: (filter: { ids: string[] }) => Promise<void>;
 	};
 	storage: {
 		sync: {
 			get(keys: string | string[] | null): Promise<any>;
-			set(keys: object): void;
+			set(keys: object): Promise<void>;
 		};
 	};
 };
@@ -56,6 +59,7 @@ export type Permissions = {
 };
 
 export type Port = {
+	sender?: { tab?: { id?: number } };
 	postMessage(msg: any): void;
 	onDisconnect: WebExtensionEvent<Port>;
 	onMessage: WebExtensionEvent<any>;
@@ -69,6 +73,7 @@ export type Port = {
  */
 type ChromeWebExtensionAPI = {
 	runtime: {
+		lastError?: { message?: string };
 		openOptionsPage: (cb: () => void) => void;
 		connect: () => Port;
 		onConnect: WebExtensionEvent<Port>;
@@ -94,12 +99,15 @@ type ChromeWebExtensionAPI = {
 	};
 	scripting: {
 		registerContentScripts: (opts: RegisteredContentScript[]) => Promise<void>;
-		unregisterContentScripts: () => Promise<void>;
+		getRegisteredContentScripts: (filter: {
+			ids: string[];
+		}) => Promise<RegisteredContentScript[]>;
+		unregisterContentScripts: (filter: { ids: string[] }) => Promise<void>;
 	};
 	storage: {
 		sync: {
 			get(keys: string | string[] | null, callback: (data: any) => void): void;
-			set(keys: object): void;
+			set(keys: object, callback: () => void): void;
 		};
 	};
 };
@@ -145,11 +153,24 @@ export function getBrowser(): WebExtensionAPI {
 			scripting: chrome.scripting,
 			storage: {
 				sync: {
-					get: (key: string | string[]) =>
-						new Promise((resolve) => {
-							chrome!.storage.sync.get(key, resolve);
+					get: (key: string | string[] | null) =>
+						new Promise((resolve, reject) => {
+							chrome!.storage.sync.get(key, (data) => {
+								const error = chrome!.runtime.lastError;
+								if (error)
+									reject(new Error(error.message || 'Storage read failed'));
+								else resolve(data);
+							});
 						}),
-					set: chrome.storage.sync.set.bind(chrome!.storage.sync),
+					set: (value) =>
+						new Promise((resolve, reject) => {
+							chrome!.storage.sync.set(value, () => {
+								const error = chrome!.runtime.lastError;
+								if (error)
+									reject(new Error(error.message || 'Storage write failed'));
+								else resolve();
+							});
+						}),
 				},
 			},
 		};

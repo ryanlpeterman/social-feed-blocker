@@ -19,213 +19,198 @@ const getSettings = (state: SettingsState): Settings.T => {
 /**
  * Listen for content scripts
  */
-const listen: BackgroundEffect = (store) => {
+export const listen: BackgroundEffect = (store) => {
 	const browser = getBrowser();
-	// Track last active tab id to support returning to it after close
 	let lastActiveTabId: number | null = null;
 	let currentActiveTabId: number | null = null;
-	try {
-		browser.tabs.onActivated.addListener((info: any) => {
-			lastActiveTabId = currentActiveTabId;
-			currentActiveTabId = info?.tabId ?? null;
-		});
-	} catch (e) {
-		// ignore if tabs API not available
-	}
+	browser.tabs.onActivated.addListener((info) => {
+		lastActiveTabId = currentActiveTabId;
+		currentActiveTabId = info.tabId;
+	});
 	let pages: Port[] = [];
+	const send = (port: Port, settings: SettingsState) => {
+		try {
+			port.postMessage({ t: MessageType.SETTINGS_CHANGED, settings });
+		} catch (_) {
+			pages = pages.filter((p) => p !== port);
+		}
+	};
 	browser.runtime.onConnect.addListener((port) => {
 		pages.push(port);
-
+		const tabId = port.sender?.tab?.id;
 		const state = store.getState();
-		// Send the new client the latest settings
-		if (state.ready === true) {
-			const settings: SettingsState = state.settings;
-			port.postMessage({ t: MessageType.SETTINGS_CHANGED, settings });
-		}
-
-		// Remove the port when it closes
-		port.onDisconnect.addListener(
-			() => (pages = pages.filter((p) => p !== port))
-		);
+		if (state.ready) send(port, state.settings);
+		port.onDisconnect.addListener(() => {
+			pages = pages.filter((p) => p !== port);
+		});
 		port.onMessage.addListener((msg: Message) => {
-			if (msg.t === MessageType.SETTINGS_ACTION) {
-				store.dispatch(msg.action);
-			}
-			if (msg.t === MessageType.CLOSE_ACTIVE_TAB) {
-				(async () => {
+			if (msg.t === MessageType.SETTINGS_ACTION) store.dispatch(msg.action);
+			if (
+				msg.t === MessageType.CLOSE_ACTIVE_TAB &&
+				typeof tabId === 'number' &&
+				Number.isInteger(tabId) &&
+				tabId >= 0
+			) {
+				// The sender remains the close target even if focus changes while awaiting APIs.
+				const target = currentActiveTabId === tabId ? lastActiveTabId : null;
+				void (async () => {
+					if (target != null && target !== tabId) {
+						try {
+							await browser.tabs.update(target, { active: true });
+						} catch (_) {
+							/* target closed */
+						}
+					}
 					try {
-						const tabs = await browser.tabs.query({
-							active: true,
-							currentWindow: true,
-						} as any);
-						const active = tabs && tabs[0];
-						const activeId: number | undefined = active && (active as any).id;
-						const target =
-							lastActiveTabId != null && lastActiveTabId !== activeId
-								? lastActiveTabId
-								: undefined;
-						if (target != null) {
-							try {
-								await (browser.tabs as any).update(target, { active: true });
-							} catch (_e) {
-								/* ignore */
-							}
-						}
-						if (typeof activeId === 'number') {
-							try {
-								await browser.tabs.remove(activeId);
-							} catch (_e) {
-								/* ignore */
-							}
-						}
-					} catch (_e) {
-						// ignore: no active tab or tabs API not available
+						await browser.tabs.remove(tabId);
+					} catch (_) {
+						/* sender already closed */
 					}
 				})();
 			}
 		});
 	});
 
-	// Then, after every store action we save the settings and
-	// let all the clients know the new settings
-	let saveTimer: ReturnType<typeof setTimeout> | null = null;
-	return () => {
+	let saved: string | null = null,
+		pending: string | null = null;
+	let timer: ReturnType<typeof setTimeout> | null = null;
+	let saving = false,
+		failures = 0;
+	const schedule = (delay: number) => {
+		if (timer) clearTimeout(timer);
+		timer = setTimeout(() => {
+			timer = null;
+			void flush();
+		}, delay);
+	};
+	const flush = async () => {
+		if (saving || pending === null || pending === saved) return;
+		const snapshot = pending;
+		saving = true;
+		try {
+			await Settings.save(JSON.parse(snapshot));
+			saved = snapshot;
+			failures = 0;
+		} catch (error) {
+			failures++;
+			console.error('Settings save failed; retaining pending settings', error);
+		} finally {
+			saving = false;
+			if (pending !== saved && failures <= 3)
+				schedule(1000 * Math.max(1, failures));
+		}
+	};
+	return (action) => {
 		const state = store.getState();
-		// Send the new client the latest settings
-		if (state.ready === true) {
-			const settings: SettingsState = state.settings;
-			// Debounce storage writes to avoid exceeding MAX_WRITE_OPERATIONS_PER_MINUTE quota
-			if (saveTimer) clearTimeout(saveTimer);
-			saveTimer = setTimeout(() => {
-				Settings.save(getSettings(state.settings));
-			}, 1000);
-			// Broadcast to content scripts immediately (in-memory, no quota)
-			pages.forEach((port) =>
-				port.postMessage({ t: MessageType.SETTINGS_CHANGED, settings })
+		if (!state.ready) return;
+		const serialized = JSON.stringify(getSettings(state.settings));
+		if (action.type === BackgroundActionType.SETTINGS_LOADED && saved === null)
+			saved = serialized;
+		if (serialized !== pending) {
+			pending = serialized;
+			failures = 0;
+			if (pending !== saved && !saving) schedule(1000);
+		}
+		for (const port of [...pages]) send(port, state.settings);
+	};
+};
+
+export const loadSettings: BackgroundEffect = (store) => {
+	let loading = false,
+		failures = 0;
+	return async (action) => {
+		if (
+			action.type !== BackgroundActionType.SETTINGS_LOAD ||
+			loading ||
+			store.getState().ready
+		)
+			return;
+		loading = true;
+		try {
+			const [settings, permissions] = await Promise.all([
+				Settings.load(),
+				getPermissions(),
+			]);
+			const sites = Settings.defaultSites();
+			for (const key of Object.keys(Sites) as SiteId[]) {
+				if (settings.sites[key]) sites[key] = settings.sites[key]!;
+			}
+			store.dispatch({
+				type: BackgroundActionType.SETTINGS_LOADED,
+				settings: { sites, permissions },
+			});
+			store.dispatch({ type: BackgroundActionType.CONTENT_SCRIPTS_REGISTER });
+		} catch (error) {
+			console.error(
+				'Settings load failed; existing storage is unchanged',
+				error
 			);
+			if (++failures <= 3)
+				setTimeout(
+					() => store.dispatch({ type: BackgroundActionType.SETTINGS_LOAD }),
+					failures * 1000
+				);
+		} finally {
+			loading = false;
 		}
 	};
 };
 
-const loadSettings: BackgroundEffect = (store) => async (action) => {
-	if (action.type === BackgroundActionType.SETTINGS_LOAD) {
-		const [settings, permissions] = await Promise.all([
-			Settings.load(),
-			getPermissions(),
-		]);
-
-		const sites: Record<SiteId, Settings.SiteState> = {} as Record<
-			SiteId,
-			Settings.SiteState
-		>;
-		// For any sites that don't yet exist in the settings,
-		// add a note to look at the permissions as the source of
-		// truth instead
-		for (const key of Object.keys(Sites)) {
-			sites[key] =
-				settings.sites[key] != null
-					? settings.sites[key]
-					: { type: Settings.SiteStateTag.CHECK_PERMISSIONS };
-		}
-
-		const state: SettingsState = {
-			sites,
-			permissions,
-		};
-
-		store.dispatch({
-			type: BackgroundActionType.SETTINGS_LOADED,
-			settings: state,
-		});
-
-		store.dispatch({ type: BackgroundActionType.CONTENT_SCRIPTS_REGISTER });
-	}
-};
-
-const registerContentScripts: BackgroundEffect = (store) => async (action) => {
-	// Simple debounce/lock to avoid duplicate register calls racing
-	const anySelf = registerContentScripts as any;
-	if (anySelf._lock == null) anySelf._lock = false;
-	if (anySelf._queued == null) anySelf._queued = false;
-
+export const registerContentScripts: BackgroundEffect = (store) => {
+	let locked = false,
+		queued = false;
 	const run = async () => {
 		const browser = getBrowser();
-		// Unregister existing scripts first to avoid duplicate ID errors
-		try {
-			await browser.scripting.unregisterContentScripts();
-		} catch (_) {}
-
 		const state = store.getState();
-		if (state.ready === false) return;
-
-		// Only register for granted origins to avoid API errors
+		if (!state.ready) return;
+		const registered = await browser.scripting.getRegisteredContentScripts({
+			ids: ['intercept'],
+		});
+		if (registered.some((script) => script.id === 'intercept'))
+			await browser.scripting.unregisterContentScripts({ ids: ['intercept'] });
 		const granted = new Set(state.settings.permissions.origins || []);
-		const siteIds = Object.keys(state.settings.sites) as SiteId[];
-		const siteMatches = siteIds
-			.flatMap((siteId) => Sites[siteId].origins)
-			.filter((origin) => granted.has(origin));
-
-		if (siteMatches.length === 0) return; // Nothing to register
-
-		try {
+		const matches = [
+			...new Set(
+				(Object.keys(Sites) as SiteId[])
+					.flatMap((site) => Sites[site].origins)
+					.filter((origin) => granted.has(origin))
+			),
+		];
+		if (matches.length)
 			await browser.scripting.registerContentScripts([
 				{
 					id: 'intercept',
 					js: ['intercept.js'],
 					css: ['eradicate.css'],
-					matches: siteMatches,
+					matches,
 					runAt: 'document_start',
 				},
 			]);
-		} catch (e: any) {
-			// Handle duplicate ID race by force-unregistering and retrying once
-			const msg = String(e || '');
-			if (
-				msg.includes('Duplicate script ID') ||
-				msg.includes('duplicate script id')
-			) {
-				try {
-					await browser.scripting.unregisterContentScripts();
-				} catch (_) {}
-				try {
-					await browser.scripting.registerContentScripts([
-						{
-							id: 'intercept',
-							js: ['intercept.js'],
-							css: ['eradicate.css'],
-							matches: siteMatches,
-							runAt: 'document_start',
-						},
-					]);
-				} catch (_) {
-					// give up silently; next update will retry
-				}
-			} else {
-				// Non-duplicate error: ignore to avoid crashing the SW
-			}
-		}
 	};
-
-	if (
-		action.type === BackgroundActionType.CONTENT_SCRIPTS_REGISTER ||
-		action.type === BackgroundActionType.PERMISSIONS_UPDATE
-	) {
-		if (anySelf._lock) {
-			anySelf._queued = true;
+	return async (action) => {
+		if (
+			action.type !== BackgroundActionType.CONTENT_SCRIPTS_REGISTER &&
+			action.type !== BackgroundActionType.PERMISSIONS_UPDATE
+		)
+			return;
+		if (locked) {
+			queued = true;
 			return;
 		}
-		anySelf._lock = true;
+		locked = true;
 		try {
-			await run();
+			do {
+				queued = false;
+				try {
+					await run();
+				} catch (error) {
+					console.error('Content script registration failed', error);
+				}
+			} while (queued);
 		} finally {
-			anySelf._lock = false;
-			if (anySelf._queued) {
-				anySelf._queued = false;
-				// Schedule a follow-up registration to apply latest state
-				store.dispatch({ type: BackgroundActionType.CONTENT_SCRIPTS_REGISTER });
-			}
+			locked = false;
 		}
-	}
+	};
 };
 
 export const rootEffect = Effect.all(

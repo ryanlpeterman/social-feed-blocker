@@ -9,11 +9,15 @@ export const getPermissions = async () => {
 
 const checkPermissions: BackgroundEffect = (store) => async (action) => {
 	if (action.type === BackgroundActionType.PERMISSIONS_CHECK) {
-		const permissions = await getPermissions();
-		store.dispatch({
-			type: BackgroundActionType.PERMISSIONS_UPDATE,
-			permissions,
-		});
+		try {
+			const permissions = await getPermissions();
+			store.dispatch({
+				type: BackgroundActionType.PERMISSIONS_UPDATE,
+				permissions,
+			});
+		} catch (error) {
+			console.error('Permission refresh failed', error);
+		}
 	}
 };
 

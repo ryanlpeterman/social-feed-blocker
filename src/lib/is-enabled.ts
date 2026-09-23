@@ -104,5 +104,7 @@ export function siteEnabledStatus(state: SettingsState): EnabledStatus {
 }
 
 export function enabledStatus(state: SettingsState): EnabledStatus {
-	return matchesBlockablePath() ? siteEnabledStatus(state) : { type: 'disabled' };
+	return matchesBlockablePath()
+		? siteEnabledStatus(state)
+		: { type: 'disabled' };
 }

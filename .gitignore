@@ -9,3 +9,7 @@ node_modules
 
 dist
 build
+
+.extension-build-*/
+__pycache__/
+*.py[cod]

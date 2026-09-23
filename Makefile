@@ -3,11 +3,8 @@
 # The current git tag is used as the version number
 GITTAG=$(shell git describe --always --tag)
 
-build: install copy-assets
-	mkdir -p build
-	NODE_ENV=production ./node_modules/.bin/rollup -c
-	mkdir -p dist
-	(cd build && zip -r ../dist/SocialFeedBlocker_$(GITTAG).zip .)
+build: install
+	python3 scripts/build.py --tag "$(GITTAG)"
 
 # Typecheck only
 check:
@@ -35,7 +32,7 @@ dev: install copy-assets
 	./node_modules/.bin/rollup -c --watch
 
 install:
-	npm install
+	npm ci
 
 clean:
 	rm -rf dist

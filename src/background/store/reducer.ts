@@ -4,7 +4,7 @@ import {
 } from './action-types';
 import { combineReducers } from 'redux';
 import { Permissions } from '../../webextension';
-import { SiteId } from '../../sites';
+import { SiteId, Sites } from '../../sites';
 import { Settings } from './index';
 
 function permissions(
@@ -24,6 +24,11 @@ function sites(
 ): Record<SiteId, Settings.SiteState> {
 	switch (action.type) {
 		case ActionType.SITES_SET_STATE:
+			if (
+				!Object.prototype.hasOwnProperty.call(Sites, action.siteId) ||
+				!Settings.validSiteState(action.state)
+			)
+				return state;
 			return { ...state, [action.siteId]: action.state };
 	}
 	return state || {};

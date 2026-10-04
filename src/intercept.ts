@@ -10,7 +10,6 @@ import {
 } from './lib/route-change';
 import { setupTitleScrub } from './lib/title-scrub';
 
-import * as FbClassic from './sites/fb-classic';
 import * as Fb2020 from './sites/fb-2020';
 import * as Twitter from './sites/twitter';
 import * as Reddit from './sites/reddit';
@@ -51,8 +50,6 @@ export function eradicate(store: Store) {
 		Substack.eradicate(store);
 	} else if (Threads.checkSite()) {
 		Threads.eradicate(store);
-	} else if (FbClassic.checkSite()) {
-		FbClassic.eradicate(store);
 	} else {
 		Fb2020.eradicate(store);
 	}

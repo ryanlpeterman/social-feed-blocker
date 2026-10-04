@@ -38,7 +38,7 @@ type WebExtensionAPI = {
 export type Tab = { id: number };
 export type TabsQuery = { active?: boolean; currentWindow?: boolean };
 
-type RegisteredContentScript = {
+export type RegisteredContentScript = {
 	id: string;
 	js?: string[];
 	css?: string[];

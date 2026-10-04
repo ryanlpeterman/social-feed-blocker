@@ -1,7 +1,7 @@
 import { Effect } from '../../lib/redux-effects';
 import { BackgroundState, SettingsState } from './reducer';
 import { BackgroundActionObject, BackgroundActionType } from './action-types';
-import { getBrowser, Port } from '../../webextension';
+import { getBrowser, Port, RegisteredContentScript } from '../../webextension';
 import { Message, MessageType } from '../../messaging/types';
 import { Settings } from './index';
 import { getPermissions, sitesEffect } from './sites/effects';
@@ -143,12 +143,11 @@ const loadSettings: BackgroundEffect = (store) => async (action) => {
 	}
 };
 
-const registerContentScripts: BackgroundEffect = (store) => async (action) => {
-	// Simple debounce/lock to avoid duplicate register calls racing
-	const anySelf = registerContentScripts as any;
-	if (anySelf._lock == null) anySelf._lock = false;
-	if (anySelf._queued == null) anySelf._queued = false;
+// Simple debounce/lock to avoid duplicate register calls racing
+let registerLock = false;
+let registerQueued = false;
 
+const registerContentScripts: BackgroundEffect = (store) => async (action) => {
 	const run = async () => {
 		const browser = getBrowser();
 		// Unregister existing scripts first to avoid duplicate ID errors
@@ -168,16 +167,18 @@ const registerContentScripts: BackgroundEffect = (store) => async (action) => {
 
 		if (siteMatches.length === 0) return; // Nothing to register
 
+		const scripts: RegisteredContentScript[] = [
+			{
+				id: 'intercept',
+				js: ['intercept.js'],
+				css: ['eradicate.css'],
+				matches: siteMatches,
+				runAt: 'document_start',
+			},
+		];
+
 		try {
-			await browser.scripting.registerContentScripts([
-				{
-					id: 'intercept',
-					js: ['intercept.js'],
-					css: ['eradicate.css'],
-					matches: siteMatches,
-					runAt: 'document_start',
-				},
-			]);
+			await browser.scripting.registerContentScripts(scripts);
 		} catch (e: any) {
 			// Handle duplicate ID race by force-unregistering and retrying once
 			const msg = String(e || '');
@@ -189,15 +190,7 @@ const registerContentScripts: BackgroundEffect = (store) => async (action) => {
 					await browser.scripting.unregisterContentScripts();
 				} catch (_) {}
 				try {
-					await browser.scripting.registerContentScripts([
-						{
-							id: 'intercept',
-							js: ['intercept.js'],
-							css: ['eradicate.css'],
-							matches: siteMatches,
-							runAt: 'document_start',
-						},
-					]);
+					await browser.scripting.registerContentScripts(scripts);
 				} catch (_) {
 					// give up silently; next update will retry
 				}
@@ -211,17 +204,17 @@ const registerContentScripts: BackgroundEffect = (store) => async (action) => {
 		action.type === BackgroundActionType.CONTENT_SCRIPTS_REGISTER ||
 		action.type === BackgroundActionType.PERMISSIONS_UPDATE
 	) {
-		if (anySelf._lock) {
-			anySelf._queued = true;
+		if (registerLock) {
+			registerQueued = true;
 			return;
 		}
-		anySelf._lock = true;
+		registerLock = true;
 		try {
 			await run();
 		} finally {
-			anySelf._lock = false;
-			if (anySelf._queued) {
-				anySelf._queued = false;
+			registerLock = false;
+			if (registerQueued) {
+				registerQueued = false;
 				// Schedule a follow-up registration to apply latest state
 				store.dispatch({ type: BackgroundActionType.CONTENT_SCRIPTS_REGISTER });
 			}

@@ -98,7 +98,6 @@ export function setupRouteChange(store: Store) {
 				return;
 			case 'disabled-temporarily':
 				setEnabled(false);
-
 		}
 	};
 

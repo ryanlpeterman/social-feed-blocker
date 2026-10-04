@@ -121,10 +121,11 @@ const loadSettings: BackgroundEffect = (store) => async (action) => {
 		// For any sites that don't yet exist in the settings,
 		// add a note to look at the permissions as the source of
 		// truth instead
-		for (const key of Object.keys(Sites)) {
+		for (const key of Object.keys(Sites) as SiteId[]) {
+			const stored = settings.sites[key];
 			sites[key] =
-				settings.sites[key] != null
-					? settings.sites[key]
+				stored != null
+					? stored
 					: { type: Settings.SiteStateTag.CHECK_PERMISSIONS };
 		}
 

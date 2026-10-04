@@ -1,4 +1,4 @@
-import { Sites, Site } from '../sites';
+import { Sites, Site, SiteId } from '../sites';
 import { SettingsState } from '../background/store/reducer';
 import {
 	getSiteStatus,
@@ -41,7 +41,7 @@ const pathMatchesFor = (site: Site): boolean => {
  * never applies to a page we would never block (e.g. a subreddit, a YouTube video).
  */
 export function matchesBlockablePath(): boolean {
-	for (const siteId of Object.keys(Sites)) {
+	for (const siteId of Object.keys(Sites) as SiteId[]) {
 		const site: Site = Sites[siteId];
 		if (
 			site.domain.find((domain) => window.location.host.includes(domain)) !=
@@ -63,7 +63,7 @@ export function matchesBlockablePath(): boolean {
  * before the settings arrive.
  */
 export function matchesConfiguredSite(): boolean {
-	for (const siteId of Object.keys(Sites)) {
+	for (const siteId of Object.keys(Sites) as SiteId[]) {
 		const site: Site = Sites[siteId];
 		if (
 			site.domain.find((domain) => window.location.host.includes(domain)) !=
@@ -83,7 +83,7 @@ export function matchesConfiguredSite(): boolean {
  */
 export function siteEnabledStatus(state: SettingsState): EnabledStatus {
 	const siteStatuses = getSiteStatus(state);
-	for (const siteId of Object.keys(Sites)) {
+	for (const siteId of Object.keys(Sites) as SiteId[]) {
 		const site: Site = Sites[siteId];
 		if (
 			site.domain.find((domain) => window.location.host.includes(domain)) !=

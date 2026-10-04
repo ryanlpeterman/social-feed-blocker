@@ -39,7 +39,7 @@ export default function injectUI(
 		patch(vnode, newVnode);
 		vnode = newVnode;
 
-		const col = window.getComputedStyle(document.body)['background-color'];
+		const col = window.getComputedStyle(document.body).backgroundColor;
 		const match = rgbRe.exec(col);
 		if (match) {
 			const r = parseInt(match[1], 10);

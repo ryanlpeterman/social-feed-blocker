@@ -172,8 +172,8 @@ function OptionsApp() {
 				const siteIds = Object.keys(Sites) as (keyof typeof Sites)[];
 				const mergedSites: Settings.SitesState = {} as Settings.SitesState;
 				for (const id of siteIds) {
-					const s = (raw.sites as any)[id];
-					mergedSites[id as any] =
+					const s = raw.sites[id];
+					mergedSites[id] =
 						s != null ? s : { type: Settings.SiteStateTag.CHECK_PERMISSIONS };
 				}
 				const snapshot = {

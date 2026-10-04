@@ -15,7 +15,7 @@ export namespace Settings {
 	};
 	export const defaultSites = (): SitesState => {
 		const sites: SitesState = {} as SitesState;
-		for (const siteId of Object.keys(Sites)) {
+		for (const siteId of Object.keys(Sites) as SiteId[]) {
 			sites[siteId] = { type: SiteStateTag.CHECK_PERMISSIONS };
 		}
 		return sites;

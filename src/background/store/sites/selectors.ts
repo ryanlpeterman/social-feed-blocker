@@ -23,8 +23,7 @@ export function getSettingsHealth(state: SettingsState): SettingsHealth {
 	let atLeastOneSiteEnabled = false;
 	const siteStatus = getSiteStatus(state);
 
-	Object.keys(siteStatus).forEach((id) => {
-		const s: SiteStatus = siteStatus[id];
+	Object.values(siteStatus).forEach((s: SiteStatus) => {
 		if (
 			s.type === SiteStatusTag.NEEDS_NEW_PERMISSIONS ||
 			s.type === SiteStatusTag.DISABLED_TEMPORARILY ||
@@ -44,10 +43,10 @@ namespace Record {
 
 	export function map<Key extends ValidKey, ValFrom, ValTo>(
 		record: Record<Key, ValFrom>,
-		mapper: (key: string, val: ValFrom) => ValTo
+		mapper: (key: Key, val: ValFrom) => ValTo
 	): Record<Key, ValTo> {
 		const out: Record<Key, ValTo> = {} as Record<Key, ValTo>;
-		for (const key of Object.keys(record)) {
+		for (const key of Object.keys(record) as Key[]) {
 			out[key] = mapper(key, record[key]);
 		}
 		return out;

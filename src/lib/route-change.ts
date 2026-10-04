@@ -101,7 +101,7 @@ export function setupRouteChange(store: Store) {
 		}
 	};
 
-	let timer: NodeJS.Timer | undefined = undefined;
+	let timer: ReturnType<typeof setTimeout> | undefined = undefined;
 	const checkIfLocationChanged = () => {
 		let path = document.location.pathname;
 		if (path != lastPath) {
